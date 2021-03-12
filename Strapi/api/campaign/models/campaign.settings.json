@@ -1,0 +1,60 @@
+{
+  "kind": "collectionType",
+  "collectionName": "campaigns",
+  "info": {
+    "name": "Campaign",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "richtext"
+    },
+    "picture": {
+      "collection": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
+    },
+    "status": {
+      "type": "boolean"
+    },
+    "completed": {
+      "type": "boolean"
+    },
+    "approve": {
+      "type": "boolean"
+    },
+    "note": {
+      "type": "richtext"
+    },
+    "user": {
+      "plugin": "users-permissions",
+      "model": "user",
+      "via": "campaigns"
+    },
+    "channels": {
+      "via": "campaigns",
+      "collection": "channel"
+    },
+    "category": {
+      "model": "category"
+    },
+    "campaignTTL": {
+      "type": "component",
+      "repeatable": true,
+      "component": "component.campaign-ttl"
+    }
+  }
+}

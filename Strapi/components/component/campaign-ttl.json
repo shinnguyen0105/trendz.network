@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_component_campaign_ttls",
+  "info": {
+    "name": "campaignTTL",
+    "icon": "business-time"
+  },
+  "options": {},
+  "attributes": {
+    "open_datetime": {
+      "type": "date"
+    },
+    "close_datetime": {
+      "type": "date"
+    }
+  }
+}

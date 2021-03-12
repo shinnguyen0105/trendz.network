@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_component_campaign_logs",
+  "info": {
+    "name": "campaign-log",
+    "icon": "align-center"
+  },
+  "options": {},
+  "attributes": {
+    "message": {
+      "type": "text"
+    }
+  }
+}
