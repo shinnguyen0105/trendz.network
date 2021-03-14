@@ -607,7 +607,10 @@
                 "id": {
                   "type": "string"
                 },
-                "message": {
+                "userMessage": {
+                  "type": "string"
+                },
+                "influencerMessage": {
                   "type": "string"
                 }
               }
@@ -637,7 +640,10 @@
                 "id": {
                   "type": "string"
                 },
-                "message": {
+                "userMessage": {
+                  "type": "string"
+                },
+                "influencerMessage": {
                   "type": "string"
                 }
               }

@@ -572,7 +572,10 @@
                   "type": "string"
                 },
                 "campaigns": {
-                  "type": "string"
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 },
                 "user": {
                   "type": "string"

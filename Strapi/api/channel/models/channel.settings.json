@@ -55,8 +55,8 @@
       "via": "channels"
     },
     "campaigns": {
-      "model": "campaign",
-      "via": "channels"
+      "via": "channels",
+      "collection": "campaign"
     },
     "user": {
       "plugin": "users-permissions",

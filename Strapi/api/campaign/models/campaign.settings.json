@@ -45,8 +45,9 @@
       "via": "campaigns"
     },
     "channels": {
+      "collection": "channel",
       "via": "campaigns",
-      "collection": "channel"
+      "dominant": true
     },
     "category": {
       "model": "category"

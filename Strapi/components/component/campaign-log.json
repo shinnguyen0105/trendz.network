@@ -1,12 +1,16 @@
 {
   "collectionName": "components_component_campaign_logs",
   "info": {
-    "name": "campaign-log",
-    "icon": "align-center"
+    "name": "ChatLog",
+    "icon": "align-justify",
+    "description": ""
   },
   "options": {},
   "attributes": {
-    "message": {
+    "userMessage": {
+      "type": "text"
+    },
+    "influencerMessage": {
       "type": "text"
     }
   }
