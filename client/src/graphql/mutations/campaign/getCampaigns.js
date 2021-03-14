@@ -103,3 +103,17 @@ export const REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID = gql`
     }
   }
 `;
+//get campaign-detail
+export const REQUEST_GETCAMPAIGNS_DETAILS_BY_CAMPAIGN_ID = gql`
+  query getCampaignDetails($id: ID!) {
+    campaignDetails(where: { campaign: { id: $id } }) {
+      rating
+      report
+      chatLog {
+        id
+        userMessage
+        influencerMessage
+      }
+    }
+  }
+`;
