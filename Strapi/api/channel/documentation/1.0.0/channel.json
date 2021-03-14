@@ -903,6 +903,12 @@
                 "type": "string"
               }
             }
+          },
+          "employeeConfirm": {
+            "type": "boolean"
+          },
+          "adminConfirm": {
+            "type": "boolean"
           }
         }
       },
@@ -940,6 +946,12 @@
           },
           "user": {
             "type": "string"
+          },
+          "employeeConfirm": {
+            "type": "boolean"
+          },
+          "adminConfirm": {
+            "type": "boolean"
           },
           "created_by": {
             "type": "string"

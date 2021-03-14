@@ -55,12 +55,18 @@
       "via": "channels"
     },
     "campaigns": {
-      "via": "channels",
-      "collection": "campaign"
+      "collection": "campaign",
+      "via": "channels"
     },
     "user": {
       "plugin": "users-permissions",
       "model": "user"
+    },
+    "employeeConfirm": {
+      "type": "boolean"
+    },
+    "adminConfirm": {
+      "type": "boolean"
     }
   }
 }
