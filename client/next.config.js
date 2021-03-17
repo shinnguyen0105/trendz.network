@@ -1,4 +1,5 @@
 const withPWA = require('next-pwa');
+require('dotenv').config();
 
 module.exports = withPWA({
   pwa: {
@@ -15,5 +16,8 @@ module.exports = withPWA({
       '/create-channel': { page: '/create-channel' },
       '/404': { page: '/404' },
     };
+  },
+  env: {
+    API_URL: process.env.API_URL,
   },
 });
