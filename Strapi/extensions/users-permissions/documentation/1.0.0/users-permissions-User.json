@@ -1258,7 +1258,8 @@
             "type": "string"
           },
           "gender": {
-            "type": "string"
+            "type": "string",
+            "default": "Male"
           },
           "address": {
             "type": "string"
@@ -1452,7 +1453,8 @@
             "type": "string"
           },
           "gender": {
-            "type": "string"
+            "type": "string",
+            "default": "Male"
           },
           "address": {
             "type": "string"
