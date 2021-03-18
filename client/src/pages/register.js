@@ -37,9 +37,9 @@ const Register = () => {
           <Row className='justify-content-center'>
             <Col lg='5'>
               <Card className='bg-secondary shadow border-0'>
-                <CardHeader className='bg-white'>
+                <CardHeader className='bg-white pb-4'>
                   <div className='text-center text-muted'>
-                    <h4>Or sign up with credentials</h4>
+                    <h4>Sign up with credentials</h4>
                   </div>
                 </CardHeader>
                 <CardBody className='px-lg-5 py-lg-5'>

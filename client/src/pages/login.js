@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { withRouter } from 'next/router';
+
+import { UserContext } from '../contexts/userContext';
+import { useSnackbar } from 'notistack';
+import Link from 'next/link';
 
 import {
   Button,
@@ -18,8 +22,103 @@ import {
 } from 'reactstrap';
 
 import Image from 'next/image';
+import Router from 'next/router';
 
+import { isEmpty } from 'lodash';
+import { passwordCheck } from '../utils/functions/regEx/index';
+
+import { REQUEST_LOGIN } from '../graphql/mutations/authentication/login';
+import { useMutation } from 'react-apollo';
+
+export const LOGIN = 'LOGIN';
+
+const { API_URL } = process.env.API_URL;
 const Login = () => {
+  const { state, dispatch } = useContext(UserContext);
+  const { enqueueSnackbar } = useSnackbar();
+  const [accountValues, setAccountValues] = useState({
+    identifier: '',
+    password: '',
+  });
+
+  // const [pointer, setPointer] = useState({
+  //   squares1to6: '',
+  //   squares7and8: '',
+  // });
+
+  const [focus, setFocus] = useState({
+    emailFocus: false,
+    passwordFocus: false,
+  });
+  // const followCursor = (event) => {
+  //   let posX = event.clientX - window.innerWidth / 2;
+  //   let posY = event.clientY - window.innerWidth / 6;
+
+  //   setPointer((previousState) => {
+  //     return {
+  //       ...previousState,
+  //       squares1to6:
+  //         'perspective(500px) rotateY(' +
+  //         posX * 0.05 +
+  //         'deg) rotateX(' +
+  //         posY * -0.05 +
+  //         'deg)',
+  //       squares7and8:
+  //         'perspective(500px) rotateY(' +
+  //         posX * 0.02 +
+  //         'deg) rotateX(' +
+  //         posY * -0.02 +
+  //         'deg)',
+  //     };
+  //   });
+  // };
+
+  const [requestLoginMutation, { loading: requestLoginLoading }] = useMutation(
+    REQUEST_LOGIN,
+    {
+      update(proxy, { data: userData }) {
+        dispatch({ type: LOGIN, payload: userData.login });
+      },
+      variables: accountValues,
+    }
+  );
+
+  const handleAccountChange = (event) => {
+    const { name, value } = event.target;
+    setAccountValues((previousState) => {
+      return { ...previousState, [name]: value };
+    });
+  };
+
+  const requestLogin = async () => {
+    if (isEmpty(accountValues.identifier) && isEmpty(accountValues.password)) {
+      enqueueSnackbar('Không được bỏ trống cả hai trường', {
+        variant: 'error',
+      });
+    }
+    if (!passwordCheck.test(accountValues.password)) {
+      enqueueSnackbar(
+        'Mật khẩu phải có tối thiểu 8 ký tự (Bao gồm: >=1 kí tự đặc biệt, >=1 chữ số, >=1 chữ cái in hoa)',
+        { variant: 'error' }
+      );
+    } else
+      try {
+        await requestLoginMutation();
+        enqueueSnackbar('Đăng nhập thành công!', { variant: 'success' });
+        Router.push('/dashboard');
+      } catch (error) {
+        console.log(error);
+        return enqueueSnackbar(
+          'Sai tài khoản hoặc mật khẩu! Vui lòng kiểm tra lại!',
+          { variant: 'error' }
+        );
+      }
+  };
+
+  useEffect(() => {
+    if (state.jwt === '') return;
+    Router.push('/login');
+  }, [state]);
   return (
     <main>
       <section className='section section-shaped section-lg'>
@@ -90,9 +189,18 @@ const Login = () => {
                             <i className='ni ni-email-83' />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder='Email' type='email' />
+                        <Input
+                          placeholder='Tên đăng nhập'
+                          type='text'
+                          required
+                          id='identifier'
+                          name='identifier'
+                          onChange={handleAccountChange}
+                          value={accountValues.identifier}
+                        />
                       </InputGroup>
                     </FormGroup>
+
                     <FormGroup>
                       <InputGroup className='input-group-alternative'>
                         <InputGroupAddon addonType='prepend'>
@@ -101,12 +209,17 @@ const Login = () => {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input
-                          placeholder='Password'
+                          placeholder='Mật khẩu'
                           type='password'
-                          autoComplete='off'
+                          required
+                          id='password'
+                          name='password'
+                          onChange={handleAccountChange}
+                          value={accountValues.password}
                         />
                       </InputGroup>
                     </FormGroup>
+
                     <div className='custom-control custom-control-alternative custom-checkbox'>
                       <input
                         className='custom-control-input'
@@ -121,7 +234,13 @@ const Login = () => {
                       </label>
                     </div>
                     <div className='text-center'>
-                      <Button className='my-4' color='primary' type='button'>
+                      <Button
+                        className='my-4'
+                        color='primary'
+                        type='button'
+                        onClick={requestLogin}
+                        disabled={requestLoginLoading}
+                      >
                         Sign in
                       </Button>
                     </div>
@@ -139,13 +258,11 @@ const Login = () => {
                   </a>
                 </Col>
                 <Col className='text-right' xs='6'>
-                  <a
-                    className='text-light'
-                    href='#pablo'
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    <small>Create new account</small>
-                  </a>
+                  <Link href='/register'>
+                    <a className='text-light' href='#pablo'>
+                      <small>Create new account</small>
+                    </a>
+                  </Link>
                 </Col>
               </Row>
             </Col>
