@@ -1,15 +1,24 @@
 import gql from 'graphql-tag';
 
-export const REQUEST_GET_ALL_CATEGORIES_CHANNELS = gql`
-  query getAllCategoriesAndChannels {
-    categories {
+export const REQUEST_GET_ALL_CHANNELS = gql`
+  query getAllChannelForInfluencer($influencerID: ID!) {
+    channels(where: { user: { id: $influencerID } }) {
       id
       name
-      channels {
+      user {
         id
-        name
-        status
       }
+      avatar {
+        url
+        formats
+      }
+      category {
+        name
+      }
+      status
+      adminConfirm
+      employeeConfirm
+      created_at
     }
   }
 `;

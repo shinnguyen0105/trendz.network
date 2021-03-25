@@ -8,9 +8,10 @@ import { UserContextProvider } from '../contexts/userContext';
 import { SnackbarProvider } from 'notistack';
 import Layout from '../components/Layout/Layout';
 
-import '../assets/vendor/nucleo/css/nucleo.css';
+import '../assets/css/blk-design-system-react.css';
+import '../assets/css/demo.css';
+import '../assets/css/nucleo-icons.css';
 import '../assets/vendor/font-awesome/css/font-awesome.min.css';
-import '../assets/scss/argon-design-system-react.scss?v1.1.0';
 
 const App = ({ Component, pageProps, apolloClient, router }) => {
   return (

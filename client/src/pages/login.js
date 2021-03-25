@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useContext } from 'react';
+import classnames from 'classnames';
 import { withRouter } from 'next/router';
-
 import { UserContext } from '../contexts/userContext';
 import { useSnackbar } from 'notistack';
-import Link from 'next/link';
-
+// reactstrap components
 import {
   Button,
   Card,
   CardHeader,
   CardBody,
-  FormGroup,
+  CardFooter,
+  CardTitle,
   Form,
   Input,
   InputGroupAddon,
@@ -20,19 +20,27 @@ import {
   Row,
   Col,
 } from 'reactstrap';
-
-import Image from 'next/image';
-import Router from 'next/router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 
 import { isEmpty } from 'lodash';
-import { passwordCheck } from '../utils/functions/regEx/index';
+
+import { passwordCheck } from '../utils/functions/regEx';
 
 import { REQUEST_LOGIN } from '../graphql/mutations/authentication/login';
 import { useMutation } from 'react-apollo';
 
-export const LOGIN = 'LOGIN';
+import Router from 'next/router';
 
+// core components
+//import ExamplesNavbar from "components/Navbars/ExamplesNavbar.js";
+
+/* TYPES */
+export const LOGIN = 'LOGIN';
+/* END */
 const { API_URL } = process.env.API_URL;
+
 const Login = () => {
   const { state, dispatch } = useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
@@ -41,37 +49,37 @@ const Login = () => {
     password: '',
   });
 
-  // const [pointer, setPointer] = useState({
-  //   squares1to6: '',
-  //   squares7and8: '',
-  // });
+  const [pointer, setPointer] = useState({
+    squares1to6: '',
+    squares7and8: '',
+  });
 
   const [focus, setFocus] = useState({
     emailFocus: false,
     passwordFocus: false,
   });
-  // const followCursor = (event) => {
-  //   let posX = event.clientX - window.innerWidth / 2;
-  //   let posY = event.clientY - window.innerWidth / 6;
+  const followCursor = (event) => {
+    let posX = event.clientX - window.innerWidth / 2;
+    let posY = event.clientY - window.innerWidth / 6;
 
-  //   setPointer((previousState) => {
-  //     return {
-  //       ...previousState,
-  //       squares1to6:
-  //         'perspective(500px) rotateY(' +
-  //         posX * 0.05 +
-  //         'deg) rotateX(' +
-  //         posY * -0.05 +
-  //         'deg)',
-  //       squares7and8:
-  //         'perspective(500px) rotateY(' +
-  //         posX * 0.02 +
-  //         'deg) rotateX(' +
-  //         posY * -0.02 +
-  //         'deg)',
-  //     };
-  //   });
-  // };
+    setPointer((previousState) => {
+      return {
+        ...previousState,
+        squares1to6:
+          'perspective(500px) rotateY(' +
+          posX * 0.05 +
+          'deg) rotateX(' +
+          posY * -0.05 +
+          'deg)',
+        squares7and8:
+          'perspective(500px) rotateY(' +
+          posX * 0.02 +
+          'deg) rotateX(' +
+          posY * -0.02 +
+          'deg)',
+      };
+    });
+  };
 
   const [requestLoginMutation, { loading: requestLoginLoading }] = useMutation(
     REQUEST_LOGIN,
@@ -116,160 +124,185 @@ const Login = () => {
   };
 
   useEffect(() => {
+    document.body.classList.toggle('login-page');
+    document.documentElement.addEventListener('mousemove', followCursor);
+    return () => {
+      document.body.classList.toggle('login-page');
+      document.documentElement.removeEventListener('mousemove', followCursor);
+    };
+  }, []);
+
+  useEffect(() => {
     if (state.jwt === '') return;
     Router.push('/login');
   }, [state]);
   return (
-    <main>
-      <section className='section section-shaped section-lg'>
-        <div className='shape shape-style-1 bg-gradient-default'>
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
-        </div>
-        <Container className='pt-lg-7'>
-          <Row className='justify-content-center'>
-            <Col lg='5'>
-              <Card className='bg-secondary shadow border-0'>
-                <CardHeader className='bg-white pb-5'>
-                  <div className='text-muted text-center mb-3'>
-                    <small>Sign in with</small>
-                  </div>
-                  <div className='btn-wrapper text-center'>
-                    <Button
-                      className='btn-neutral btn-icon'
-                      color='default'
-                      href='#pablo'
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      <span className='btn-inner--icon mr-1 pb-2'>
-                        <Image
-                          alt='...'
-                          className='mt-1'
-                          width='20'
-                          height='20'
-                          src='/github.svg'
-                        />
-                      </span>
-                      <span className='btn-inner--text'>Github</span>
-                    </Button>
-                    <Button
-                      className='btn-neutral btn-icon ml-1'
-                      color='default'
-                      href='#pablo'
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      <span className='btn-inner--icon mr-1 pb-2'>
-                        <Image
-                          alt='...'
-                          className='mt-1'
-                          width='20'
-                          height='20'
-                          src='/google.svg'
-                        />
-                      </span>
-                      <span className='btn-inner--text'>Google</span>
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardBody className='px-lg-5 py-lg-5'>
-                  <div className='text-center text-muted mb-4'>
-                    <small>Or sign in with credentials</small>
-                  </div>
-                  <Form role='form'>
-                    <FormGroup className='mb-3'>
-                      <InputGroup className='input-group-alternative'>
-                        <InputGroupAddon addonType='prepend'>
-                          <InputGroupText>
-                            <i className='ni ni-email-83' />
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input
-                          placeholder='Tên đăng nhập'
-                          type='text'
-                          required
-                          id='identifier'
-                          name='identifier'
-                          onChange={handleAccountChange}
-                          value={accountValues.identifier}
-                        />
-                      </InputGroup>
-                    </FormGroup>
-
-                    <FormGroup>
-                      <InputGroup className='input-group-alternative'>
-                        <InputGroupAddon addonType='prepend'>
-                          <InputGroupText>
-                            <i className='ni ni-lock-circle-open' />
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input
-                          placeholder='Mật khẩu'
-                          type='password'
-                          required
-                          id='password'
-                          name='password'
-                          onChange={handleAccountChange}
-                          value={accountValues.password}
-                        />
-                      </InputGroup>
-                    </FormGroup>
-
-                    <div className='custom-control custom-control-alternative custom-checkbox'>
-                      <input
-                        className='custom-control-input'
-                        id=' customCheckLogin'
-                        type='checkbox'
-                      />
-                      <label
-                        className='custom-control-label'
-                        htmlFor=' customCheckLogin'
-                      >
-                        <span>Remember me</span>
-                      </label>
-                    </div>
-                    <div className='text-center'>
+    <div>
+      <div className='wrapper'>
+        <div className='page-header'>
+          <div className='page-header-image' />
+          <div className='content'>
+            <Container>
+              <Row>
+                <Col className='offset-lg-0 offset-md-3' lg='5' md='6'>
+                  <div
+                    className='square square-7'
+                    id='square7'
+                    style={{ transform: pointer.squares7and8 }}
+                  />
+                  <div
+                    className='square square-8'
+                    id='square8'
+                    style={{ transform: pointer.squares7and8 }}
+                  />
+                  <Card className='card-login'>
+                    <CardHeader>
+                      <CardTitle tag='h4'>Đăng nhập</CardTitle>
+                    </CardHeader>
+                    <CardBody>
+                      <Form className='form'>
+                        <InputGroup
+                          className={classnames({
+                            'input-group-focus': focus.emailFocus,
+                          })}
+                        >
+                          <InputGroupAddon addonType='prepend'>
+                            <InputGroupText>
+                              <i className='tim-icons'>
+                                <FontAwesomeIcon icon={faEnvelope} />
+                              </i>
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            placeholder='Tên đăng nhập'
+                            type='text'
+                            required
+                            onFocus={(event) =>
+                              setFocus((previousState) => {
+                                return {
+                                  ...previousState,
+                                  emailFocus: true,
+                                };
+                              })
+                            }
+                            onBlur={(event) =>
+                              setFocus((previousState) => {
+                                return {
+                                  ...previousState,
+                                  emailFocus: false,
+                                };
+                              })
+                            }
+                            id='identifier'
+                            name='identifier'
+                            onChange={handleAccountChange}
+                            value={accountValues.identifier}
+                          />
+                        </InputGroup>
+                        <InputGroup
+                          className={classnames({
+                            'input-group-focus': focus.passwordFocus,
+                          })}
+                        >
+                          <InputGroupAddon addonType='prepend'>
+                            <InputGroupText>
+                              <i className='tim-icons'>
+                                <FontAwesomeIcon icon={faLock} />
+                              </i>
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            placeholder='Mật khẩu'
+                            type='password'
+                            required
+                            onFocus={(event) =>
+                              setFocus((previousState) => {
+                                return {
+                                  ...previousState,
+                                  passwordFocus: true,
+                                };
+                              })
+                            }
+                            onBlur={(event) =>
+                              setFocus((previousState) => {
+                                return {
+                                  ...previousState,
+                                  passwordFocus: false,
+                                };
+                              })
+                            }
+                            id='password'
+                            name='password'
+                            onChange={handleAccountChange}
+                            value={accountValues.password}
+                          />
+                        </InputGroup>
+                      </Form>
+                    </CardBody>
+                    <CardFooter>
                       <Button
-                        className='my-4'
+                        className='btn-round'
                         color='primary'
-                        type='button'
+                        size='lg'
                         onClick={requestLogin}
                         disabled={requestLoginLoading}
                       >
-                        Sign in
+                        Đăng nhập
                       </Button>
-                    </div>
-                  </Form>
-                </CardBody>
-              </Card>
-              <Row className='mt-3'>
-                <Col xs='6'>
-                  <a
-                    className='text-light'
-                    href='#pablo'
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    <small>Forgot password?</small>
-                  </a>
-                </Col>
-                <Col className='text-right' xs='6'>
-                  <Link href='/register'>
-                    <a className='text-light' href='#pablo'>
-                      <small>Create new account</small>
-                    </a>
-                  </Link>
+                      <br />
+                    </CardFooter>
+                    <CardFooter>
+                      <a href={`${API_URL}/connect/facebook`} className='link'>
+                        <Button
+                          className='btn-round'
+                          color='info'
+                          size='lg'
+                          social='facebook'
+                        >
+                          <i />
+                          Đăng nhập bằng Facebook
+                        </Button>
+                      </a>
+                    </CardFooter>
+                  </Card>
                 </Col>
               </Row>
-            </Col>
-          </Row>
-        </Container>
-      </section>
-    </main>
+              <div className='login-bg' />
+              <div
+                className='square square-1'
+                id='square1'
+                style={{ transform: pointer.squares1to6 }}
+              />
+              <div
+                className='square square-2'
+                id='square2'
+                style={{ transform: pointer.squares1to6 }}
+              />
+              <div
+                className='square square-3'
+                id='square3'
+                style={{ transform: pointer.squares1to6 }}
+              />
+              <div
+                className='square square-4'
+                id='square4'
+                style={{ transform: pointer.squares1to6 }}
+              />
+              <div
+                className='square square-5'
+                id='square5'
+                style={{ transform: pointer.squares1to6 }}
+              />
+              <div
+                className='square square-6'
+                id='square6'
+                style={{ transform: pointer.squares1to6 }}
+              />
+            </Container>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

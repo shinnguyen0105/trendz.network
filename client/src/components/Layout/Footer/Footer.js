@@ -1,4 +1,19 @@
+/**
+ *
+ * Footer
+ *
+ */
+
 import React from 'react';
+//import PropTypes from 'prop-types';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faTwitter,
+  faFacebook,
+  faInstagram,
+} from '@fortawesome/free-brands-svg-icons';
+
 import {
   Button,
   NavItem,
@@ -12,38 +27,97 @@ import {
 
 function Footer() {
   return (
-    <footer className=' footer'>
+    <footer className='footer'>
       <Container>
-        <Row className=' align-items-center justify-content-md-between'>
-          <Col md='6'>
-            <div className='copyright'>
-              © {new Date().getFullYear()}{' '}
-              <a href='/' target='_blank'>
-                Trendz Network
-              </a>
-              .
-            </div>
+        <Row>
+          <Col md='3'>
+            <h2 className='title'>Trendz•Network</h2>
           </Col>
-          <Col md='6'>
-            <Nav className=' nav-footer justify-content-end'>
+          <Col md='3'>
+            <Nav>
               <NavItem>
-                <NavLink href='/' target='_blank'>
-                  About Us
-                </NavLink>
+                <NavLink>Home</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink
-                  href='https://github.com/shinnguyen0105/trendz.network'
-                  target='_blank'
-                >
-                  Github
+                <NavLink>Landing</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink>Register</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink>Profile</NavLink>
+              </NavItem>
+            </Nav>
+          </Col>
+          <Col md='3'>
+            <Nav>
+              <NavItem>
+                <NavLink href='#'>Contact Us</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink href='#'>About Us</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink href='#'>Blog</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink href='https://opensource.org/licenses/MIT'>
+                  License
                 </NavLink>
               </NavItem>
             </Nav>
+          </Col>
+          <Col md='3'>
+            <h3 className='title'>Follow us:</h3>
+            <div className='btn-wrapper profile'>
+              <Button
+                className='btn-icon btn-neutral btn-round btn-simple'
+                color='default'
+                href='#'
+                id='tooltip622135962'
+                target='_blank'
+              >
+                <i className='fab'>
+                  <FontAwesomeIcon icon={faTwitter} />{' '}
+                </i>
+              </Button>
+              <UncontrolledTooltip delay={0} target='tooltip622135962'>
+                Follow us
+              </UncontrolledTooltip>
+              <Button
+                className='btn-icon btn-neutral btn-round btn-simple'
+                color='default'
+                href='#'
+                id='tooltip230450801'
+                target='_blank'
+              >
+                <i className='fab'>
+                  <FontAwesomeIcon icon={faFacebook} />{' '}
+                </i>
+              </Button>
+              <UncontrolledTooltip delay={0} target='tooltip230450801'>
+                Like us
+              </UncontrolledTooltip>
+              <Button
+                className='btn-icon btn-neutral btn-round btn-simple'
+                color='default'
+                href='#'
+                id='tooltip318450378'
+                target='_blank'
+              >
+                <i className='fab'>
+                  <FontAwesomeIcon icon={faInstagram} />{' '}
+                </i>
+              </Button>
+              <UncontrolledTooltip delay={0} target='tooltip318450378'>
+                Follow us
+              </UncontrolledTooltip>
+            </div>
           </Col>
         </Row>
       </Container>
     </footer>
   );
 }
+
 export default Footer;

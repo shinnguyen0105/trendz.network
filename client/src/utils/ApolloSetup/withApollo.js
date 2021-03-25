@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import initApollo from "./initApollo";
+import React from 'react';
+import PropTypes from 'prop-types';
+import initApollo from './initApollo';
 
 export default (App) => {
   return class WithData extends React.Component {

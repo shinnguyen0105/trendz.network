@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Button,
@@ -10,249 +11,202 @@ import {
   Row,
   Col,
   NavLink,
-  UncontrolledCollapse,
 } from 'reactstrap';
 
 import { useAuth } from '../../../contexts/userContext';
-
-import Image from 'next/image';
 import Router from 'next/router';
-import Link from 'next/link';
+
+// import StyledHeader from './StyledHeader';
+// import Link from '../Link';
+// import logo from '../../assets/img/logo.svg';
 
 /* TYPES */
 export const LOGOUT = 'LOGOUT';
+/* END */
 
-const ButtonParent = React.forwardRef(({ children, href, onClick }, ref) => (
+const TestButton = React.forwardRef(({ children, href, onClick }, ref) => (
   <p ref={ref} href={href} onClick={onClick}>
     {children}
   </p>
 ));
 
 function Header() {
-  const [isOpen, setIsOpen] = useState(false);
   const { state, dispatch } = useAuth();
+  const [isOpen, toggleIsOpen] = useState(false);
+  const [navColor, setNavColor] = useState({
+    color: 'navbar-transparent',
+  });
+  const [navCollapse, setNavCollapse] = useState({
+    collapseOut: '',
+  });
   const [isLoggedIn, setLoggedIn] = useState(false);
+  const changeColor = useCallback(() => {
+    if (
+      document.documentElement.scrollTop > 99 ||
+      document.body.scrollTop > 99
+    ) {
+      setNavColor((previousState) => {
+        return {
+          ...previousState,
+          color: 'bg-navbar',
+        };
+      });
+    } else if (
+      document.documentElement.scrollTop < 100 ||
+      document.body.scrollTop < 100
+    ) {
+      setNavColor((previousState) => {
+        return {
+          ...previousState,
+          color: 'navbar-transparent',
+        };
+      });
+    }
+  }, []);
 
-  const toggle = () => setIsOpen(!isOpen);
+  useEffect(() => {
+    window.addEventListener('scroll', changeColor);
+    return () => {
+      window.removeEventListener('scroll', changeColor);
+    };
+  }, [changeColor]);
+
+  const toggleCollapse = () => {
+    document.documentElement.classList.toggle('nav-open');
+    toggleIsOpen((isOpen) => !isOpen);
+  };
+
+  const onCollapseExiting = () => {
+    setNavCollapse((previousState) => {
+      return {
+        ...previousState,
+        collapseOut: 'collapsing-out',
+      };
+    });
+  };
+  const onCollapseExited = () => {
+    setNavCollapse((previousState) => {
+      return {
+        ...previousState,
+        collapseOut: '',
+      };
+    });
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('userInfo');
     dispatch({ type: LOGOUT });
+    //Router.reload();
 
     Router.push('/login');
     location.reload();
   };
-  const renderUnAuthenticateHeader = (
-    <Navbar
-      className='navbar-main navbar-transparent navbar-light headroom'
-      expand='lg'
-      id='navbar-main'
-    >
-      <Container>
-        <NavbarBrand className='mr-lg-5'>
-          <Link href='/'>
-            <Image
-              alt='...'
-              className='mt-1'
-              width='100'
-              height='30'
-              src='/argon-react-white.png'
-            />
+
+  const renderUnloggedInButton = (
+    <Nav navbar>
+      <NavItem>
+        <Link href='/login'>
+          <Button className='nav-link d-none d-lg-block' color='default'>
+            Đăng nhập
+          </Button>
+        </Link>
+
+        <NavLink
+          className='nav-pills d-lg-none d-xl-none'
+          onClick={toggleCollapse}
+        >
+          <Link href='/login'>
+            <TestButton>Đăng nhập</TestButton>
           </Link>
-        </NavbarBrand>
-        <button className='navbar-toggler' id='navbar_global' onClick={toggle}>
-          <span className='navbar-toggler-icon' />
-        </button>
-        <Collapse toggler='#navbar_global' navbar isOpen={isOpen}>
-          <div className='navbar-collapse-header'>
-            <Row>
-              <Col className='collapse-brand' xs='6'>
-                <Link href='/' onClick={toggle}>
-                  <Image
-                    alt='...'
-                    className='mt-1'
-                    width='100'
-                    height='30'
-                    src='/argon-react.png'
-                  />
-                </Link>
-              </Col>
-              <Col className='collapse-close' xs='6'>
-                <button
-                  className='navbar-toggler'
-                  id='navbar_global'
-                  onClick={toggle}
-                >
-                  <span />
-                  <span />
-                </button>
-              </Col>
-            </Row>
-          </div>
-          <Nav>
-            <Row>
-              <Col className='collapse-brand' xs='12'>
-                <NavLink
-                  className='nav-pills d-lg-none d-xl-none'
-                  onClick={toggle}
-                >
-                  <Link href='/login'>
-                    <ButtonParent>Sign in</ButtonParent>
-                  </Link>
-                </NavLink>
-              </Col>
-              <Col className='collapse-brand' xs='12'>
-                <NavLink
-                  className='nav-pills d-lg-none d-xl-none'
-                  onClick={toggle}
-                >
-                  <Link href='/register'>
-                    <ButtonParent>Sign up</ButtonParent>
-                  </Link>
-                </NavLink>
-              </Col>
-            </Row>
-          </Nav>
-          <Nav className='align-items-lg-center ml-lg-auto' navbar>
-            <NavItem className='d-none d-lg-block ml-lg-4'>
-              <Link href='/login'>
-                <Button
-                  className='btn-icon btn-3 ml-1'
-                  color='primary'
-                  type='button'
-                >
-                  <span className='btn-inner--icon mr-1'>
-                    <i className='fa fa-cloud-download mr-1' />
-                  </span>
-                  <span className='nav-link-inner--text ml-1'>Sign In</span>
-                </Button>
-              </Link>
-            </NavItem>
-            <NavItem className='d-none d-lg-block ml-lg-4'>
-              <Link href='/register'>
-                <Button
-                  className='btn-icon btn-3 ml-1'
-                  color='info'
-                  type='button'
-                >
-                  <span className='btn-inner--icon'>
-                    <i className='fa fa-cloud-download mr-1' />
-                  </span>
-                  <span className='nav-link-inner--text ml-1'>Sign Up</span>
-                </Button>
-              </Link>
-            </NavItem>
-          </Nav>
-        </Collapse>
-      </Container>
-    </Navbar>
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <Link href='/register'>
+          <Button className='nav-link d-none d-lg-block' color='primary'>
+            Đăng ký
+          </Button>
+        </Link>
+        <NavLink className='d-lg-none d-xl-none' onClick={toggleCollapse}>
+          <Link href='/register'>
+            <TestButton>Đăng ký</TestButton>
+          </Link>
+        </NavLink>
+      </NavItem>
+    </Nav>
   );
 
-  const renderAuthenticateHeader = (
-    <Navbar
-      className='navbar-main navbar-transparent navbar-light headroom'
-      expand='lg'
-      id='navbar-main'
-    >
-      <Container>
-        <NavbarBrand className='mr-lg-5'>
-          <Link href='/dashboard'>
-            <Image
-              alt='...'
-              className='mt-1'
-              width='100'
-              height='30'
-              src='/argon-react-white.png'
-            />
+  const renderLoggedInButton = (
+    <Nav navbar>
+      {/* <NavItem>
+          <Link href="/create">
+          <Button className="nav-link d-none d-lg-block" color="warning">Tạo campaign</Button>
           </Link>
-        </NavbarBrand>
-        <button className='navbar-toggler' id='navbar_global'>
-          <span className='navbar-toggler-icon' />
-        </button>
-        <Collapse toggler='#navbar_global' isOpen={isOpen} navbar>
-          <div className='navbar-collapse-header'>
-            <Row>
-              <Col className='collapse-brand' xs='6'>
-                <Link href='/dashboard'>
-                  <Image
-                    alt='...'
-                    className='mt-1'
-                    width='100'
-                    height='30'
-                    src='/argon-react.png'
-                  />
-                </Link>
-              </Col>
-              <Col className='collapse-close' xs='6'>
-                <button
-                  className='navbar-toggler'
-                  id='navbar_global'
-                  onClick={toggle}
-                >
-                  <span />
-                  <span />
-                </button>
-              </Col>
-            </Row>
-          </div>
-          <Nav>
-            <Row>
-              <Col className='collapse-brand' xs='12'>
-                <NavLink
-                  className='nav-pills d-lg-none d-xl-none'
-                  onClick={toggle}
-                >
-                  <Link href='/profile'>
-                    <ButtonParent>Profile</ButtonParent>
-                  </Link>
-                </NavLink>
-              </Col>
-              <Col className='collapse-brand' xs='12'>
-                <NavLink
-                  className='nav-pills d-lg-none d-xl-none'
-                  onClick={toggle}
-                >
-                  <Link href='/'>
-                    <ButtonParent onClick={handleLogout}>Logout</ButtonParent>
-                  </Link>
-                </NavLink>
-              </Col>
-            </Row>
-          </Nav>
-          <Nav className='align-items-lg-center ml-lg-auto' navbar>
-            <NavItem className='d-none d-lg-block ml-lg-4'>
-              <Link href='/profile'>
-                <Button
-                  className='btn-neutral btn-icon'
-                  color='default'
-                  target='_blank'
-                >
-                  <span className='btn-inner--icon'>
-                    <i className='fa fa-cloud-download mr-2' />
-                  </span>
-                  <span className='nav-link-inner--text ml-1'>Profile</span>
-                </Button>
-              </Link>
-            </NavItem>
-            <NavItem className='d-none d-lg-block ml-lg-4'>
-              <Link href='/'>
-                <Button
-                  className='btn-neutral btn-icon'
-                  color='default'
-                  target='_blank'
-                  onClick={handleLogout}
-                >
-                  <span className='btn-inner--icon'>
-                    <i className='fa fa-cloud-download mr-2' />
-                  </span>
-                  <span className='nav-link-inner--text ml-1'>Logout</span>
-                </Button>
-              </Link>
-            </NavItem>
-          </Nav>
-        </Collapse>
-      </Container>
-    </Navbar>
+        
+          <Link href="/create">
+          <NavLink
+          className="nav-pills d-lg-none d-xl-none"
+          onClick={toggleCollapse}
+        >Tạo campaign</NavLink>
+          </Link>
+      </NavItem> */}
+      <NavItem>
+        <Link href='/profile'>
+          <Button className='nav-link d-none d-lg-block' color='warning'>
+            Hồ sơ
+          </Button>
+        </Link>
+        <NavLink
+          className='nav-pills d-lg-none d-xl-none'
+          onClick={toggleCollapse}
+        >
+          <Link href='/profile'>
+            <TestButton>Hồ sơ</TestButton>
+          </Link>
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <Link href='/'>
+          <Button
+            className='nav-link d-none d-lg-block'
+            color='default'
+            onClick={handleLogout}
+          >
+            Đăng xuất
+          </Button>
+        </Link>
+
+        <NavLink
+          className='nav-pills d-lg-none d-xl-none'
+          onClick={() => {
+            toggleCollapse();
+            handleLogout();
+          }}
+        >
+          <Link href='/'>
+            <TestButton>Đăng xuất</TestButton>
+          </Link>
+        </NavLink>
+      </NavItem>
+    </Nav>
+  );
+
+  const renderUnloggedBrand = (
+    <Link href='/'>
+      <TestButton>
+        <span className='text-dark font-weight-normal'>
+          <strong>TRENDZ •</strong> NETWORK
+        </span>
+      </TestButton>
+    </Link>
+  );
+
+  const renderLoggedBrand = (
+    <Link href='/dashboard'>
+      <TestButton>
+        <span>TRENDZ • </span>
+        NETWORK
+      </TestButton>
+    </Link>
   );
 
   useEffect(() => {
@@ -262,11 +216,51 @@ function Header() {
   }, [state.jwt]);
 
   return (
-    <>
-      <header className='header-global'>
-        {isLoggedIn ? renderAuthenticateHeader : renderUnAuthenticateHeader}
-      </header>
-    </>
+    <Navbar
+      className={`fixed-top p-2 ${navColor.color}`}
+      color-on-scroll='100'
+      expand='lg'
+    >
+      <Container>
+        <div className='navbar-translate'>
+          <NavbarBrand id='navbar-brand'>
+            {!isLoggedIn ? renderUnloggedBrand : renderLoggedBrand}
+          </NavbarBrand>
+          <button
+            aria-expanded={isOpen}
+            className='navbar-toggler navbar-toggler'
+            onClick={toggleCollapse}
+          >
+            <span className='navbar-toggler-bar bar1' />
+            <span className='navbar-toggler-bar bar2' />
+            <span className='navbar-toggler-bar bar3' />
+          </button>
+        </div>
+        <Collapse
+          className={`justify-content-end ${navCollapse.collapseOut}`}
+          navbar
+          isOpen={isOpen}
+          onExiting={onCollapseExiting}
+          onExited={onCollapseExited}
+        >
+          <div className='navbar-collapse-header'>
+            <Row>
+              <Col className='collapse-brand' xs='6'></Col>
+              <Col className='collapse-close text-right' xs='6'>
+                <button
+                  aria-expanded={isOpen}
+                  className='navbar-toggler'
+                  onClick={toggleCollapse}
+                >
+                  <i className='tim-icons icon-simple-remove' />
+                </button>
+              </Col>
+            </Row>
+          </div>
+          {!isLoggedIn ? renderUnloggedInButton : renderLoggedInButton}
+        </Collapse>
+      </Container>
+    </Navbar>
   );
 }
 
