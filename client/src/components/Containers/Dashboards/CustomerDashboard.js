@@ -44,26 +44,11 @@ const CustomerDashboard = () => {
   const [navState, setNav] = useState({
     vertical: 1,
   });
-
-  const [categories, setCategories] = useState({
-    categories: [],
-  });
-
-  const [query, setQuery] = useState('?');
-
   const [filterItems, setFilterItems] = useState({
     status: '',
     category: '',
     sort: '',
     search: '',
-  });
-
-  const [influencers, setInfluencers] = useState({
-    influencers: [],
-  });
-
-  const [myCampaigns, setMyCampaigns] = useState({
-    campaigns: [],
   });
 
   const toggleTabs = (event, stateName, index) => {
@@ -108,151 +93,12 @@ const CustomerDashboard = () => {
   };
 
   const [sortGraphqlFilter, setSortGraphqlFilter] = useState();
-  const [searchGraphqlFilter, setSearchGraphqlFilter] = useState();
 
   useEffect(() => {
     if (filterItems.sort !== '') {
       setSortGraphqlFilter(filterItems.sort);
     }
-    if (filterItems.search !== '') {
-      setSearchGraphqlFilter(filterItems.search);
-    }
   }, [filterItems]);
-  // useEffect(() => {
-  //   let query = '?';
-  //   if (filterItems.search !== '' && query === '?') {
-  //     query += 'title_contains=' + filterItems.search;
-  //   } else if (filterItems.search !== '' && query !== '?')
-  //     query += '&title_contains=' + filterItems.search;
-  //   if (filterItems.category !== '' && query === '?') {
-  //     query += '_where[category.id]=' + filterItems.category;
-  //   } else if (filterItems.category !== '' && query !== '?')
-  //     query += '&_where[category.id]=' + filterItems.category;
-  //   if (filterItems.sort !== '' && query === '?') {
-  //     query += filterItems.sort;
-  //   } else if (filterItems.sort !== '' && query !== '?')
-  //     query += '&' + filterItems.sort;
-  //   if (filterItems.status !== '' && query === '?') {
-  //     query += filterItems.status;
-  //   } else if (filterItems.status !== '' && query !== '?')
-  //     query += '&' + filterItems.status;
-  //   setQuery(query);
-  // }, [filterItems]);
-
-  // useEffect(() => {
-  //   let mountedCampaign = true;
-  //   const campaignUrl = API_URL + '/campaigns' + query;
-  //   const fetchCampaign = async () => {
-  //     try {
-  //       const get_resolve = await axios.get(campaignUrl, {
-  //         cancelToken: signal.token,
-  //         headers: {
-  //           Authorization: `Bearer ${state.jwt}`,
-  //         },
-  //       });
-  //       if (mountedCampaign) {
-  //         try {
-  //           setMyCampaigns({
-  //             campaigns: get_resolve.data.filter(function (campaign) {
-  //               return campaign.user.id == state.user.id;
-  //             }),
-  //           });
-  //         } catch (error) {
-  //           console.log(error);
-  //         }
-  //       }
-  //     } catch (error) {
-  //       if (axios.isCancel(error) && error.message !== undefined) {
-  //         console.log('Error: ', error.message);
-  //       }
-  //     }
-  //   };
-  //   fetchCampaign();
-  //   return function cleanup() {
-  //     mountedCampaign = false;
-  //     signal.cancel();
-  //   };
-  // }, [query]);
-
-  // useEffect(() => {
-  //   const campaignUrl = API_URL + '/campaigns';
-  //   const influencersUrl = API_URL + '/users';
-  //   const categoryUrl = API_URL + '/categories';
-  //   const fetchCampaign = async () => {
-  //     try {
-  //       const get_resolve = await axios.get(campaignUrl, {
-  //         cancelToken: signal.token,
-  //         headers: {
-  //           Authorization: `Bearer ${state.jwt}`,
-  //         },
-  //       });
-  //       try {
-  //         console.log(get_resolve.data);
-  //         setMyCampaigns({
-  //           campaigns: get_resolve.data.filter(function (campaign) {
-  //             return campaign.user.id == state.user.id;
-  //           }),
-  //         });
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     } catch (error) {
-  //       if (axios.isCancel(error) && error.message !== undefined) {
-  //         console.log('Error: ', error.message);
-  //       }
-  //     }
-  //   };
-  //   const fetchInfluencers = async () => {
-  //     try {
-  //       const get_resolve = await axios.get(influencersUrl, {
-  //         cancelToken: signal.token,
-  //         headers: {
-  //           Authorization: `Bearer ${state.jwt}`,
-  //         },
-  //       });
-  //       try {
-  //         setInfluencers({
-  //           influencers: get_resolve.data.filter(function (user) {
-  //             return user.role.name == 'Influencer';
-  //           }),
-  //         });
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     } catch (error) {
-  //       if (axios.isCancel(error) && error.message !== undefined) {
-  //         console.log('Error: ', error.message);
-  //       }
-  //     }
-  //   };
-  //   const fetchCategories = async () => {
-  //     try {
-  //       const get_resolve = await axios.get(categoryUrl, {
-  //         cancelToken: signal.token,
-  //         headers: {
-  //           Authorization: `Bearer ${state.jwt}`,
-  //         },
-  //       });
-  //       try {
-  //         setCategories({
-  //           categories: get_resolve.data,
-  //         });
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     } catch (error) {
-  //       if (axios.isCancel(error) && error.message !== undefined) {
-  //         console.log('Error: ', error.message);
-  //       }
-  //     }
-  //   };
-  //   fetchCampaign();
-  //   fetchInfluencers();
-  //   fetchCategories();
-  //   return function cleanup() {
-  //     signal.cancel();
-  //   };
-  // }, []);
 
   function FetchInfluencer() {
     const { loading, error, data } = useQuery(REQUEST_GET_ALL_INFLUENCERS, {
