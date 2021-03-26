@@ -30,12 +30,26 @@ const renderStatus = (approvalStatus, influencerStatus, status) => {
     return 'Đã được cấp phép - Influencer đã chấp thuận - Đang hoạt động';
   } else return 'Đã được cấp phép - Influencer đã chấp thuận - Đã kết thúc';
 };
-const DashboardChildren = ({ data, categ }) => {
-  if (categ != '') {
-    var campaign = data.filter((c) => c.category.id == categ);
-  } else {
-    var campaign = data;
+const DashboardChildren = ({ data, categ, search }) => {
+  var campaign;
+  var searchItem = search.toLowerCase();
+  console.log(searchItem);
+  if (categ != '' && search == '') {
+    campaign = data.filter((c) => c.category.id == categ);
+  } else if (search != '' && categ == '') {
+    campaign = data.filter((c) =>
+      c.title.toLowerCase().includes(`${searchItem}`)
+    );
+  } else if (categ != '' && search != '') {
+    campaign = data.filter(
+      (c) =>
+        c.title.toLowerCase().includes(`${searchItem}`) &&
+        c.category.id == categ
+    );
+  } else if (categ == '' && search == '') {
+    campaign = data;
   }
+  console.log(campaign);
   return (
     <Row>
       <CardDeck>

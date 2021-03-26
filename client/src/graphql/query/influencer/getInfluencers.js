@@ -2,11 +2,14 @@ import gql from 'graphql-tag';
 
 export const REQUEST_GET_ALL_INFLUENCERS = gql`
   query getAllInfluencers {
-    channels {
-      user {
-        id
+    users(where: { role: { name: "Influencer" } }) {
+      id
+      name
+      avatar {
+        formats
+      }
+      role {
         name
-        username
       }
     }
   }

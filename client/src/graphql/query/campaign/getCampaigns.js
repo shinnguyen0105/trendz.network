@@ -46,13 +46,24 @@ export const REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID = gql`
 `;
 //Customer get our campaign
 export const REQUEST_GET_MY_CAMPAIGNS = gql`
-  query getCampaignByCustomerID($idCustomer: ID!) {
-    campaigns(where: { user: { id: $idCustomer } }) {
+  query getCampaignByCustomerID(
+    $idCustomer: ID!
+    $sort: String
+    $searchTitle: String
+  ) {
+    campaigns(
+      where: { user: { id: $idCustomer }, title_contains: $searchTitle }
+      sort: $sort
+    ) {
       id
       title
       status
       completed
       approve
+      category {
+        id
+        name
+      }
       user {
         name
       }
