@@ -4,6 +4,8 @@ import Router from 'next/router';
 
 import InfluencerDashboard from '../components/Containers/Dashboards/InfluencerDashboard';
 import CustomerDashboard from '../components/Containers/Dashboards/CustomerDashboard';
+import EmployeeDashboard from '../components/Containers/Dashboards/EmployeeDashboard';
+import AdminDashboard from '../components/Containers/Dashboards/AdminDashboard';
 
 // import Customer from '../components/Dashboards/Customer';
 // import Employee from '../components/Dashboards/Employee';
@@ -18,8 +20,8 @@ const Dashboard = () => {
     <>
       {state.user.role.name === 'Influencer' ? <InfluencerDashboard /> : null}
       {state.user.role.name === 'Customer' ? <CustomerDashboard /> : null}
-      {/* {state.user.role.name === 'Employee' ? <Employee /> : null}
-      {state.user.role.name === 'Admin' ? <Admin /> : null} */}
+      {state.user.role.name === 'Employee' ? <EmployeeDashboard /> : null}
+      {state.user.role.name === 'Admin' ? <AdminDashboard /> : null}
     </>
   );
 };

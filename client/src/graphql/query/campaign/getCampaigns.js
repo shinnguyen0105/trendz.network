@@ -86,6 +86,32 @@ export const REQUEST_GET_ID_CAMPAIGNS = gql`
     }
   }
 `;
+export const REQUEST_GET_ALL_CAMPAIGNS = gql`
+  query getAllCampaigns {
+    campaigns {
+      id
+      title
+      user {
+        id
+        name
+      }
+      status
+      completed
+      approve
+      picture {
+        formats
+      }
+      category {
+        id
+        name
+      }
+      campaignTTL {
+        open_datetime
+        close_datetime
+      }
+    }
+  }
+`;
 //Get campaign by id
 export const REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID = gql`
   query getCampaignByCampaignID($id: ID!) {

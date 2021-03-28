@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+
 import {
   Button,
   Card,
@@ -16,21 +17,41 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import Link from 'next/link';
 
 const { API_URL } = process.env;
-const renderStatus = (approvalStatus, influencerStatus, status) => {
-  if (approvalStatus == true && influencerStatus == null) {
-    return 'Đang chờ influencer chấp thuận';
+
+const DashboardChildren = ({ data, categ, search, roleType }) => {
+  function renderStatus(approvalStatus, influencerStatus, status) {
+    if ((roleType = 'Employee')) {
+      if (approvalStatus == null) {
+        return 'Đang chờ cấp phép';
+      }
+      if (!approvalStatus) {
+        return 'Không được cấp phép';
+      }
+      if (approvalStatus && influencerStatus == null) {
+        return 'Đã được cấp phép - Đang chờ influencer xác nhận';
+      }
+      if (approvalStatus && !influencerStatus) {
+        return 'Đã được cấp phép - Influencer đã từ chối';
+      }
+      if (approvalStatus && influencerStatus && status == false) {
+        return 'Đã được cấp phép - Influencer đã chấp thuận - Đang hoạt động';
+      } else return 'Đã được cấp phép - Influencer đã chấp thuận - Đã kết thúc';
+    } else {
+      if (approvalStatus == true && influencerStatus == null) {
+        return 'Đang chờ influencer chấp thuận';
+      }
+      if (approvalStatus == true && influencerStatus == true) {
+        return 'Đã được chấp thuận - Đang thực hiện';
+      }
+      if (approvalStatus == true && influencerStatus == false) {
+        return 'Đã được cấp phép - Influencer đã từ chối';
+      }
+      if (approvalStatus && influencerStatus && status == false) {
+        return 'Đã được cấp phép - Influencer đã chấp thuận - Đang hoạt động';
+      } else return 'Đã được cấp phép - Influencer đã chấp thuận - Đã kết thúc';
+    }
   }
-  if (approvalStatus == true && influencerStatus == true) {
-    return 'Đã được chấp thuận - Đang thực hiện';
-  }
-  if (approvalStatus == true && influencerStatus == false) {
-    return 'Đã được cấp phép - Influencer đã từ chối';
-  }
-  if (approvalStatus && influencerStatus && status == false) {
-    return 'Đã được cấp phép - Influencer đã chấp thuận - Đang hoạt động';
-  } else return 'Đã được cấp phép - Influencer đã chấp thuận - Đã kết thúc';
-};
-const DashboardChildren = ({ data, categ, search }) => {
+
   var campaign;
   var searchItem = search.toLowerCase();
   console.log(searchItem);

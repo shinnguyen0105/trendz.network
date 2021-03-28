@@ -38,8 +38,8 @@ const ListChannel = ({ data }) => {
   return (
     <Row>
       <CardDeck>
-        {data.channels.length !== 0 ? (
-          data.channels.map((channel) => (
+        {data.length !== 0 ? (
+          data.map((channel) => (
             <Col md={4} key={channel.id}>
               <Card className='campaign-card'>
                 {channel.avatar.formats !== null ? (

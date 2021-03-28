@@ -28,7 +28,7 @@ import { sortBy } from '../../../utils/filters/sortBy';
 
 import { REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID } from '../../../graphql/query/campaign/getCampaigns';
 import { REQUEST_GET_ALL_CATEGORIES } from '../../../graphql/query/category/getCategory';
-import { REQUEST_GET_ALL_CHANNELS } from '../../../graphql/query/channel/getChannels';
+import { REQUEST_GET_MY_CHANNELS } from '../../../graphql/query/channel/getChannels';
 
 import DashboardChildren from '../../ListCampaign';
 import ListChannel from '../../ListChannel';
@@ -181,7 +181,7 @@ const InfluencerDashboard = () => {
     );
   }
   function ListChannels() {
-    const { loading, error, data } = useQuery(REQUEST_GET_ALL_CHANNELS, {
+    const { loading, error, data } = useQuery(REQUEST_GET_MY_CHANNELS, {
       variables: {
         influencerID: state.user.id,
       },
@@ -189,9 +189,10 @@ const InfluencerDashboard = () => {
     if (loading) return <Skeleton variant='text' />;
     if (error) return null;
     // console.log('channel ne:', data);
+    let channelData = data.channels;
     return (
       <TabPane tabId='vertical4'>
-        <ListChannel data={data} />
+        <ListChannel data={channelData} />
       </TabPane>
     );
   }
