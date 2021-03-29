@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useQuery } from 'react-apollo';
 
 import classnames from 'classnames';
 import {
@@ -12,11 +13,16 @@ import {
   Row,
   Col,
 } from 'reactstrap';
-
 import Skeleton from '@material-ui/lab/Skeleton';
+
+import { REQUEST_ALL_CHANNELS } from '../../../graphql/query/channel/getChannels';
+
 import ListChannel from '../../ListChannel';
 
 const AdminDashboard = () => {
+  const [navState, setNav] = useState({
+    vertical: 1,
+  });
   const toggleTabs = (event, stateName, index) => {
     event.preventDefault();
     setNav((previousState) => {
@@ -40,7 +46,7 @@ const AdminDashboard = () => {
     );
     let unapprove = channels.filter(
       (channel) =>
-        channel.employeeConfirm == false && channel.adminConfirm == false
+        channel.employeeConfirm == true && channel.adminConfirm == false
     );
     // console.log('onhold channel', onhold);
     // console.log('onhold channel', approve);
