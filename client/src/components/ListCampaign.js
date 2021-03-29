@@ -1,5 +1,7 @@
 import React from 'react';
+import Link from 'next/link';
 
+import Skeleton from '@material-ui/lab/Skeleton';
 import {
   Button,
   Card,
@@ -8,13 +10,10 @@ import {
   CardDeck,
   CardSubtitle,
   CardTitle,
-  TabPane,
   Row,
   Col,
   Spinner,
 } from 'reactstrap';
-import Skeleton from '@material-ui/lab/Skeleton';
-import Link from 'next/link';
 
 const { API_URL } = process.env;
 

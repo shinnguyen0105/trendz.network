@@ -21,11 +21,9 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-
 import Skeleton from '@material-ui/lab/Skeleton';
 
 import { sortBy } from '../../../utils/filters/sortBy';
-
 import { REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID } from '../../../graphql/query/campaign/getCampaigns';
 import { REQUEST_GET_ALL_CATEGORIES } from '../../../graphql/query/category/getCategory';
 import { REQUEST_GET_MY_CHANNELS } from '../../../graphql/query/channel/getChannels';
