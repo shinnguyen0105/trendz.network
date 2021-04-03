@@ -130,7 +130,6 @@ const InfluencerDashboard = () => {
     const { loading, error, data } = useQuery(
       REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID,
       {
-        nextFetchPolicy: 'cache-and-network',
         variables: {
           idInfluencer: state.user.id,
           sort: sortGraphqlFilter,

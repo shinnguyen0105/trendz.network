@@ -909,6 +909,12 @@
           },
           "adminConfirm": {
             "type": "boolean"
+          },
+          "adminNote": {
+            "type": "string"
+          },
+          "employeeNote": {
+            "type": "string"
           }
         }
       },
@@ -952,6 +958,12 @@
           },
           "adminConfirm": {
             "type": "boolean"
+          },
+          "adminNote": {
+            "type": "string"
+          },
+          "employeeNote": {
+            "type": "string"
           },
           "created_by": {
             "type": "string"

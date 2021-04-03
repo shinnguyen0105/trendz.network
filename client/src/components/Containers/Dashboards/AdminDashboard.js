@@ -30,9 +30,7 @@ const AdminDashboard = () => {
     });
   };
   function ListChannels() {
-    const { loading, error, data } = useQuery(REQUEST_ALL_CHANNELS, {
-      nextFetchPolicy: 'cache-and-network',
-    });
+    const { loading, error, data } = useQuery(REQUEST_ALL_CHANNELS);
     if (loading) return <Skeleton variant='text' />;
     if (error) return null;
     let channels = data.channels;

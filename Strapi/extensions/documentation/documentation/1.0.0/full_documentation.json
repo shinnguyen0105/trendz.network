@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "03/16/2021 2:03:30 PM"
+    "x-generation-date": "04/03/2021 4:46:12 PM"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -4682,6 +4682,12 @@
                 "adminConfirm": {
                   "type": "boolean"
                 },
+                "adminNote": {
+                  "type": "string"
+                },
+                "employeeNote": {
+                  "type": "string"
+                },
                 "created_by": {
                   "type": "string"
                 },
@@ -4732,11 +4738,11 @@
                 },
                 "open_datetime": {
                   "type": "string",
-                  "format": "date"
+                  "format": "date-time"
                 },
                 "close_datetime": {
                   "type": "string",
-                  "format": "date"
+                  "format": "date-time"
                 }
               }
             }
@@ -4788,11 +4794,11 @@
                 },
                 "open_datetime": {
                   "type": "string",
-                  "format": "date"
+                  "format": "date-time"
                 },
                 "close_datetime": {
                   "type": "string",
-                  "format": "date"
+                  "format": "date-time"
                 }
               }
             }
@@ -4876,6 +4882,12 @@
                 },
                 "adminConfirm": {
                   "type": "boolean"
+                },
+                "adminNote": {
+                  "type": "string"
+                },
+                "employeeNote": {
+                  "type": "string"
                 },
                 "created_by": {
                   "type": "string"
@@ -5248,6 +5260,12 @@
           },
           "adminConfirm": {
             "type": "boolean"
+          },
+          "adminNote": {
+            "type": "string"
+          },
+          "employeeNote": {
+            "type": "string"
           }
         }
       },
@@ -5291,6 +5309,12 @@
           },
           "adminConfirm": {
             "type": "boolean"
+          },
+          "adminNote": {
+            "type": "string"
+          },
+          "employeeNote": {
+            "type": "string"
           },
           "created_by": {
             "type": "string"

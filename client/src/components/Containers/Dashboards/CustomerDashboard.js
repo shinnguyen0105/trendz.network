@@ -101,9 +101,7 @@ const CustomerDashboard = () => {
   }, [filterItems]);
 
   function FetchInfluencer() {
-    const { loading, error, data } = useQuery(REQUEST_GET_ALL_INFLUENCERS, {
-      nextFetchPolicy: 'cache-and-network',
-    });
+    const { loading, error, data } = useQuery(REQUEST_GET_ALL_INFLUENCERS);
     if (loading) return <Skeleton variant='text' />;
     if (error) return null;
     return (

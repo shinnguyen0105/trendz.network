@@ -1,35 +1,123 @@
 import gql from 'graphql-tag';
 
-export const UPDATE_CHANNEL = gql`
-  mutation updateChannel(
+export const UPDATE_CHANNEL_BY_INFLUENCER = gql`
+  mutation updateChannelByInfluencer($id: ID!, $status: Boolean) {
+    updateChannel(
+      input: { where: { id: $id }, data: { employeeConfirm: $status } }
+    ) {
+      channel {
+        id
+        name
+        website
+        status
+        employeeConfirm
+        employeeNote
+        adminConfirm
+        adminNote
+        price
+        category {
+          id
+          name
+          description
+        }
+        avatar {
+          id
+          formats
+          url
+        }
+        picture {
+          id
+          formats
+          url
+        }
+      }
+    }
+  }
+`;
+export const UPDATE_CHANNEL_BY_ADMIN = gql`
+  mutation updateChannelByAdmin(
     $id: ID!
-    $name: String
-    $description: String
-    $category: ID
-    $phone: String
-    $website: String
-    $price: Long
+    $adminConfirm: Boolean
+    $status: Boolean
+    $adminNote: String
   ) {
     updateChannel(
       input: {
         where: { id: $id }
         data: {
-          name: $name
-          description: $description
-          website: $website
-          phone: $phone
-          price: $price
-          category: $category
-          status: null
-          employeeConfirm: null
-          adminConfirm: null
+          adminConfirm: $adminConfirm
+          status: $status
+          adminNote: $adminNote
         }
       }
     ) {
       channel {
         id
         name
+        website
         status
+        employeeConfirm
+        adminConfirm
+        adminNote
+        employeeNote
+        price
+        category {
+          id
+          name
+          description
+        }
+        avatar {
+          id
+          formats
+          url
+        }
+        picture {
+          id
+          formats
+          url
+        }
+      }
+    }
+  }
+`;
+
+export const UPDATE_CHANNEL_BY_EMPLOYEE = gql`
+  mutation updateChannelByInfluencer(
+    $id: ID!
+    $status: Boolean
+    $employeeNote: String
+  ) {
+    updateChannel(
+      input: {
+        where: { id: $id }
+        data: { employeeConfirm: $status, employeeNote: $employeeNote }
+      }
+    ) {
+      channel {
+        id
+        name
+        website
+        status
+        employeeConfirm
+        employeeNote
+        adminConfirm
+        adminNote
+        price
+        category {
+          id
+          name
+          description
+        }
+        avatar {
+          id
+          formats
+          url
+        }
+        picture {
+          id
+          formats
+          url
+        }
       }
     }
   }

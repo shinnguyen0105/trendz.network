@@ -806,6 +806,12 @@
                 "adminConfirm": {
                   "type": "boolean"
                 },
+                "adminNote": {
+                  "type": "string"
+                },
+                "employeeNote": {
+                  "type": "string"
+                },
                 "created_by": {
                   "type": "string"
                 },
@@ -856,11 +862,11 @@
                 },
                 "open_datetime": {
                   "type": "string",
-                  "format": "date"
+                  "format": "date-time"
                 },
                 "close_datetime": {
                   "type": "string",
-                  "format": "date"
+                  "format": "date-time"
                 }
               }
             }
@@ -912,11 +918,11 @@
                 },
                 "open_datetime": {
                   "type": "string",
-                  "format": "date"
+                  "format": "date-time"
                 },
                 "close_datetime": {
                   "type": "string",
-                  "format": "date"
+                  "format": "date-time"
                 }
               }
             }

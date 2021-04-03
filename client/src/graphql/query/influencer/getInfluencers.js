@@ -6,9 +6,11 @@ export const REQUEST_GET_ALL_INFLUENCERS = gql`
       id
       name
       avatar {
+        id
         formats
       }
       role {
+        id
         name
       }
     }
@@ -23,10 +25,12 @@ export const REQUEST_GET_INFLUENCER_DETAILS = gql`
       status
       price
       avatar {
+        id
         formats
         url
       }
       picture {
+        id
         formats
         url
       }
@@ -37,6 +41,7 @@ export const REQUEST_GET_INFLUENCER_DETAILS = gql`
         email
         phoneNumber
         avatar {
+          id
           formats
           url
         }

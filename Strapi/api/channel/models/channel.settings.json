@@ -67,6 +67,12 @@
     },
     "adminConfirm": {
       "type": "boolean"
+    },
+    "adminNote": {
+      "type": "text"
+    },
+    "employeeNote": {
+      "type": "string"
     }
   }
 }

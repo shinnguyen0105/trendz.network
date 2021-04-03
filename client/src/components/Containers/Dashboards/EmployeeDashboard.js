@@ -115,21 +115,13 @@ const EmployeeDashboard = () => {
     );
   }
   function ListCampaigns() {
-    const { loading, error, data } = useQuery(REQUEST_GET_ALL_CAMPAIGNS, {
-      nextFetchPolicy: 'cache-and-network',
-    });
+    const { loading, error, data } = useQuery(REQUEST_GET_ALL_CAMPAIGNS);
     if (loading) return <Skeleton variant='text' />;
     if (error) return null;
     let campaigns = data.campaigns;
-    let onhold = campaigns.filter(
-      (campaign) => campaign.approve == true && campaign.status == null
-    );
-    let approve = campaigns.filter(
-      (campaign) => campaign.approve && campaign.status == true
-    );
-    let unapprove = campaigns.filter(
-      (campaign) => campaign.approve == true && campaign.status == false
-    );
+    let onhold = campaigns.filter((campaign) => campaign.approve == null);
+    let approve = campaigns.filter((campaign) => campaign.approve == true);
+    let unapprove = campaigns.filter((campaign) => campaign.approve == false);
     // console.log('onhold', onhold);
     // console.log('onhold', approve);
     // console.log('onhold', unapprove);
@@ -163,9 +155,7 @@ const EmployeeDashboard = () => {
     );
   }
   function ListChannels() {
-    const { loading, error, data } = useQuery(REQUEST_ALL_CHANNELS, {
-      nextFetchPolicy: 'cache-and-network',
-    });
+    const { loading, error, data } = useQuery(REQUEST_ALL_CHANNELS);
     if (loading) return <Skeleton variant='text' />;
     if (error) return null;
     let channels = data.channels;

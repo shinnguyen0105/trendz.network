@@ -2,18 +2,9 @@ import gql from 'graphql-tag';
 
 //Influencer get campaign for our channel
 export const REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID = gql`
-  query getCampaignByInfluencerID(
-    $idInfluencer: ID!
-    $categoryFilter: ID
-    $sort: String
-    $searchTitle: String
-  ) {
+  query getCampaignByInfluencerID($idInfluencer: ID!, $sort: String) {
     campaigns(
-      where: {
-        title_contains: $searchTitle
-        channels: { user: { id: $idInfluencer } }
-        category: { id: $categoryFilter }
-      }
+      where: { channels: { user: { id: $idInfluencer } } }
       sort: $sort
     ) {
       id
@@ -26,6 +17,7 @@ export const REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID = gql`
         name
       }
       user {
+        id
         name
       }
       channels {
@@ -34,10 +26,12 @@ export const REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID = gql`
         }
       }
       picture {
+        id
         formats
         url
       }
       campaignTTL {
+        id
         open_datetime
         close_datetime
       }
@@ -46,15 +40,8 @@ export const REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID = gql`
 `;
 //Customer get our campaign
 export const REQUEST_GET_MY_CAMPAIGNS = gql`
-  query getCampaignByCustomerID(
-    $idCustomer: ID!
-    $sort: String
-    $searchTitle: String
-  ) {
-    campaigns(
-      where: { user: { id: $idCustomer }, title_contains: $searchTitle }
-      sort: $sort
-    ) {
+  query getCampaignByCustomerID($idCustomer: ID!, $sort: String) {
+    campaigns(where: { user: { id: $idCustomer } }, sort: $sort) {
       id
       title
       status
@@ -65,13 +52,16 @@ export const REQUEST_GET_MY_CAMPAIGNS = gql`
         name
       }
       user {
+        id
         name
       }
       picture {
+        id
         formats
         url
       }
       campaignTTL {
+        id
         open_datetime
         close_datetime
       }
@@ -99,6 +89,7 @@ export const REQUEST_GET_ALL_CAMPAIGNS = gql`
       completed
       approve
       picture {
+        id
         formats
       }
       category {
@@ -106,6 +97,7 @@ export const REQUEST_GET_ALL_CAMPAIGNS = gql`
         name
       }
       campaignTTL {
+        id
         open_datetime
         close_datetime
       }
@@ -115,7 +107,7 @@ export const REQUEST_GET_ALL_CAMPAIGNS = gql`
 //Get campaign by id
 export const REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID = gql`
   query getCampaignByCampaignID($id: ID!) {
-    campaigns(where: { id: $id }) {
+    campaign(id: $id) {
       id
       title
       content
@@ -123,6 +115,10 @@ export const REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID = gql`
       completed
       approve
       note
+      category {
+        id
+        name
+      }
       user {
         id
         name
@@ -130,26 +126,42 @@ export const REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID = gql`
         email
         address
         phoneNumber
+        avatar {
+          id
+          formats
+        }
       }
       channels {
+        id
         name
-        description
+        phone
+        address
+        website
         user {
           id
           name
           role {
+            id
             name
           }
+          avatar {
+            id
+            formats
+          }
+          gender
+          birthDay
+          email
+          address
+          phoneNumber
         }
-        phone
-        address
-        website
       }
       picture {
+        id
         formats
         url
       }
       campaignTTL {
+        id
         open_datetime
         close_datetime
       }
@@ -159,7 +171,11 @@ export const REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID = gql`
 //get campaign-detail
 export const REQUEST_GETCAMPAIGNS_DETAILS_BY_CAMPAIGN_ID = gql`
   query getCampaignDetails($id: ID!) {
-    campaignDetails(where: { campaign: { id: $id } }) {
+    campaignDetail(id: $id) {
+      campaign {
+        id
+        title
+      }
       rating
       report
       chatLog {

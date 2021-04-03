@@ -8,3 +8,15 @@ export const REQUEST_GET_ALL_CATEGORIES = gql`
     }
   }
 `;
+export const REQUEST_GET_ALL_CATEGORIES_CHANNELS = gql`
+  query getAllCategoriesAndChannel {
+    categories {
+      id
+      name
+      channels {
+        id
+        name
+      }
+    }
+  }
+`;

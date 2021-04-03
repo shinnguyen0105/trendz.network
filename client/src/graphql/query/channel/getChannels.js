@@ -9,10 +9,12 @@ export const REQUEST_GET_MY_CHANNELS = gql`
         id
       }
       avatar {
+        id
         url
         formats
       }
       category {
+        id
         name
       }
       status
@@ -31,10 +33,12 @@ export const REQUEST_ALL_CHANNELS = gql`
         id
       }
       avatar {
+        id
         url
         formats
       }
       category {
+        id
         name
       }
       status
@@ -46,7 +50,7 @@ export const REQUEST_ALL_CHANNELS = gql`
 `;
 export const REQUEST_GET_CHANNEL_DETAILS = gql`
   query getChannelDetails($channelID: ID!) {
-    channels(where: { id: $channelID }) {
+    channel(id: $channelID) {
       id
       name
       website
@@ -54,16 +58,20 @@ export const REQUEST_GET_CHANNEL_DETAILS = gql`
       employeeConfirm
       adminConfirm
       price
+      adminNote
+      employeeNote
       category {
         id
         name
         description
       }
       avatar {
+        id
         formats
         url
       }
       picture {
+        id
         formats
         url
       }
@@ -74,6 +82,7 @@ export const REQUEST_GET_CHANNEL_DETAILS = gql`
         email
         phoneNumber
         avatar {
+          id
           formats
           url
         }
