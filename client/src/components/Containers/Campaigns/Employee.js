@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../contexts/userContext';
 import Router from 'next/router';
-import axios from 'axios';
-import { useQuery, useMutation } from 'react-apollo';
+import { useMutation } from 'react-apollo';
 
 import {
   Button,

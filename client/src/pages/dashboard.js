@@ -17,7 +17,7 @@ const Dashboard = () => {
     if (state.jwt === '') Router.push('/login');
   }, [state]);
   return (
-    <div>
+    <div className='wrapper'>
       {state.user.role.name === 'Influencer' ? <InfluencerDashboard /> : null}
       {state.user.role.name === 'Customer' ? <CustomerDashboard /> : null}
       {state.user.role.name === 'Employee' ? <EmployeeDashboard /> : null}

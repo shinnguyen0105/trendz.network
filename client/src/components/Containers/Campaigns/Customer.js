@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useAuth } from '../../../contexts/userContext';
+import React, { useState } from 'react';
 import Router from 'next/router';
-import axios from 'axios';
 import { useQuery, useMutation } from 'react-apollo';
 
 import { REQUEST_GET_ALL_CATEGORIES } from '../../../graphql/query/category/getCategory';
@@ -56,12 +54,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import SyncIcon from '@material-ui/icons/Sync';
 import LockIcon from '@material-ui/icons/Lock';
-
-// import MessageList from '../../MessageChatList';
-
-// const user = {
-//   uid: 'customer',
-// };
+import { Editor } from '@tinymce/tinymce-react';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -86,7 +79,6 @@ const { API_URL } = process.env;
 
 const Customer = ({ campaign, cid }) => {
   const { enqueueSnackbar } = useSnackbar();
-  const { state } = useAuth();
   const [tempCampaign, setTempCampaign] = useState(campaign);
   const [navState, setNav] = useState({
     vertical: 1,
@@ -99,6 +91,12 @@ const Customer = ({ campaign, cid }) => {
     categoryName: '',
     channelId: '',
     channelName: tempCampaign.channels[0].name,
+    campaignTTL: [
+      {
+        open_datetime: new Date(tempCampaign.campaignTTL[0].open_datetime),
+        close_datetime: new Date(tempCampaign.campaignTTL[0].close_datetime),
+      },
+    ],
   });
 
   const [campaignModal, setCampaignModal] = useState(false);
@@ -142,6 +140,17 @@ const Customer = ({ campaign, cid }) => {
           ],
         };
       });
+      setTempData((previousState) => {
+        return {
+          ...previousState,
+          campaignTTL: [
+            {
+              open_datetime: event._d,
+              close_datetime: previousState.campaignTTL[0].close_datetime,
+            },
+          ],
+        };
+      });
       console.log('start date: ', value);
       setDate(value);
     } else return;
@@ -160,7 +169,19 @@ const Customer = ({ campaign, cid }) => {
           ],
         };
       });
-      console.log('start date: ', value);
+
+      setTempData((previousState) => {
+        return {
+          ...previousState,
+          campaignTTL: [
+            {
+              open_datetime: event._d,
+              close_datetime: previousState.campaignTTL[0].close_datetime,
+            },
+          ],
+        };
+      });
+      console.log('start date: ', event._d);
     } else return;
   };
 
@@ -428,15 +449,13 @@ const Customer = ({ campaign, cid }) => {
             </FormGroup>
             <FormGroup className='modal-items'>
               <Label for='content'>Nội dung</Label>
-              <Input
-                type='textarea'
+              <Editor
+                apiKey='awf8d12nkj02oekbnk7t8xx283a5kexhscdfvpj9sd8h22ox'
                 id='content'
                 placeholder='Nội dung...'
-                name='content'
-                onChange={handleCampaignChange}
+                onEditorChange={handleCampaignChange}
                 value={tempCampaign.content}
                 required
-                className='modal-items'
               />
             </FormGroup>
             <div className='form-row'>
@@ -446,7 +465,7 @@ const Customer = ({ campaign, cid }) => {
                 </Label>
                 <Datetime
                   onChange={handleStartDateChange}
-                  value={new Date(tempCampaign.campaignTTL[0].open_datetime)}
+                  value={tempData.campaignTTL[0].open_datetime}
                   required
                   isValidDate={validStartDate}
                   className='modal-items'
@@ -458,7 +477,7 @@ const Customer = ({ campaign, cid }) => {
                 </Label>
                 <Datetime
                   onChange={handleEndDateChange}
-                  value={new Date(tempCampaign.campaignTTL[0].close_datetime)}
+                  value={tempData.campaignTTL[0].close_datetime}
                   required
                   isValidDate={valid}
                   className='modal-items'

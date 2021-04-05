@@ -4,11 +4,11 @@ export const CREATE_CHANNEL = gql`
   mutation createChannel(
     $name: String!
     $description: String
+    $address: String
+    $website: String
     $category: ID!
     $phone: String
     $avatar: ID!
-    $website: String
-    $picture: [ID]
     $price: Long
     $user: ID
   ) {
@@ -17,10 +17,10 @@ export const CREATE_CHANNEL = gql`
         data: {
           name: $name
           description: $description
+          address: $address
           website: $website
           phone: $phone
           avatar: $avatar
-          picture: $picture
           price: $price
           category: $category
           user: $user
@@ -30,7 +30,22 @@ export const CREATE_CHANNEL = gql`
       channel {
         id
         name
+        user {
+          id
+        }
+        avatar {
+          id
+          url
+          formats
+        }
+        category {
+          id
+          name
+        }
         status
+        adminConfirm
+        employeeConfirm
+        created_at
       }
     }
   }

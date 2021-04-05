@@ -38,7 +38,6 @@ const InfluencerCampaignPage = ({ chid, channel }) => {
   );
   const handleChangeStatusChannel = async () => {
     try {
-      console.log(tempChannel);
       await requestUpdateChannelStatusMutation();
     } catch (e) {
       console.log(e);
