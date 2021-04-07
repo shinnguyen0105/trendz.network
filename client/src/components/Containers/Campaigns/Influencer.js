@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
 import axios from 'axios';
 import { useMutation } from 'react-apollo';
+import gql from 'graphql-tag';
 
 import { REQUEST_UPDATE_CAMPAIGN_INFLUENCER } from '../../../graphql/mutations/campaign/updateCampaign';
+import { REQUEST_SEND_CHAT_BY_INFLUENCER } from '../../../graphql/mutations/message/sendChat';
 
 import {
   Button,
@@ -23,6 +25,14 @@ import {
   TabContent,
   TabPane,
   Container,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  Label,
+  FormGroup,
+  Toast,
+  ToastBody,
+  Input,
 } from 'reactstrap';
 import { useSnackbar } from 'notistack';
 import classnames from 'classnames';
@@ -41,6 +51,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import SyncIcon from '@material-ui/icons/Sync';
 import LockIcon from '@material-ui/icons/Lock';
+import { forEach } from 'lodash';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -70,6 +81,41 @@ const Influencer = ({ campaign, cid }) => {
   });
   const [statusChange, setStatusChange] = useState();
   const { enqueueSnackbar } = useSnackbar();
+
+  const [chatModal, setChatModal] = useState(false);
+  const [contentChat, setContentChat] = useState(campaign.messages);
+  const toggleChatModal = () => {
+    setChatModal(!chatModal);
+  };
+
+  const [message, setMesage] = useState('');
+  const [
+    requestSendMessageMutation,
+    { loading: requestSendLoading },
+  ] = useMutation(REQUEST_SEND_CHAT_BY_INFLUENCER, {
+    update(cache, { data: { createMessage } }) {
+      //console.log('abc: ', createMessage.message);
+      let content = createMessage.message;
+      setContentChat((prev) => {
+        return [...prev, content];
+      });
+    },
+  });
+  //update Cached pls
+  const handleInfluencerSendMessage = async () => {
+    try {
+      await requestSendMessageMutation({
+        variables: {
+          input: message,
+          campaign: campaign.id,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+    return;
+  };
+
   const classes = useStyles();
   const [
     requestUpdateCampaignMutation,
@@ -138,6 +184,74 @@ const Influencer = ({ campaign, cid }) => {
 
   return (
     <Row>
+      <Modal isOpen={chatModal} toggle={toggleChatModal}>
+        <div className='modal-header'>
+          <h4 className='modal-title' id='avatarModal'>
+            <strong>{campaign.user.name}</strong>
+          </h4>
+          <button
+            type='button'
+            className='close'
+            data-dismiss='modal'
+            aria-hidden='true'
+            onClick={() => {
+              toggleChatModal();
+            }}
+          >
+            <i className='tim-icons icon-simple-remove' />
+          </button>
+        </div>
+        <ModalBody>
+          <div className='wrapper-chat'>
+            <div className='content-chat'>
+              {contentChat.map((chat, i) => {
+                if (chat.influencerMessage !== null) {
+                  return (
+                    <div className='d-flex justify-content-end' key={i}>
+                      <div className='p-2 justify-content-start wrap bg-info my-2 rounded w-50'>
+                        <p>{chat.influencerMessage}</p>
+                      </div>
+                    </div>
+                  );
+                }
+                if (chat.userMessage !== null) {
+                  return (
+                    <div
+                      className='d-flex justify-content-start wrap p-2 bg-success my-2 rounded w-50'
+                      key={i}
+                    >
+                      <p> {chat.userMessage}</p>
+                    </div>
+                  );
+                }
+              })}
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <FormGroup className='w-100 d-flex nowrap'>
+            <Input
+              placeholder='Write your message...'
+              value={message}
+              onChange={(e) => setMesage(e.target.value)}
+              className='text-dark'
+            />
+            <button
+              type='button'
+              className='close'
+              data-dismiss='modal'
+              aria-hidden='true'
+              disabled={requestSendLoading}
+              onClick={() => {
+                handleInfluencerSendMessage();
+                setMesage('');
+              }}
+            >
+              <i className='tim-icons icon-send' />
+            </button>
+          </FormGroup>
+        </ModalFooter>
+      </Modal>
       <Col md='2'>
         <Nav className='nav-pills-primary flex-column' pills>
           <NavItem>
@@ -352,14 +466,10 @@ const Influencer = ({ campaign, cid }) => {
                     ) : (
                       ''
                     )}
-                    <br /> <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
                     <div className='form-button'>
-                      <Button color='primary'>Liên hệ ngay!</Button>
+                      <Button color='primary' onClick={toggleChatModal}>
+                        Liên hệ ngay!
+                      </Button>
                     </div>
                   </CardBody>
                 </Card>

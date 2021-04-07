@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Router from 'next/router';
 import { useQuery, useMutation } from 'react-apollo';
 
@@ -6,6 +6,7 @@ import { REQUEST_GET_ALL_CATEGORIES } from '../../../graphql/query/category/getC
 import { REQUEST_GET_ALL_CATEGORIES_CHANNELS } from '../../../graphql/query/category/getCategory';
 import { REQUEST_UPDATE_CAMPAIGN } from '../../../graphql/mutations/campaign/updateCampaign';
 import { REQUEST_DELETE_CAMPAIGN } from '../../../graphql/mutations/campaign/deleteCampaign';
+import { REQUEST_SEND_CHAT_BY_CUSTOMER } from '../../../graphql/mutations/message/sendChat';
 
 import Datetime from 'react-datetime';
 import {
@@ -55,6 +56,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import SyncIcon from '@material-ui/icons/Sync';
 import LockIcon from '@material-ui/icons/Lock';
 import { Editor } from '@tinymce/tinymce-react';
+import { TrafficOutlined } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -99,15 +101,32 @@ const Customer = ({ campaign, cid }) => {
     ],
   });
 
+  const [isAbleToSend, setIsAbleToSend] = useState(true);
+
   const [campaignModal, setCampaignModal] = useState(false);
   const toggleCampaignModal = () => {
     setCampaignModal(!campaignModal);
   };
 
+  const [chatModal, setChatModal] = useState(false);
+  const [contentChat, setContentChat] = useState(campaign.messages);
+  const toggleChatModal = () => {
+    setChatModal(!chatModal);
+    setMesage('');
+  };
+
+  const [message, setMesage] = useState('');
+
   const [deleteModal, setDeleteModal] = useState(false);
   const toggleDeleteModal = () => {
     setDeleteModal(!deleteModal);
   };
+
+  useEffect(() => {
+    if (message !== '') {
+      setIsAbleToSend(false);
+    }
+  }, [message]);
 
   var valid = function (current) {
     return current.isAfter(date);
@@ -151,7 +170,7 @@ const Customer = ({ campaign, cid }) => {
           ],
         };
       });
-      console.log('start date: ', value);
+      //console.log('start date: ', value);
       setDate(value);
     } else return;
   };
@@ -181,7 +200,7 @@ const Customer = ({ campaign, cid }) => {
           ],
         };
       });
-      console.log('start date: ', event._d);
+      //console.log('start date: ', event._d);
     } else return;
   };
 
@@ -215,7 +234,31 @@ const Customer = ({ campaign, cid }) => {
       };
     });
   };
-
+  const [
+    requestSendMessageMutation,
+    { loading: requestSendLoading },
+  ] = useMutation(REQUEST_SEND_CHAT_BY_CUSTOMER, {
+    update(cache, { data: { createMessage } }) {
+      //console.log('abc: ', createMessage.message);
+      let content = createMessage.message;
+      setContentChat((prev) => {
+        return [...prev, content];
+      });
+    },
+  });
+  const handleCustomerSendMessage = async () => {
+    try {
+      await requestSendMessageMutation({
+        variables: {
+          input: message,
+          campaign: campaign.id,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+    return;
+  };
   console.log('temp campaign: ', tempCampaign);
   function FetchCategories() {
     const { loading, error, data } = useQuery(REQUEST_GET_ALL_CATEGORIES);
@@ -256,7 +299,7 @@ const Customer = ({ campaign, cid }) => {
     );
     if (loading) return <Skeleton />;
     if (error) return null;
-
+    console.log(data.categories.find((x) => x.id == 1));
     return (
       <>
         <DropdownToggle caret color='secondary' data-toggle='dropdown'>
@@ -298,23 +341,24 @@ const Customer = ({ campaign, cid }) => {
     },
   });
 
-  const [requestDeletePostMutation] = useMutation(REQUEST_DELETE_CAMPAIGN, {
-    update(cache, { data: { deleteCampaign } }) {
-      cache.modify({
-        fields: {
-          campaigns(existingCampaign, { readField }) {
-            const newCampaigns = existingCampaign.filter(
-              (camRef) => readField('id', camRef) !== deleteCampaign.id
-            );
-            return newCampaigns;
-          },
-        },
-      });
-    },
-    variables: {
-      id: cid,
-    },
-  });
+  const [requestDeletePostMutation] = useMutation(REQUEST_DELETE_CAMPAIGN);
+  // , {
+  //   update(cache, { data: { deleteCampaign } }) {
+  //     cache.modify({
+  //       fields: {
+  //         campaigns(existingCampaign, { readField }) {
+  //           const newCampaigns = existingCampaign.filter(
+  //             (camRef) => readField('id', camRef) !== deleteCampaign.id
+  //           );
+  //           return newCampaigns;
+  //         },
+  //       },
+  //     });
+  //   },
+  //   variables: {
+  //     id: cid,
+  //   },
+  // }
   const handleEditSubmit = async () => {
     try {
       await requestUpdateCampaignMutation();
@@ -326,7 +370,11 @@ const Customer = ({ campaign, cid }) => {
   //creator delete campaign
   const handleDelete = async () => {
     try {
-      await requestDeletePostMutation();
+      await requestDeletePostMutation({
+        variables: {
+          id: campaign.id,
+        },
+      });
     } catch (e) {
       console.log(e);
     }
@@ -480,7 +528,7 @@ const Customer = ({ campaign, cid }) => {
                   value={tempData.campaignTTL[0].close_datetime}
                   required
                   isValidDate={valid}
-                  className='modal-items'
+                  className='modal-items text-dark'
                 />
               </FormGroup>
             </div>
@@ -953,28 +1001,94 @@ const Customer = ({ campaign, cid }) => {
                   ''
                 )}
               </Timeline>
-            </Row>
-            {/* {campaign.completed == false ? (
-              <Row>
-                <Container>
-                <div className="chat-box">
-                  <div className="msg-page">
-                    <MessageList isLoading={false} messages={messages} user={user}/>
-                    <div className="chat-box-bottom">
-                      <div id="end-of-chat"/>
+              <Modal isOpen={chatModal} toggle={toggleChatModal}>
+                <div className='modal-header'>
+                  <h4 className='modal-title' id='avatarModal'>
+                    <strong>{campaign.channels[0].user.name}</strong>
+                  </h4>
+                  <button
+                    type='button'
+                    className='close'
+                    data-dismiss='modal'
+                    aria-hidden='true'
+                    onClick={() => {
+                      toggleChatModal();
+                    }}
+                  >
+                    <i className='tim-icons icon-simple-remove' />
+                  </button>
+                </div>
+                <ModalBody>
+                  <div className='wrapper-chat'>
+                    <div className='content-chat'>
+                      {contentChat.map((chat, i) => {
+                        if (chat.userMessage !== null) {
+                          return (
+                            <div className='d-flex justify-content-end' key={i}>
+                              <div className='pt-2 pl-2 pr-2 justify-content-start wrap bg-info my-2 rounded w-50'>
+                                <p> {chat.userMessage}</p>
+                                <p className='create-at-message'>
+                                  <i className='tim-icons icon-check-2' />
+                                  {new Date(chat.created_at).toLocaleTimeString(
+                                    'en-US'
+                                  ) +
+                                    ' ' +
+                                    new Date(
+                                      chat.created_at
+                                    ).toLocaleDateString('en-US')}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        }
+                        if (chat.influencerMessage !== null) {
+                          return (
+                            <div
+                              className='d-flex justify-content-start wrap pt-2 pl-2 pr-2 bg-success my-2 rounded w-50'
+                              key={i}
+                            >
+                              <p>{chat.influencerMessage}</p>
+                            </div>
+                          );
+                        }
+                      })}
                     </div>
                   </div>
-                  <div className="msg-footer">
-                    <form className="message-form">
-                      <div className="chat-input-group">
-                        <input type="text" className="chat-form-control message-input"  required/>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-                </Container>
-              </Row>
-            ):("")} */}
+                </ModalBody>
+                <ModalFooter>
+                  <FormGroup className='w-100 d-flex nowrap'>
+                    <Input
+                      placeholder='Write your message...'
+                      value={message}
+                      onChange={(e) => setMesage(e.target.value)}
+                      className='text-dark'
+                    />
+                    <button
+                      type='button'
+                      className='close'
+                      data-dismiss='modal'
+                      aria-hidden='true'
+                      disabled={isAbleToSend}
+                      onClick={() => {
+                        handleCustomerSendMessage();
+                        setMesage('');
+                      }}
+                    >
+                      <i className='tim-icons icon-send' />
+                    </button>
+                  </FormGroup>
+                </ModalFooter>
+              </Modal>
+            </Row>
+            <div
+              className='form-button margin-button'
+              onClick={() => {
+                toggleChatModal();
+                setMesage('');
+              }}
+            >
+              <Button color='primary'>Liên hệ ngay!</Button>
+            </div>
           </TabPane>
         </TabContent>
       </Col>

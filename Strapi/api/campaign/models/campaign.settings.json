@@ -56,6 +56,10 @@
       "type": "component",
       "repeatable": true,
       "component": "component.campaign-ttl"
+    },
+    "messages": {
+      "via": "campaign",
+      "collection": "message"
     }
   }
 }

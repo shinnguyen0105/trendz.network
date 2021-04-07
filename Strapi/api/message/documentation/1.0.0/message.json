@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/campaign-details": {
+    "/messages": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -10,10 +10,9 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "foo": {
-                      "type": "string"
-                    }
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Message"
                   }
                 }
               }
@@ -52,7 +51,7 @@
         },
         "summary": "",
         "tags": [
-          "Campaign-detail"
+          "Message"
         ],
         "parameters": [
           {
@@ -202,11 +201,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "foo": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Message"
                 }
               }
             }
@@ -244,7 +239,7 @@
         },
         "summary": "",
         "tags": [
-          "Campaign-detail"
+          "Message"
         ],
         "requestBody": {
           "description": "",
@@ -252,14 +247,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewCampaign-detail"
+                "$ref": "#/components/schemas/NewMessage"
               }
             }
           }
         }
       }
     },
-    "/campaign-details/count": {
+    "/messages/count": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -270,8 +265,8 @@
               "application/json": {
                 "schema": {
                   "properties": {
-                    "foo": {
-                      "type": "string"
+                    "count": {
+                      "type": "integer"
                     }
                   }
                 }
@@ -311,12 +306,12 @@
         },
         "summary": "",
         "tags": [
-          "Campaign-detail"
+          "Message"
         ],
         "parameters": []
       }
     },
-    "/campaign-details/{id}": {
+    "/messages/{id}": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -326,11 +321,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "foo": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Message"
                 }
               }
             }
@@ -368,7 +359,7 @@
         },
         "summary": "",
         "tags": [
-          "Campaign-detail"
+          "Message"
         ],
         "parameters": [
           {
@@ -392,11 +383,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "foo": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Message"
                 }
               }
             }
@@ -434,7 +421,7 @@
         },
         "summary": "",
         "tags": [
-          "Campaign-detail"
+          "Message"
         ],
         "requestBody": {
           "description": "",
@@ -442,7 +429,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewCampaign-detail"
+                "$ref": "#/components/schemas/NewMessage"
               }
             }
           }
@@ -508,7 +495,7 @@
         },
         "summary": "",
         "tags": [
-          "Campaign-detail"
+          "Message"
         ],
         "parameters": [
           {
@@ -527,7 +514,7 @@
   },
   "components": {
     "schemas": {
-      "Campaign-detail": {
+      "Message": {
         "required": [
           "id"
         ],
@@ -535,10 +522,10 @@
           "id": {
             "type": "string"
           },
-          "rating": {
-            "type": "integer"
+          "userMessage": {
+            "type": "string"
           },
-          "report": {
+          "influencerMessage": {
             "type": "string"
           },
           "campaign": {
@@ -588,6 +575,12 @@
               "campaignTTL": {
                 "type": "component"
               },
+              "messages": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
               "created_by": {
                 "type": "string"
               },
@@ -595,59 +588,19 @@
                 "type": "string"
               }
             }
-          },
-          "chatLog": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "id"
-              ],
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "userMessage": {
-                  "type": "string"
-                },
-                "influencerMessage": {
-                  "type": "string"
-                }
-              }
-            }
           }
         }
       },
-      "NewCampaign-detail": {
+      "NewMessage": {
         "properties": {
-          "rating": {
-            "type": "integer"
+          "userMessage": {
+            "type": "string"
           },
-          "report": {
+          "influencerMessage": {
             "type": "string"
           },
           "campaign": {
             "type": "string"
-          },
-          "chatLog": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "id"
-              ],
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "userMessage": {
-                  "type": "string"
-                },
-                "influencerMessage": {
-                  "type": "string"
-                }
-              }
-            }
           },
           "created_by": {
             "type": "string"
@@ -659,5 +612,9 @@
       }
     }
   },
-  "tags": []
+  "tags": [
+    {
+      "name": "Message"
+    }
+  ]
 }

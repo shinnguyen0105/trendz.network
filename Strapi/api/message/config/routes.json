@@ -2,48 +2,48 @@
   "routes": [
     {
       "method": "GET",
-      "path": "/campaign-details",
-      "handler": "campaign-detail.find",
+      "path": "/messages",
+      "handler": "message.find",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/campaign-details/count",
-      "handler": "campaign-detail.count",
+      "path": "/messages/count",
+      "handler": "message.count",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/campaign-details/:id",
-      "handler": "campaign-detail.findOne",
+      "path": "/messages/:id",
+      "handler": "message.findOne",
       "config": {
         "policies": []
       }
     },
     {
       "method": "POST",
-      "path": "/campaign-details",
-      "handler": "campaign-detail.create",
+      "path": "/messages",
+      "handler": "message.create",
       "config": {
         "policies": []
       }
     },
     {
       "method": "PUT",
-      "path": "/campaign-details/:id",
-      "handler": "campaign-detail.update",
+      "path": "/messages/:id",
+      "handler": "message.update",
       "config": {
         "policies": []
       }
     },
     {
       "method": "DELETE",
-      "path": "/campaign-details/:id",
-      "handler": "campaign-detail.delete",
+      "path": "/messages/:id",
+      "handler": "message.delete",
       "config": {
         "policies": []
       }

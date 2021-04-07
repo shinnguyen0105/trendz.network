@@ -870,6 +870,34 @@
                 }
               }
             }
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "userMessage": {
+                  "type": "string"
+                },
+                "influencerMessage": {
+                  "type": "string"
+                },
+                "campaign": {
+                  "type": "string"
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "updated_by": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       },
@@ -925,6 +953,12 @@
                   "format": "date-time"
                 }
               }
+            }
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "type": "string"
             }
           },
           "created_by": {

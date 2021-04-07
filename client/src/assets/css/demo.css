@@ -499,3 +499,20 @@
   content: '';
   background: rgba(0, 0, 0, 0.5);
 }
+.wrapper-chat {
+  display: flex;
+  flex-direction: column-reverse;
+  overflow: hidden;
+  height: 300px;
+}
+.content-chat {
+  overflow-y: auto;
+  padding-right: 15px;
+}
+.margin-button {
+  margin-bottom: 1rem;
+}
+.create-at-message {
+  font-size: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+}

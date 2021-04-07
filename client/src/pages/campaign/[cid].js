@@ -19,6 +19,9 @@ const { API_URL } = process.env;
 
 const Campaign = ({ cid }) => {
   const { state } = useAuth();
+  useEffect(() => {
+    if (state.jwt === '') Router.push('/login');
+  }, [state]);
   function CampaignDetail() {
     const { loading, error, data } = useQuery(
       REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID,

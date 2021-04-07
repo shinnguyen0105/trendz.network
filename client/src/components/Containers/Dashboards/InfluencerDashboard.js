@@ -138,6 +138,7 @@ const InfluencerDashboard = () => {
     );
     if (loading) return <Skeleton variant='text' />;
     if (error) return null;
+    console.log(data);
     let campaigns = data.campaigns;
     let onhold = campaigns.filter(
       (campaign) => campaign.approve == true && campaign.status == null

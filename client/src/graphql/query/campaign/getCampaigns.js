@@ -2,11 +2,8 @@ import gql from 'graphql-tag';
 
 //Influencer get campaign for our channel
 export const REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID = gql`
-  query getCampaignByInfluencerID($idInfluencer: ID!, $sort: String) {
-    campaigns(
-      where: { channels: { user: { id: $idInfluencer } } }
-      sort: $sort
-    ) {
+  query getCampaignByInfluencerID($idInfluencer: ID!) {
+    campaigns(where: { channels: { user: { id: $idInfluencer } } }) {
       id
       title
       status
@@ -17,7 +14,6 @@ export const REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID = gql`
         name
       }
       user {
-        id
         name
       }
       channels {
@@ -26,12 +22,10 @@ export const REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID = gql`
         }
       }
       picture {
-        id
         formats
         url
       }
       campaignTTL {
-        id
         open_datetime
         close_datetime
       }
@@ -119,6 +113,12 @@ export const REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID = gql`
         id
         name
       }
+      messages {
+        id
+        userMessage
+        influencerMessage
+        created_at
+      }
       user {
         id
         name
@@ -127,12 +127,10 @@ export const REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID = gql`
         address
         phoneNumber
         avatar {
-          id
           formats
         }
       }
       channels {
-        id
         name
         phone
         address
@@ -141,11 +139,9 @@ export const REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID = gql`
           id
           name
           role {
-            id
             name
           }
           avatar {
-            id
             formats
           }
           gender
@@ -156,32 +152,12 @@ export const REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID = gql`
         }
       }
       picture {
-        id
         formats
         url
       }
       campaignTTL {
-        id
         open_datetime
         close_datetime
-      }
-    }
-  }
-`;
-//get campaign-detail
-export const REQUEST_GETCAMPAIGNS_DETAILS_BY_CAMPAIGN_ID = gql`
-  query getCampaignDetails($id: ID!) {
-    campaignDetail(id: $id) {
-      campaign {
-        id
-        title
-      }
-      rating
-      report
-      chatLog {
-        id
-        userMessage
-        influencerMessage
       }
     }
   }
