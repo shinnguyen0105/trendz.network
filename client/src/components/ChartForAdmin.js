@@ -156,9 +156,9 @@ const ChartForAdmin = () => {
     if (loading) return <Skeleton variant='text' />;
     if (error) return null;
 
-    var channelsWithInfluencer = data.campaigns.map((x) => x.channels);
-    var destructorChannelsWithInfluencer = [];
-    for (var i = 0; i < channelsWithInfluencer.length; i++) {
+    let channelsWithInfluencer = data.campaigns.map((x) => x.channels);
+    let destructorChannelsWithInfluencer = [];
+    for (let i = 0; i < channelsWithInfluencer.length; i++) {
       destructorChannelsWithInfluencer.push(channelsWithInfluencer[i][0]);
     }
     //destructor array in array
@@ -175,18 +175,18 @@ const ChartForAdmin = () => {
       }
     }
     //return object but i want to convert to array
-    var sortable = [];
-    for (var vehicle in counts) {
+    let sortable = [];
+    for (let vehicle in counts) {
       sortable.push([vehicle, counts[vehicle]]);
     }
     sortable.sort(function (a, b) {
       return a[0] - b[0];
     });
     //return 2D array has been sorted with name influencer an number of their campaigns
-    var nameTopInfluencer = sortable.map(function (tuple) {
+    let nameTopInfluencer = sortable.map(function (tuple) {
       return tuple[0];
     });
-    var dataTopInfluencer = sortable.map(function (tuple) {
+    let dataTopInfluencer = sortable.map(function (tuple) {
       return tuple[1];
     });
     //split 2D array
