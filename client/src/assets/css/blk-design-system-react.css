@@ -23146,6 +23146,16 @@ td.rdtYear:hover {
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
 
-.chat-box-bottom {
-  margin-top: auto;
+.statistic-card {
+  height: 150px;
+  width: 100%;
+  color: #000 !important;
+}
+.chart-card {
+  width: 100%;
+}
+.text-statistic {
+  font-size: 3.6275rem;
+    font-weight: 600;
+    line-height: 1.2;
 }

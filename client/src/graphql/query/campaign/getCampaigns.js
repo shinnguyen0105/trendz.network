@@ -98,6 +98,15 @@ export const REQUEST_GET_ALL_CAMPAIGNS = gql`
     }
   }
 `;
+export const REQUEST_GET_ALL_CAMPAIGNS_TO_COUNT = gql`
+  query getAllCampaignToCount {
+    campaigns {
+      id
+      title
+      created_at
+    }
+  }
+`;
 //Get campaign by id
 export const REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID = gql`
   query getCampaignByCampaignID($id: ID!) {

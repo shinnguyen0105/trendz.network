@@ -18,6 +18,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import { REQUEST_ALL_CHANNELS } from '../../../graphql/query/channel/getChannels';
 
 import ListChannel from '../../ListChannel';
+import ChartForAdmin from '../../ChartForAdmin';
 
 const AdminDashboard = () => {
   const [navState, setNav] = useState({
@@ -52,13 +53,13 @@ const AdminDashboard = () => {
 
     return (
       <>
-        <TabPane tabId='vertical1'>
+        <TabPane tabId='vertical2'>
           <ListChannel data={onhold} />
         </TabPane>
-        <TabPane tabId='vertical2'>
+        <TabPane tabId='vertical3'>
           <ListChannel data={approve} />
         </TabPane>
-        <TabPane tabId='vertical3'>
+        <TabPane tabId='vertical4'>
           <ListChannel data={unapprove} />
         </TabPane>
       </>
@@ -80,7 +81,7 @@ const AdminDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 1)}
                     >
-                      Channel requests
+                      Overview TrendzNetwork
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -90,7 +91,7 @@ const AdminDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 2)}
                     >
-                      Approved Channels
+                      Channel requests
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -100,6 +101,16 @@ const AdminDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 3)}
                     >
+                      Approved Channels
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className={classnames({
+                        active: navState.vertical === 4,
+                      })}
+                      onClick={(e) => toggleTabs(e, 'vertical', 4)}
+                    >
                       Unapproved Channels
                     </NavLink>
                   </NavItem>
@@ -107,6 +118,9 @@ const AdminDashboard = () => {
               </Col>
               <Col>
                 <TabContent activeTab={'vertical' + navState.vertical}>
+                  <TabPane tabId='vertical1'>
+                    <ChartForAdmin />
+                  </TabPane>
                   <ListChannels />
                 </TabContent>
               </Col>

@@ -48,6 +48,14 @@ export const REQUEST_ALL_CHANNELS = gql`
     }
   }
 `;
+export const REQUEST_ALL_CHANNELS_TO_COUNT = gql`
+  query getAllChannelToCount {
+    channels {
+      id
+      name
+    }
+  }
+`;
 export const REQUEST_GET_CHANNEL_DETAILS = gql`
   query getChannelDetails($channelID: ID!) {
     channel(id: $channelID) {

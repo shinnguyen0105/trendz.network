@@ -16,6 +16,29 @@ export const REQUEST_GET_ALL_INFLUENCERS = gql`
     }
   }
 `;
+export const REQUEST_GET_ALL_INFLUENCERS_TO_COUNT = gql`
+  query getAllInfluencerToCount {
+    users(where: { role: { name: "Influencer" } }) {
+      id
+      name
+    }
+  }
+`;
+export const REQUEST_GET_TOP_INFLUENCERS = gql`
+  query getTopInfluencer {
+    campaigns {
+      id
+      title
+      channels {
+        id
+        user {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
 export const REQUEST_GET_INFLUENCER_DETAILS = gql`
   query getInfluencerDetails($influencerID: ID!) {
     channels(where: { user: { id: $influencerID } }) {
