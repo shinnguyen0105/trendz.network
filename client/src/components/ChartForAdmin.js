@@ -182,7 +182,7 @@ const ChartForAdmin = () => {
     sortable.sort(function (a, b) {
       return a[0] - b[0];
     });
-    //return 2D array has been sorted with name influencer an number of their campaigns
+    //return 2D array has been sorted with name influencer and number of their campaigns
     let nameTopInfluencer = sortable.map(function (tuple) {
       return tuple[0];
     });
