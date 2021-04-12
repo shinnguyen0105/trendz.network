@@ -62,7 +62,7 @@ const Create = () => {
   const [influencers, setInfluencers] = useState({
     influencers: [],
   });
-
+  const [emailInfluencer, setEmailInfluencer] = useState([]);
   const [tempData, setTempData] = useState({
     id: '',
     name: '',
@@ -194,6 +194,26 @@ const Create = () => {
         channelName: '',
       };
     });
+    const FetchInfluencerEmail = async () => {
+      const url = API_URL + '/channels/' + tempData.channelId;
+      try {
+        const get_resolve = await axios.get(url, {
+          cancelToken: signal.token,
+          headers: {
+            Authorization: `Bearer ${state.jwt}`,
+          },
+        });
+        //console.log('dataatatata: ', get_resolve.data);
+        setEmailInfluencer([...emailInfluencer, get_resolve.data.user.email]);
+      } catch (error) {
+        if (axios.isCancel(error) && error.message !== undefined) {
+          console.log('Error: ', error.message);
+        } else {
+          console.log(error);
+        }
+      }
+    };
+    FetchInfluencerEmail();
   };
 
   const handleChannelDeSelect = (id) => () => {
@@ -261,9 +281,43 @@ const Create = () => {
       console.log(e);
     }
   };
+  const sendMailForInfluencer = async (infor) => {
+    try {
+      await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: 'user_PWL3k2BSLrz7JcZwxx0SN',
+          service_id: 'service_0lq6l3d',
+          template_id: 'template_f7h28gx',
+          template_params: infor,
+        }),
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const handleCampaignSubmit = async () => {
     try {
+      emailInfluencer.map((influencer) => {
+        var influencerName = influencer.split('@');
+        const infor = {
+          customer_name: state.user.username,
+          campaign_name: campaignState.title,
+          start_date: new Date(campaignState.open_datetime).toLocaleDateString(
+            'en-GB'
+          ),
+          end_date: new Date(campaignState.close_datetime).toLocaleDateString(
+            'en-GB'
+          ),
+          influencer_name: influencerName[0],
+          to_email: influencer,
+        };
+        sendMailForInfluencer(infor);
+      });
       selectedChannels.map((channel) => {
         const campaign = {
           title: campaignState.title,
