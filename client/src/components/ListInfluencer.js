@@ -12,6 +12,8 @@ import {
   Col,
   Spinner,
 } from 'reactstrap';
+import Skeleton from '@material-ui/lab/Skeleton';
+
 const { API_URL } = process.env;
 
 const ListInfluencer = ({ data }) => {
@@ -31,7 +33,11 @@ const ListInfluencer = ({ data }) => {
                       className='campaign-img'
                     />
                   ) : (
-                    <Skeleton variant='rect' width={256} height={186} />
+                    <CardImg
+                      src='/256x186.svg'
+                      alt='Card image cap'
+                      className='campaign-img'
+                    />
                   )}
                   <CardBody>
                     <CardTitle className='dashboard-card-title'>

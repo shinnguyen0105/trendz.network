@@ -12,7 +12,8 @@ const create = (initialState, headers) => {
   const isBrowser = typeof window !== 'undefined';
 
   const httpLink = new HttpLink({
-    uri: process.env.API_URL + '/graphql' || 'http://localhost:1337/graphql',
+    uri:
+      process.env.API_URL + '/graphql' || 'http://103.82.25.142:1337/graphql',
   });
   console.log(process.env.API_URL);
   const authLink = setContext((_, previousContext) => {
