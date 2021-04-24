@@ -71,7 +71,7 @@ function optionsChartJs(text) {
   };
   return options;
 }
-const ChartForAdmin = () => {
+const StatisticsChart = () => {
   function GetChannels() {
     const { loading, error, data } = useQuery(REQUEST_ALL_CHANNELS_TO_COUNT);
     if (loading) return <Skeleton variant='text' />;
@@ -156,11 +156,14 @@ const ChartForAdmin = () => {
     if (loading) return <Skeleton variant='text' />;
     if (error) return null;
 
+    //console.log(data.campaigns);
     let channelsWithInfluencer = data.campaigns.map((x) => x.channels);
+    //console.log(channelsWithInfluencer);
     let destructorChannelsWithInfluencer = [];
     for (let i = 0; i < channelsWithInfluencer.length; i++) {
       destructorChannelsWithInfluencer.push(channelsWithInfluencer[i][0]);
     }
+    //console.log(destructorChannelsWithInfluencer);
     //destructor array in array
     var ListInfluencer = destructorChannelsWithInfluencer.map(
       (x) => x.user.name
@@ -242,4 +245,4 @@ const ChartForAdmin = () => {
   );
 };
 
-export default ChartForAdmin;
+export default StatisticsChart;

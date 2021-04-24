@@ -108,6 +108,7 @@ const Customer = ({ campaign, cid }) => {
 
   const [chatModal, setChatModal] = useState(false);
   const [contentChat, setContentChat] = useState(campaign.messages);
+  console.log('message', contentChat);
   const toggleChatModal = () => {
     setChatModal(!chatModal);
     setMesage('');
@@ -971,13 +972,12 @@ const Customer = ({ campaign, cid }) => {
                                 <p> {chat.userMessage}</p>
                                 <p className='create-at-message'>
                                   <i className='tim-icons icon-check-2' />
-                                  {new Date(chat.created_at).toLocaleTimeString(
+                                  {new Date(chat.created_at).toLocaleDateString(
                                     'en-US'
                                   ) +
-                                    ' ' +
                                     new Date(
                                       chat.created_at
-                                    ).toLocaleDateString('en-US')}
+                                    ).toLocaleTimeString('en-US')}
                                 </p>
                               </div>
                             </div>
@@ -986,10 +986,21 @@ const Customer = ({ campaign, cid }) => {
                         if (chat.influencerMessage !== null) {
                           return (
                             <div
-                              className='d-flex justify-content-start wrap pt-2 pl-2 pr-2 bg-success my-2 rounded w-50'
+                              className=' wrap pt-2 pl-2 pr-2 bg-success my-2 rounded w-50'
                               key={i}
                             >
-                              <p>{chat.influencerMessage}</p>
+                              <p>
+                                {chat.influencerMessage} <br />
+                              </p>
+                              <p className='create-at-message'>
+                                <i className='tim-icons icon-check-2' />
+                                {new Date(chat.created_at).toLocaleDateString(
+                                  'en-US'
+                                ) +
+                                  new Date(chat.created_at).toLocaleTimeString(
+                                    'en-US'
+                                  )}
+                              </p>
                             </div>
                           );
                         }

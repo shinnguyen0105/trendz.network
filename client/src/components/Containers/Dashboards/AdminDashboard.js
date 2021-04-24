@@ -18,7 +18,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import { REQUEST_ALL_CHANNELS } from '../../../graphql/query/channel/getChannels';
 
 import ListChannel from '../../ListChannel';
-import ChartForAdmin from '../../ChartForAdmin';
+import StatisticsChart from '../../StatisticsChart';
 
 const AdminDashboard = () => {
   const [navState, setNav] = useState({
@@ -119,7 +119,7 @@ const AdminDashboard = () => {
               <Col>
                 <TabContent activeTab={'vertical' + navState.vertical}>
                   <TabPane tabId='vertical1'>
-                    <ChartForAdmin />
+                    <StatisticsChart />
                   </TabPane>
                   <ListChannels />
                 </TabContent>

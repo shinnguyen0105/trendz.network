@@ -230,6 +230,15 @@ const Influencer = ({ campaign, cid }) => {
                     <div className='d-flex justify-content-end' key={i}>
                       <div className='p-2 justify-content-start wrap bg-info my-2 rounded w-50'>
                         <p>{chat.influencerMessage}</p>
+                        <p className='create-at-message'>
+                          <i className='tim-icons icon-check-2' />
+                          {new Date(chat.created_at).toLocaleDateString(
+                            'en-US'
+                          ) +
+                            new Date(chat.created_at).toLocaleTimeString(
+                              'en-US'
+                            )}
+                        </p>
                       </div>
                     </div>
                   );
@@ -237,10 +246,21 @@ const Influencer = ({ campaign, cid }) => {
                 if (chat.userMessage !== null) {
                   return (
                     <div
-                      className='d-flex justify-content-start wrap p-2 bg-success my-2 rounded w-50'
+                      className='wrap p-2 bg-success my-2 rounded w-50'
                       key={i}
                     >
                       <p> {chat.userMessage}</p>
+                      <div>
+                        <p className='create-at-message'>
+                          <i className='tim-icons icon-check-2' />
+                          {new Date(chat.created_at).toLocaleDateString(
+                            'en-US'
+                          ) +
+                            new Date(chat.created_at).toLocaleTimeString(
+                              'en-US'
+                            )}
+                        </p>
+                      </div>
                     </div>
                   );
                 }

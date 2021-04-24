@@ -29,6 +29,7 @@ import { sortBy } from '../../../utils/filters/sortBy';
 import { REQUEST_GET_ALL_CAMPAIGNS } from '../../../graphql/query/campaign/getCampaigns';
 import { REQUEST_GET_ALL_CATEGORIES } from '../../../graphql/query/category/getCategory';
 import { REQUEST_ALL_CHANNELS } from '../../../graphql/query/channel/getChannels';
+import StatisticsChart from '../../StatisticsChart';
 
 const EmployeeDashboard = () => {
   const [navState, setNav] = useState({
@@ -151,7 +152,7 @@ const EmployeeDashboard = () => {
     // console.log('onhold', unapprove);
     return (
       <>
-        <TabPane tabId='vertical1'>
+        <TabPane tabId='vertical2'>
           <DashboardChildren
             data={onhold}
             categ={filterItems.category}
@@ -159,7 +160,7 @@ const EmployeeDashboard = () => {
             roleType={'Employee'}
           />
         </TabPane>
-        <TabPane tabId='vertical2'>
+        <TabPane tabId='vertical3'>
           <DashboardChildren
             data={approve}
             categ={filterItems.category}
@@ -167,7 +168,7 @@ const EmployeeDashboard = () => {
             roleType={'Employee'}
           />
         </TabPane>
-        <TabPane tabId='vertical3'>
+        <TabPane tabId='vertical4'>
           <DashboardChildren
             data={unapprove}
             categ={filterItems.category}
@@ -175,7 +176,7 @@ const EmployeeDashboard = () => {
             roleType={'Employee'}
           />
         </TabPane>
-        <TabPane tabId='vertical4'>
+        <TabPane tabId='vertical5'>
           <DashboardChildren
             data={influencerCompleted}
             categ={filterItems.category}
@@ -183,7 +184,7 @@ const EmployeeDashboard = () => {
             roleType={'Employee'}
           />
         </TabPane>
-        <TabPane tabId='vertical5'>
+        <TabPane tabId='vertical6'>
           <DashboardChildren
             data={completed}
             categ={filterItems.category}
@@ -210,13 +211,13 @@ const EmployeeDashboard = () => {
 
     return (
       <>
-        <TabPane tabId='vertical6'>
+        <TabPane tabId='vertical7'>
           <ListChannel data={onhold} />
         </TabPane>
-        <TabPane tabId='vertical7'>
+        <TabPane tabId='vertical8'>
           <ListChannel data={approve} />
         </TabPane>
-        <TabPane tabId='vertical8'>
+        <TabPane tabId='vertical9'>
           <ListChannel data={unapprove} />
         </TabPane>
       </>
@@ -238,7 +239,7 @@ const EmployeeDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 1)}
                     >
-                      Campaign requests
+                      Overview TrendzNetwork
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -248,7 +249,7 @@ const EmployeeDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 2)}
                     >
-                      Approved Campaigns
+                      Campaign requests
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -258,7 +259,7 @@ const EmployeeDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 3)}
                     >
-                      Unapproved Campaigns
+                      Approved Campaigns
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -268,7 +269,7 @@ const EmployeeDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 4)}
                     >
-                      Campaigns Request Pay
+                      Unapproved Campaigns
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -278,7 +279,7 @@ const EmployeeDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 5)}
                     >
-                      Campaigns Completed
+                      Campaigns Request Pay
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -288,7 +289,7 @@ const EmployeeDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 6)}
                     >
-                      Channel requests
+                      Campaigns Completed
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -298,7 +299,7 @@ const EmployeeDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 7)}
                     >
-                      Approved Channels
+                      Channel requests
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -308,6 +309,16 @@ const EmployeeDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 8)}
                     >
+                      Approved Channels
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className={classnames({
+                        active: navState.vertical === 9,
+                      })}
+                      onClick={(e) => toggleTabs(e, 'vertical', 9)}
+                    >
                       Unapproved Channels
                     </NavLink>
                   </NavItem>
@@ -315,7 +326,7 @@ const EmployeeDashboard = () => {
               </Col>
               <Col>
                 <TabContent activeTab={'vertical' + navState.vertical}>
-                  {navState.vertical <= 5 ? (
+                  {navState.vertical <= 6 && navState.vertical > 1 ? (
                     <Row style={{ marginTop: '30px' }}>
                       <Col>
                         <Row>
@@ -395,6 +406,9 @@ const EmployeeDashboard = () => {
                   )}
                   <ListCampaigns />
                   <ListChannels />
+                  <TabPane tabId='vertical1'>
+                    <StatisticsChart />
+                  </TabPane>
                 </TabContent>
               </Col>
             </Row>
