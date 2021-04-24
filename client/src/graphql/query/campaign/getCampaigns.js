@@ -2,8 +2,11 @@ import gql from 'graphql-tag';
 
 //Influencer get campaign for our channel
 export const REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID = gql`
-  query getCampaignByInfluencerID($idInfluencer: ID!) {
-    campaigns(where: { channels: { user: { id: $idInfluencer } } }) {
+  query getCampaignByInfluencerID($idInfluencer: ID!, $sort: String) {
+    campaigns(
+      where: { channels: { user: { id: $idInfluencer } } }
+      sort: $sort
+    ) {
       id
       title
       status
@@ -118,9 +121,12 @@ export const REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID = gql`
       completed
       approve
       note
+      influencerCompleted
+      created_at
       category {
         id
         name
+        description
       }
       messages {
         id
@@ -140,6 +146,7 @@ export const REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID = gql`
         }
       }
       channels {
+        id
         name
         phone
         address

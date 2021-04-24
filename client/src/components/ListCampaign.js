@@ -115,13 +115,13 @@ const DashboardChildren = ({ data, categ, search, roleType }) => {
                   </CardSubtitle>
                   <CardSubtitle>
                     <small className='text-muted'>
-                      {campaign.campaignTTL[0] !== undefined ? (
+                      {campaign.campaignTTL !== undefined ? (
                         new Date(
-                          campaign.campaignTTL[0].open_datetime
+                          campaign.campaignTTL.open_datetime
                         ).toLocaleString('en-GB') +
                         ' - ' +
                         new Date(
-                          campaign.campaignTTL[0].close_datetime
+                          campaign.campaignTTL.close_datetime
                         ).toLocaleString('en-GB')
                       ) : (
                         <Skeleton variant='text' />

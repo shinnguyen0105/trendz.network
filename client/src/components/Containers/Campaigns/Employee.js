@@ -434,15 +434,15 @@ const Employee = ({ campaign, cid }) => {
                     <CardSubtitle>
                       <strong>Thời gian:</strong>
                     </CardSubtitle>
-                    {campaign.campaignTTL[0] !== undefined ? (
+                    {campaign.campaignTTL !== undefined ? (
                       <CardText>
                         {'Từ ' +
                           new Date(
-                            campaign.campaignTTL[0].open_datetime
+                            campaign.campaignTTL.open_datetime
                           ).toLocaleDateString('en-GB') +
                           ' - Đến ' +
                           new Date(
-                            campaign.campaignTTL[0].close_datetime
+                            campaign.campaignTTL.close_datetime
                           ).toLocaleDateString('en-GB')}
                       </CardText>
                     ) : (
@@ -819,7 +819,7 @@ const Employee = ({ campaign, cid }) => {
                       <TimelineOppositeContent>
                         <Typography variant='body2' color='textSecondary'>
                           {new Date(
-                            campaign.campaignTTL[0].open_datetime
+                            campaign.campaignTTL.open_datetime
                           ).toLocaleString('en-GB')}
                         </Typography>
                       </TimelineOppositeContent>
@@ -840,7 +840,7 @@ const Employee = ({ campaign, cid }) => {
                       <TimelineOppositeContent>
                         <Typography variant='body2' color='textSecondary'>
                           {new Date(
-                            campaign.campaignTTL[0].close_datetime
+                            campaign.campaignTTL.close_datetime
                           ).toLocaleString('en-GB')}
                         </Typography>
                       </TimelineOppositeContent>
@@ -866,7 +866,7 @@ const Employee = ({ campaign, cid }) => {
                       <TimelineOppositeContent>
                         <Typography variant='body2' color='textSecondary'>
                           {new Date(
-                            campaign.campaignTTL[0].open_datetime
+                            campaign.campaignTTL.open_datetime
                           ).toLocaleString('en-GB')}
                         </Typography>
                       </TimelineOppositeContent>
@@ -887,7 +887,7 @@ const Employee = ({ campaign, cid }) => {
                       <TimelineOppositeContent>
                         <Typography variant='body2' color='textSecondary'>
                           {new Date(
-                            campaign.campaignTTL[0].close_datetime
+                            campaign.campaignTTL.close_datetime
                           ).toLocaleString('en-GB')}
                         </Typography>
                       </TimelineOppositeContent>

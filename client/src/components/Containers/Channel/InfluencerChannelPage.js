@@ -19,7 +19,7 @@ import { UPDATE_CHANNEL_BY_INFLUENCER } from '../../../graphql/mutations/channel
 
 const { API_URL } = process.env;
 
-const InfluencerCampaignPage = ({ chid, channel }) => {
+const InfluencerChannelPage = ({ chid, channel }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [tempChannel, setTempChannel] = useState();
   const [statusModal, setStatusModal] = useState(false);
@@ -147,12 +147,12 @@ const InfluencerCampaignPage = ({ chid, channel }) => {
   };
   console.log(channel);
   return (
-    <Card className='single-card'>
+    <Card className='single-card col-md-6 offset-md-3'>
       {channel.status !== null ? renderStatusModal() : ''}
       <CardImg
         src={
           channel.avatar.formats !== null
-            ? `${API_URL}${channel.avatar.formats.thumbnail.url}`
+            ? `${API_URL}${channel.avatar.formats.medium.url}`
             : `${API_URL}${channel.avatar.url}`
         }
         alt='Card image cap'
@@ -242,4 +242,4 @@ const InfluencerCampaignPage = ({ chid, channel }) => {
   );
 };
 
-export default InfluencerCampaignPage;
+export default InfluencerChannelPage;

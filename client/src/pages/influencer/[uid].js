@@ -79,7 +79,7 @@ const Influencer = () => {
             <CardImg
               src={
                 influencerInfor.avatar.formats !== null
-                  ? `${API_URL}${influencerInfor.avatar.formats.thumbnail.url}`
+                  ? `${API_URL}${influencerInfor.avatar.formats.small.url}`
                   : `${API_URL}${influencerInfor.avatar.url}`
               }
               alt='Card image cap'
@@ -101,7 +101,7 @@ const Influencer = () => {
                     ? channels.map((channel) => (
                         <Col md={4} key={channel.id}>
                           <Card className='campaign-card'>
-                            {channel.avatar.formats !== null ? (
+                            {channel.avatar.formats.thumbnail !== null ? (
                               <CardImg
                                 src={`${API_URL}${channel.avatar.formats.thumbnail.url}`}
                                 alt='Card image cap'

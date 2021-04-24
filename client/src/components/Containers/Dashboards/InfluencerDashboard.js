@@ -83,7 +83,7 @@ const InfluencerDashboard = () => {
       search: '',
     });
   };
-
+  console.log(filterItems);
   useEffect(() => {
     if (filterItems.sort !== '') {
       setSortGraphqlFilter(filterItems.sort);

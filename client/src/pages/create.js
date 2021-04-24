@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useQuery } from 'react-apollo';
+
 import { useAuth } from '../contexts/userContext';
 import Router from 'next/router';
 import {
@@ -23,6 +25,9 @@ import Datetime from 'react-datetime';
 import { Editor } from '@tinymce/tinymce-react';
 import { Chip, CircularProgress } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
+import Skeleton from '@material-ui/lab/Skeleton';
+
+import { REQUEST_GET_ALL_INFLUENCERS } from '../graphql/query/influencer/getInfluencers';
 
 const { API_URL } = process.env;
 
@@ -161,11 +166,19 @@ const Create = () => {
       channelId: '',
       channelName: '',
     });
+    // console.log(
+    //   influencers.influencers
+    //     .find((x) => x.id == id)
+    //     .channels.filter((x) => x.status === true)
+    // );
     //raw channels
-    const allChannelsRaw = influencers.influencers.find((x) => x.id === id)
-      .channels;
-    //filter status=true channels
-    setAllChannels(allChannelsRaw.filter((x) => x.status === true));
+    // const allChannelsRaw = influencers.influencers.find((x) => x.id == id).channels;
+    // //filter status=true channels
+    setAllChannels(
+      influencers.influencers
+        .find((x) => x.id == id)
+        .channels.filter((x) => x.status === true)
+    );
   };
 
   const handleChannelsChange = (id, name) => {
@@ -194,6 +207,7 @@ const Create = () => {
         channelName: '',
       };
     });
+    console.log(allChannels);
     const FetchInfluencerEmail = async () => {
       const url = API_URL + '/channels/' + tempData.channelId;
       try {
@@ -205,6 +219,7 @@ const Create = () => {
         });
         //console.log('dataatatata: ', get_resolve.data);
         setEmailInfluencer([...emailInfluencer, get_resolve.data.user.email]);
+        //console.log('arr', [...emailInfluencer, get_resolve.data.user.email]);
       } catch (error) {
         if (axios.isCancel(error) && error.message !== undefined) {
           console.log('Error: ', error.message);
@@ -232,6 +247,35 @@ const Create = () => {
         channelName: '',
       };
     });
+    const FetchInfluencerChannelEmail = async () => {
+      const url = API_URL + '/users?_where[channels.id]=' + id;
+      try {
+        const get_resolve = await axios.get(url, {
+          cancelToken: signal.token,
+          headers: {
+            Authorization: `Bearer ${state.jwt}`,
+          },
+        });
+        let temp = get_resolve.data[0].email;
+        setEmailInfluencer(
+          emailInfluencer.filter(function (email) {
+            return email != temp;
+          })
+        );
+        // console.log(
+        //   emailInfluencer.filter(function (email) {
+        //     return email != temp;
+        //   })
+        // );
+      } catch (error) {
+        if (axios.isCancel(error) && error.message !== undefined) {
+          console.log('Error: ', error.message);
+        } else {
+          console.log(error);
+        }
+      }
+    };
+    FetchInfluencerChannelEmail();
   };
 
   const handleImageSubmit = async (event) => {
@@ -313,7 +357,7 @@ const Create = () => {
           end_date: new Date(campaignState.close_datetime).toLocaleDateString(
             'en-GB'
           ),
-          influencer_name: influencerName[0],
+          influencer_name: influencerName,
           to_email: influencer,
         };
         sendMailForInfluencer(infor);
@@ -366,7 +410,26 @@ const Create = () => {
       );
     } else return null;
   };
-
+  function FetchInfluencer() {
+    const { loading, error, data } = useQuery(REQUEST_GET_ALL_INFLUENCERS);
+    if (loading) return <Skeleton variant='text' />;
+    if (error) return null;
+    return (
+      <DropdownMenu className='dropdown-menu'>
+        {data.users.map((user) => (
+          <DropdownItem
+            key={user.id}
+            onClick={(event) => {
+              event.preventDefault();
+              handleInfluencerChange(user.id, user.name);
+            }}
+          >
+            {user.name}
+          </DropdownItem>
+        ))}
+      </DropdownMenu>
+    );
+  }
   const RenderCategoryOrInfluencerDropdown = () => {
     if (isCategory == true) {
       return (
@@ -452,7 +515,7 @@ const Create = () => {
               >
                 {tempData.name === '' ? 'Chọn Influencer...' : tempData.name}
               </DropdownToggle>
-              <DropdownMenu className='dropdown-menu'>
+              {/* <DropdownMenu className='dropdown-menu'>
                 {influencers.influencers.map((user) => (
                   <DropdownItem
                     key={user.id}
@@ -464,7 +527,8 @@ const Create = () => {
                     {user.name}
                   </DropdownItem>
                 ))}
-              </DropdownMenu>
+              </DropdownMenu> */}
+              <FetchInfluencer />
             </UncontrolledDropdown>
           </FormGroup>
           <FormGroup className='col-md-3'>
@@ -551,6 +615,7 @@ const Create = () => {
           });
           if (mounted) {
             setCategories({ categories: get_resolve.data });
+            console.log(categories);
           }
         } catch (error) {
           if (axios.isCancel(error) && error.message !== undefined) {
@@ -562,6 +627,7 @@ const Create = () => {
       };
 
       //fetch Influencers
+
       const fetchInfluencers = async () => {
         const url = API_URL + '/users?_where[role.name]=Influencer';
         try {
@@ -573,6 +639,7 @@ const Create = () => {
           });
           if (mounted) {
             setInfluencers({ influencers: get_resolve.data });
+            console.log('asdasdasdasdasdas', get_resolve.data);
           }
         } catch (error) {
           if (axios.isCancel(error) && error.message !== undefined) {

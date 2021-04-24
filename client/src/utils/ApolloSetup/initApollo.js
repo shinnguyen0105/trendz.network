@@ -14,6 +14,10 @@ const create = (initialState, headers) => {
   const httpLink = new HttpLink({
     uri:
       process.env.API_URL + '/graphql' || 'http://103.82.25.142:1337/graphql',
+    onError: ({ networkError, graphQLErrors }) => {
+      console.log('graphQLErrors', graphQLErrors);
+      console.log('networkError', networkError);
+    },
   });
   console.log(process.env.API_URL);
   const authLink = setContext((_, previousContext) => {

@@ -1,14 +1,13 @@
+import React from 'react';
 import axios from 'axios';
 import { useAuth } from '../../contexts/userContext';
-import React, { useEffect, useState } from 'react';
-import Router from 'next/router';
 import { useQuery } from 'react-apollo';
 import { Card, CardBody } from 'reactstrap';
-import { CircularProgress } from '@material-ui/core';
 
 import InfluencerChannelPage from '../../components/Containers/Channel/InfluencerChannelPage';
 import EmployeeChannelPage from '../../components/Containers/Channel/EmployeeChannelPage';
 import AdminChannelPage from '../../components/Containers/Channel/AdminChannelPage';
+import CustomerChannelPage from '../../components/Containers/Channel/CustomerChannelPage';
 import { Skeleton } from '@material-ui/lab';
 import { REQUEST_GET_CHANNEL_DETAILS } from '../../graphql/query/channel/getChannels';
 
@@ -35,13 +34,14 @@ const Channel = ({ chid }) => {
       console.log(error);
       return null;
     } else {
+      console.log(data);
       if (state.user.id == data.channel.user.id) {
         return <InfluencerChannelPage channel={data.channel} chid={chid} />;
       } else if (state.user.role.name == 'Employee') {
         return <EmployeeChannelPage channel={data.channel} chid={chid} />;
       } else if (state.user.role.name == 'Admin') {
         return <AdminChannelPage channel={data.channel} chid={chid} />;
-      }
+      } else return <CustomerChannelPage channel={data.channel} />;
     }
   }
 

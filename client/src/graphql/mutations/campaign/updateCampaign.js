@@ -34,7 +34,15 @@ export const REQUEST_UPDATE_CAMPAIGN = gql`
         approve
         note
         category {
+          id
           name
+          description
+        }
+        messages {
+          id
+          userMessage
+          influencerMessage
+          created_at
         }
         user {
           id
@@ -48,6 +56,7 @@ export const REQUEST_UPDATE_CAMPAIGN = gql`
           }
         }
         channels {
+          id
           name
           phone
           address
@@ -84,12 +93,12 @@ export const REQUEST_UPDATE_CAMPAIGN_INFLUENCER = gql`
   mutation updateCampaignForInfluencer(
     $id: ID!
     $status: Boolean
-    $completed: Boolean
+    $InfluencerCompleted: Boolean
   ) {
     updateCampaign(
       input: {
         where: { id: $id }
-        data: { status: $status, completed: $completed }
+        data: { status: $status, influencerCompleted: $InfluencerCompleted }
       }
     ) {
       campaign {
@@ -98,8 +107,10 @@ export const REQUEST_UPDATE_CAMPAIGN_INFLUENCER = gql`
         content
         status
         completed
+        influencerCompleted
         approve
         note
+        created_at
         category {
           name
         }

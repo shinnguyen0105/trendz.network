@@ -11,6 +11,7 @@ import {
   Col,
   Spinner,
 } from 'reactstrap';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const { API_URL } = process.env;
 const renderStatus = (status) => {
@@ -72,13 +73,13 @@ const MyCampaign = ({ data, categ, search }) => {
                   </CardSubtitle>
                   <CardSubtitle>
                     <small className='text-muted'>
-                      {campaign.campaignTTL[0] !== undefined ? (
+                      {campaign.campaignTTL !== undefined ? (
                         new Date(
-                          campaign.campaignTTL[0].open_datetime
+                          campaign.campaignTTL.open_datetime
                         ).toLocaleString('en-GB') +
                         ' - ' +
                         new Date(
-                          campaign.campaignTTL[0].close_datetime
+                          campaign.campaignTTL.close_datetime
                         ).toLocaleString('en-GB')
                       ) : (
                         <Skeleton variant='text' />

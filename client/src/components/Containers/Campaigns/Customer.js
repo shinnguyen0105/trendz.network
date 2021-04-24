@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Router from 'next/router';
 import { useQuery, useMutation } from 'react-apollo';
+import { useAuth } from '../../../contexts/userContext';
+
+import axios from 'axios';
 
 import { REQUEST_GET_ALL_CATEGORIES } from '../../../graphql/query/category/getCategory';
 import { REQUEST_GET_ALL_CATEGORIES_CHANNELS } from '../../../graphql/query/category/getCategory';
@@ -80,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
 const { API_URL } = process.env;
 
 const Customer = ({ campaign, cid }) => {
+  const { state } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const [tempCampaign, setTempCampaign] = useState(campaign);
   const [navState, setNav] = useState({
@@ -93,12 +97,6 @@ const Customer = ({ campaign, cid }) => {
     categoryName: '',
     channelId: '',
     channelName: tempCampaign.channels[0].name,
-    campaignTTL: [
-      {
-        open_datetime: new Date(tempCampaign.campaignTTL[0].open_datetime),
-        close_datetime: new Date(tempCampaign.campaignTTL[0].close_datetime),
-      },
-    ],
   });
 
   const [isAbleToSend, setIsAbleToSend] = useState(true);
@@ -138,36 +136,26 @@ const Customer = ({ campaign, cid }) => {
 
   //creator edit campaign
   const handleCampaignChange = (event) => {
-    event.preventDefault();
     const { name, value } = event.target;
     setTempCampaign((previousState) => {
       return { ...previousState, [name]: value };
     });
   };
-
+  const handleContentChange = (content, editor) => {
+    setTempCampaign((previousState) => {
+      return { ...previousState, content };
+    });
+  };
   const handleStartDateChange = (event) => {
     if (event._d !== undefined) {
       const value = event._d.toISOString();
       setTempCampaign((previousState) => {
         return {
           ...previousState,
-          campaignTTL: [
-            {
-              open_datetime: value,
-              close_datetime: previousState.campaignTTL[0].close_datetime,
-            },
-          ],
-        };
-      });
-      setTempData((previousState) => {
-        return {
-          ...previousState,
-          campaignTTL: [
-            {
-              open_datetime: event._d,
-              close_datetime: previousState.campaignTTL[0].close_datetime,
-            },
-          ],
+          campaignTTL: {
+            open_datetime: value,
+            close_datetime: previousState.campaignTTL.close_datetime,
+          },
         };
       });
       //console.log('start date: ', value);
@@ -180,24 +168,10 @@ const Customer = ({ campaign, cid }) => {
       setTempCampaign((previousState) => {
         return {
           ...previousState,
-          campaignTTL: [
-            {
-              open_datetime: previousState.campaignTTL[0].open_datetime,
-              close_datetime: value,
-            },
-          ],
-        };
-      });
-
-      setTempData((previousState) => {
-        return {
-          ...previousState,
-          campaignTTL: [
-            {
-              open_datetime: event._d,
-              close_datetime: previousState.campaignTTL[0].close_datetime,
-            },
-          ],
+          campaignTTL: {
+            open_datetime: previousState.campaignTTL.open_datetime,
+            close_datetime: value,
+          },
         };
       });
       //console.log('start date: ', event._d);
@@ -234,6 +208,7 @@ const Customer = ({ campaign, cid }) => {
       };
     });
   };
+
   const [
     requestSendMessageMutation,
     { loading: requestSendLoading },
@@ -259,6 +234,7 @@ const Customer = ({ campaign, cid }) => {
     }
     return;
   };
+
   console.log('temp campaign: ', tempCampaign);
   function FetchCategories() {
     const { loading, error, data } = useQuery(REQUEST_GET_ALL_CATEGORIES);
@@ -299,7 +275,7 @@ const Customer = ({ campaign, cid }) => {
     );
     if (loading) return <Skeleton />;
     if (error) return null;
-    console.log(data.categories.find((x) => x.id == 1));
+    //    console.log(data.categories.find((x) => x.id == 1));
     return (
       <>
         <DropdownToggle caret color='secondary' data-toggle='dropdown'>
@@ -329,43 +305,63 @@ const Customer = ({ campaign, cid }) => {
       </>
     );
   }
-  const [requestUpdateCampaignMutation] = useMutation(REQUEST_UPDATE_CAMPAIGN, {
+
+  const [requestDeletePostMutation] = useMutation(REQUEST_DELETE_CAMPAIGN);
+  const [
+    requestUpdateCampaignMutation,
+    { loading: requestUpdateCampaignLoading },
+  ] = useMutation(REQUEST_UPDATE_CAMPAIGN, {
     variables: {
       id: cid,
       title: tempCampaign.title,
       content: tempCampaign.content,
-      category: tempCampaign.category.id,
+      category: parseInt(tempCampaign.category.id),
       channels: tempCampaign.channels,
-      open_datetime: tempCampaign.campaignTTL[0].open_datetime,
-      close_datetime: tempCampaign.campaignTTL[0].close_datetime,
+      open_datetime: tempCampaign.campaignTTL.open_datetime,
+      close_datetime: tempCampaign.campaignTTL.close_datetime,
     },
   });
 
-  const [requestDeletePostMutation] = useMutation(REQUEST_DELETE_CAMPAIGN);
-  // , {
-  //   update(cache, { data: { deleteCampaign } }) {
-  //     cache.modify({
-  //       fields: {
-  //         campaigns(existingCampaign, { readField }) {
-  //           const newCampaigns = existingCampaign.filter(
-  //             (camRef) => readField('id', camRef) !== deleteCampaign.id
-  //           );
-  //           return newCampaigns;
-  //         },
-  //       },
-  //     });
-  //   },
-  //   variables: {
-  //     id: cid,
-  //   },
-  // }
   const handleEditSubmit = async () => {
     try {
       await requestUpdateCampaignMutation();
+      enqueueSnackbar('Chỉnh sửa thành công!', {
+        variant: 'success',
+      });
     } catch (e) {
+      enqueueSnackbar('Chỉnh sửa không thành công!', {
+        variant: 'error',
+      });
       console.log(e);
     }
   };
+  // const handleEditSubmit = async () => {
+  //   // setCampaign((previousState) => {
+  //   //   return {
+  //   //     ...previousState,
+  //   //     campaignTTL: tempCampaign.campaignTTL,
+  //   //     category: tempCampaign.category,
+  //   //     channels: tempCampaign.channels,
+  //   //     content: tempCampaign.content,
+  //   //     title: tempCampaign.title,
+  //   //   };
+  //   // });
+  //   // let dataf = {
+  //   //   campaignTTL: tempCampaign.campaignTTL,
+  //   //   category: tempCampaign.category,
+  //   //   channels: tempCampaign.channels,
+  //   //   content: tempCampaign.content,
+  //   //   title: tempCampaign.title,
+  //   // };
+  //   const upload_resolve = await axios({
+  //     method: 'PUT',
+  //     headers: {
+  //       Authorization: `Bearer ${state.jwt}`,
+  //     },
+  //     url: `${API_URL}/campaigns/${cid}`,
+  //     data: tempCampaign,
+  //   });
+  // };
 
   //creator delete campaign
   const handleDelete = async () => {
@@ -501,7 +497,7 @@ const Customer = ({ campaign, cid }) => {
                 apiKey='awf8d12nkj02oekbnk7t8xx283a5kexhscdfvpj9sd8h22ox'
                 id='content'
                 placeholder='Nội dung...'
-                onEditorChange={handleCampaignChange}
+                onEditorChange={handleContentChange}
                 value={tempCampaign.content}
                 required
               />
@@ -513,7 +509,7 @@ const Customer = ({ campaign, cid }) => {
                 </Label>
                 <Datetime
                   onChange={handleStartDateChange}
-                  value={tempData.campaignTTL[0].open_datetime}
+                  value={new Date(tempCampaign.campaignTTL.open_datetime)}
                   required
                   isValidDate={validStartDate}
                   className='modal-items'
@@ -525,7 +521,7 @@ const Customer = ({ campaign, cid }) => {
                 </Label>
                 <Datetime
                   onChange={handleEndDateChange}
-                  value={tempData.campaignTTL[0].close_datetime}
+                  value={new Date(tempCampaign.campaignTTL.close_datetime)}
                   required
                   isValidDate={valid}
                   className='modal-items text-dark'
@@ -563,19 +559,15 @@ const Customer = ({ campaign, cid }) => {
             onClick={() => {
               try {
                 handleEditSubmit();
-                enqueueSnackbar('Chỉnh sửa thành công!', {
-                  variant: 'success',
-                });
-              } catch (error) {
-                enqueueSnackbar('Chỉnh sửa không thành công!', {
-                  variant: 'error',
-                });
+                toggleCampaignModal();
+                // Router.reload();
+              } catch (e) {
+                console.log(e);
+                toggleCampaignModal();
               }
-              toggleCampaignModal();
-              Router.reload();
             }}
           >
-            Lưu
+            Save
           </Button>
         </ModalFooter>
       </Modal>
@@ -676,22 +668,20 @@ const Customer = ({ campaign, cid }) => {
                       <strong>Người tạo:</strong>
                     </CardSubtitle>
                     <CardText>
-                      {campaign.user !== undefined
-                        ? campaign.user.username
-                        : ''}
+                      {campaign.user !== undefined ? campaign.user.name : ''}
                     </CardText>
                     <CardSubtitle>
                       <strong>Thời gian:</strong>
                     </CardSubtitle>
-                    {campaign.campaignTTL[0] !== undefined ? (
+                    {campaign.campaignTTL !== undefined ? (
                       <CardText>
                         {'Từ ' +
                           new Date(
-                            campaign.campaignTTL[0].open_datetime
+                            campaign.campaignTTL.open_datetime
                           ).toLocaleDateString('en-GB') +
                           ' - Đến ' +
                           new Date(
-                            campaign.campaignTTL[0].close_datetime
+                            campaign.campaignTTL.close_datetime
                           ).toLocaleDateString('en-GB')}
                       </CardText>
                     ) : (
@@ -909,7 +899,7 @@ const Customer = ({ campaign, cid }) => {
                       <TimelineOppositeContent>
                         <Typography variant='body2' color='textSecondary'>
                           {new Date(
-                            campaign.campaignTTL[0].open_datetime
+                            campaign.campaignTTL.open_datetime
                           ).toLocaleString('en-GB')}
                         </Typography>
                       </TimelineOppositeContent>
@@ -930,7 +920,7 @@ const Customer = ({ campaign, cid }) => {
                       <TimelineOppositeContent>
                         <Typography variant='body2' color='textSecondary'>
                           {new Date(
-                            campaign.campaignTTL[0].close_datetime
+                            campaign.campaignTTL.close_datetime
                           ).toLocaleString('en-GB')}
                         </Typography>
                       </TimelineOppositeContent>
@@ -956,7 +946,7 @@ const Customer = ({ campaign, cid }) => {
                       <TimelineOppositeContent>
                         <Typography variant='body2' color='textSecondary'>
                           {new Date(
-                            campaign.campaignTTL[0].open_datetime
+                            campaign.campaignTTL.open_datetime
                           ).toLocaleString('en-GB')}
                         </Typography>
                       </TimelineOppositeContent>
@@ -977,7 +967,7 @@ const Customer = ({ campaign, cid }) => {
                       <TimelineOppositeContent>
                         <Typography variant='body2' color='textSecondary'>
                           {new Date(
-                            campaign.campaignTTL[0].close_datetime
+                            campaign.campaignTTL.close_datetime
                           ).toLocaleString('en-GB')}
                         </Typography>
                       </TimelineOppositeContent>

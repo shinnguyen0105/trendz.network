@@ -21,7 +21,7 @@ import { UPDATE_CHANNEL_BY_EMPLOYEE } from '../../../graphql/mutations/channel/u
 
 const { API_URL } = process.env;
 
-const EmployeeCampaignPage = ({ chid, channel }) => {
+const EmployeeChannelPage = ({ chid, channel }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [employeeStatus, setEmployeeStatus] = useState();
@@ -230,7 +230,7 @@ const EmployeeCampaignPage = ({ chid, channel }) => {
   };
 
   return (
-    <Card className='single-card'>
+    <Card className='single-card col-md-6 offset-md-3'>
       {renderApproveModal()}
       {renderUnApproveModal()}
       <CardImg
@@ -314,4 +314,4 @@ const EmployeeCampaignPage = ({ chid, channel }) => {
   );
 };
 
-export default EmployeeCampaignPage;
+export default EmployeeChannelPage;
