@@ -504,7 +504,7 @@ const Customer = ({ campaign, cid }) => {
               />
             </FormGroup>
             <div className='form-row'>
-              <FormGroup className='col-md-4'>
+              <FormGroup className='col-md-5'>
                 <Label for='startDate' className='modal-items'>
                   Chọn Ngày bắt đầu
                 </Label>
@@ -513,10 +513,10 @@ const Customer = ({ campaign, cid }) => {
                   value={new Date(tempCampaign.campaignTTL.open_datetime)}
                   required
                   isValidDate={validStartDate}
-                  className='modal-items'
+                  className='modal-items bg-custom'
                 />
               </FormGroup>
-              <FormGroup className='col-md-4'>
+              <FormGroup className='col-md-5'>
                 <Label for='endDate' className='modal-items'>
                   Chọn Ngày kết thúc
                 </Label>
@@ -525,7 +525,7 @@ const Customer = ({ campaign, cid }) => {
                   value={new Date(tempCampaign.campaignTTL.close_datetime)}
                   required
                   isValidDate={valid}
-                  className='modal-items text-dark'
+                  className='modal-items bg-custom'
                 />
               </FormGroup>
             </div>

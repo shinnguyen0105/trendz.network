@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Button,
@@ -14,8 +13,8 @@ import {
 } from 'reactstrap';
 
 import { useAuth } from '../../../contexts/userContext';
+import Link from 'next/link';
 import Router from 'next/router';
-
 // import StyledHeader from './StyledHeader';
 // import Link from '../Link';
 // import logo from '../../assets/img/logo.svg';
@@ -97,7 +96,6 @@ function Header() {
     localStorage.removeItem('userInfo');
     dispatch({ type: LOGOUT });
     //Router.reload();
-
     Router.push('/login');
     location.reload();
   };
@@ -107,7 +105,7 @@ function Header() {
       <NavItem>
         <Link href='/login'>
           <Button className='nav-link d-none d-lg-block' color='default'>
-            Đăng nhập
+            Login
           </Button>
         </Link>
 
@@ -116,19 +114,19 @@ function Header() {
           onClick={toggleCollapse}
         >
           <Link href='/login'>
-            <TestButton>Đăng nhập</TestButton>
+            <TestButton>Login</TestButton>
           </Link>
         </NavLink>
       </NavItem>
       <NavItem>
         <Link href='/register'>
           <Button className='nav-link d-none d-lg-block' color='primary'>
-            Đăng ký
+            Register
           </Button>
         </Link>
         <NavLink className='d-lg-none d-xl-none' onClick={toggleCollapse}>
           <Link href='/register'>
-            <TestButton>Đăng ký</TestButton>
+            <TestButton>Register</TestButton>
           </Link>
         </NavLink>
       </NavItem>
@@ -152,7 +150,7 @@ function Header() {
       <NavItem>
         <Link href='/profile'>
           <Button className='nav-link d-none d-lg-block' color='warning'>
-            Hồ sơ
+            Profile
           </Button>
         </Link>
         <NavLink
@@ -160,7 +158,7 @@ function Header() {
           onClick={toggleCollapse}
         >
           <Link href='/profile'>
-            <TestButton>Hồ sơ</TestButton>
+            <TestButton>Profile</TestButton>
           </Link>
         </NavLink>
       </NavItem>
@@ -171,7 +169,7 @@ function Header() {
             color='default'
             onClick={handleLogout}
           >
-            Đăng xuất
+            Logout
           </Button>
         </Link>
 
@@ -183,7 +181,7 @@ function Header() {
           }}
         >
           <Link href='/'>
-            <TestButton>Đăng xuất</TestButton>
+            <TestButton>Logout</TestButton>
           </Link>
         </NavLink>
       </NavItem>
@@ -193,7 +191,7 @@ function Header() {
   const renderUnloggedBrand = (
     <Link href='/'>
       <TestButton>
-        <span className='text-dark font-weight-normal'>
+        <span className='text-brand font-weight-normal'>
           <strong>TRENDZ •</strong> NETWORK
         </span>
       </TestButton>
@@ -203,8 +201,9 @@ function Header() {
   const renderLoggedBrand = (
     <Link href='/dashboard'>
       <TestButton>
-        <span>TRENDZ • </span>
-        NETWORK
+        <span className='text-brand font-weight-normal'>
+          <strong>TRENDZ •</strong> NETWORK
+        </span>
       </TestButton>
     </Link>
   );

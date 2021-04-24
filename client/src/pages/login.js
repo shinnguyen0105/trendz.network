@@ -106,18 +106,18 @@ const Login = () => {
     }
     if (!passwordCheck.test(accountValues.password)) {
       enqueueSnackbar(
-        'Mật khẩu phải có tối thiểu 8 ký tự (Bao gồm: >=1 kí tự đặc biệt, >=1 chữ số, >=1 chữ cái in hoa)',
+        'Password must have at least 8 characters (Including:> = 1 special character,> = 1 digit,> = 1 uppercase letter)',
         { variant: 'error' }
       );
     } else
       try {
         await requestLoginMutation();
-        enqueueSnackbar('Đăng nhập thành công!', { variant: 'success' });
+        enqueueSnackbar('Logged in successfully!', { variant: 'success' });
         Router.push('/dashboard');
       } catch (error) {
         console.log(error);
         return enqueueSnackbar(
-          'Sai tài khoản hoặc mật khẩu! Vui lòng kiểm tra lại!',
+          'Wrong account or password! Please check again!',
           { variant: 'error' }
         );
       }
@@ -157,7 +157,7 @@ const Login = () => {
                   />
                   <Card className='card-login'>
                     <CardHeader>
-                      <CardTitle tag='h4'>Đăng nhập</CardTitle>
+                      <CardTitle tag='h4'>LOGIN</CardTitle>
                     </CardHeader>
                     <CardBody>
                       <Form className='form'>
@@ -174,7 +174,7 @@ const Login = () => {
                             </InputGroupText>
                           </InputGroupAddon>
                           <Input
-                            placeholder='Tên đăng nhập'
+                            placeholder='Your email'
                             type='text'
                             required
                             onFocus={(event) =>
@@ -212,7 +212,7 @@ const Login = () => {
                             </InputGroupText>
                           </InputGroupAddon>
                           <Input
-                            placeholder='Mật khẩu'
+                            placeholder='Password'
                             type='password'
                             required
                             onFocus={(event) =>
@@ -247,22 +247,9 @@ const Login = () => {
                         onClick={requestLogin}
                         disabled={requestLoginLoading}
                       >
-                        Đăng nhập
+                        Login
                       </Button>
                       <br />
-                    </CardFooter>
-                    <CardFooter>
-                      <a href={`${API_URL}/connect/facebook`} className='link'>
-                        <Button
-                          className='btn-round'
-                          color='info'
-                          size='lg'
-                          social='facebook'
-                        >
-                          <i />
-                          Đăng nhập bằng Facebook
-                        </Button>
-                      </a>
                     </CardFooter>
                   </Card>
                 </Col>

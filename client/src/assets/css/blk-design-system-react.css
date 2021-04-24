@@ -1831,13 +1831,16 @@ pre code {
   padding: 0.5rem 0.7rem;
   font-size: 0.875rem;
   line-height: 1.42857;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgb(255 255 255 / 80%);
   background-color: transparent;
   background-clip: padding-box;
   border: 1px solid #cad1d7;
   border-radius: 0.25rem;
   box-shadow: none;
   transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.form-control-high {
+  color: rgb(0 0 0 / 80%);
 }
 @media screen and (prefers-reduced-motion: reduce) {
   .form-control {
@@ -6538,6 +6541,16 @@ button.bg-default:hover,
 button.bg-default:focus {
   background-color: #243152 !important;
 }
+.bg-custom {
+  background-color: #2c4864 !important;
+}
+
+a.bg-custom:hover,
+a.bg-custom:focus,
+button.bg-custom:hover,
+button.bg-custom:focus {
+  background-color: #2c4864 !important;
+}
 
 .bg-white {
   background-color: #ffffff !important;
@@ -9966,6 +9979,14 @@ a.text-danger:focus {
 a.text-light:hover,
 a.text-light:focus {
   color: #919ca6 !important;
+}
+.text-brand {
+  color: #ffffff !important;
+}
+
+a.text-brand:hover,
+a.text-brand:focus {
+  color: #ffffff !important;
 }
 
 .text-dark {
@@ -23156,6 +23177,6 @@ td.rdtYear:hover {
 }
 .text-statistic {
   font-size: 3.6275rem;
-    font-weight: 600;
-    line-height: 1.2;
+  font-weight: 600;
+  line-height: 1.2;
 }

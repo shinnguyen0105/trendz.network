@@ -31,6 +31,7 @@ module.exports = {
       '/register': { page: '/register' },
       '/profile': { page: '/profile' },
       '/create-channel': { page: '/create-channel' },
+      '/privacypolicies': { page: '/privacypolicies' },
       '/404': { page: '/404' },
     };
   },

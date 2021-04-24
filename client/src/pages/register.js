@@ -107,25 +107,25 @@ const Register = () => {
       isEmpty(accountValues.password) &&
       isEmpty(accountValues.email)
     ) {
-      enqueueSnackbar('Không được bỏ trống cả hai trường', {
+      enqueueSnackbar('Do not leave both fields blank', {
         variant: 'error',
       });
     }
     if (!passwordCheck.test(accountValues.password)) {
       enqueueSnackbar(
-        'Mật khẩu phải có tối thiểu 8 ký tự (Bao gồm: >=1 kí tự đặc biệt, >=1 chữ số, >=1 chữ cái in hoa)',
+        'Password must have at least 8 characters (Including:> = 1 special character,> = 1 digit,> = 1 uppercase letter)',
         { variant: 'error' }
       );
     }
     if (accountValues.password !== reTypePassword.rePassword) {
       enqueueSnackbar(
-        'Mật khẩu và Nhập lại mật khẩu không trùng khớp! Vui lòng thử lại',
-        { variant: 'success' }
+        'Password and Re-enter password do not match! Please try again',
+        { variant: 'error' }
       );
     } else
       try {
         await requestRegisterMutation();
-        enqueueSnackbar('Đăng ký thành công! Vui lòng kiểm tra email của bạn', {
+        enqueueSnackbar('Sign Up Success!', {
           variant: 'success',
         });
         return Router.push('/login');
@@ -168,7 +168,7 @@ const Register = () => {
                   />
                   <Card className='card-register'>
                     <CardHeader>
-                      <CardTitle tag='h4'>Đăng ký</CardTitle>
+                      <CardTitle tag='h4'>LOGIN</CardTitle>
                     </CardHeader>
                     <CardBody>
                       <Form className='form'>
@@ -185,7 +185,7 @@ const Register = () => {
                             </InputGroupText>
                           </InputGroupAddon>
                           <Input
-                            placeholder='Tên đăng nhập'
+                            placeholder='Username'
                             type='text'
                             required
                             onFocus={(event) =>
@@ -223,7 +223,7 @@ const Register = () => {
                             </InputGroupText>
                           </InputGroupAddon>
                           <Input
-                            placeholder='Địa chỉ email'
+                            placeholder='Your email'
                             type='text'
                             required
                             onFocus={(event) =>
@@ -261,7 +261,7 @@ const Register = () => {
                             </InputGroupText>
                           </InputGroupAddon>
                           <Input
-                            placeholder='Mật khẩu'
+                            placeholder='Password'
                             type='password'
                             required
                             onFocus={(event) =>
@@ -299,7 +299,7 @@ const Register = () => {
                             </InputGroupText>
                           </InputGroupAddon>
                           <Input
-                            placeholder='Nhập lại mật khẩu'
+                            placeholder='Confirm Password'
                             type='password'
                             required
                             onFocus={(event) =>
@@ -334,7 +334,7 @@ const Register = () => {
                         onClick={requestRegister}
                         disabled={requestRegisterLoading}
                       >
-                        Đăng ký
+                        Register
                       </Button>
                     </CardFooter>
                   </Card>

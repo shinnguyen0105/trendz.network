@@ -1,11 +1,6 @@
-/**
- *
- * Footer
- *
- */
-
 import React from 'react';
-//import PropTypes from 'prop-types';
+
+import Link from 'next/link';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -24,7 +19,11 @@ import {
   Col,
   UncontrolledTooltip,
 } from 'reactstrap';
-
+const TestButton = React.forwardRef(({ children, href, onClick }, ref) => (
+  <p ref={ref} href={href} onClick={onClick}>
+    {children}
+  </p>
+));
 function Footer() {
   return (
     <footer className='footer'>
@@ -36,83 +35,38 @@ function Footer() {
           <Col md='3'>
             <Nav>
               <NavItem>
-                <NavLink>Home</NavLink>
+                <NavLink>
+                  <Link href='/'>
+                    <TestButton>HOME</TestButton>
+                  </Link>
+                </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink>Landing</NavLink>
+                <NavLink>
+                  <Link href='/register'>
+                    <TestButton>REGISTER</TestButton>
+                  </Link>
+                </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink>Register</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink>Profile</NavLink>
+                <NavLink>
+                  <Link href='/login'>
+                    <TestButton>LOGIN</TestButton>
+                  </Link>
+                </NavLink>
               </NavItem>
             </Nav>
           </Col>
           <Col md='3'>
             <Nav>
               <NavItem>
-                <NavLink href='#'>Contact Us</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href='#'>About Us</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href='#'>Blog</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href='https://opensource.org/licenses/MIT'>
-                  License
+                <NavLink>
+                  <Link href='/privacypolicies'>
+                    <TestButton>Privacy Policy</TestButton>
+                  </Link>
                 </NavLink>
               </NavItem>
             </Nav>
-          </Col>
-          <Col md='3'>
-            <h3 className='title'>Follow us:</h3>
-            <div className='btn-wrapper profile'>
-              <Button
-                className='btn-icon btn-neutral btn-round btn-simple'
-                color='default'
-                href='#'
-                id='tooltip622135962'
-                target='_blank'
-              >
-                <i className='fab'>
-                  <FontAwesomeIcon icon={faTwitter} />{' '}
-                </i>
-              </Button>
-              <UncontrolledTooltip delay={0} target='tooltip622135962'>
-                Follow us
-              </UncontrolledTooltip>
-              <Button
-                className='btn-icon btn-neutral btn-round btn-simple'
-                color='default'
-                href='#'
-                id='tooltip230450801'
-                target='_blank'
-              >
-                <i className='fab'>
-                  <FontAwesomeIcon icon={faFacebook} />{' '}
-                </i>
-              </Button>
-              <UncontrolledTooltip delay={0} target='tooltip230450801'>
-                Like us
-              </UncontrolledTooltip>
-              <Button
-                className='btn-icon btn-neutral btn-round btn-simple'
-                color='default'
-                href='#'
-                id='tooltip318450378'
-                target='_blank'
-              >
-                <i className='fab'>
-                  <FontAwesomeIcon icon={faInstagram} />{' '}
-                </i>
-              </Button>
-              <UncontrolledTooltip delay={0} target='tooltip318450378'>
-                Follow us
-              </UncontrolledTooltip>
-            </div>
           </Col>
         </Row>
       </Container>
