@@ -74,8 +74,8 @@ export const REQUEST_GET_ID_CAMPAIGNS = gql`
   }
 `;
 export const REQUEST_GET_ALL_CAMPAIGNS = gql`
-  query getAllCampaigns {
-    campaigns {
+  query getAllCampaigns($sort: String) {
+    campaigns(sort: $sort) {
       id
       title
       user {
@@ -85,6 +85,7 @@ export const REQUEST_GET_ALL_CAMPAIGNS = gql`
       status
       completed
       approve
+      influencerCompleted
       picture {
         id
         formats

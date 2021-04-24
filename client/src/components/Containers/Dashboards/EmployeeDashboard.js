@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from 'react-apollo';
 
 import classnames from 'classnames';
@@ -114,14 +114,38 @@ const EmployeeDashboard = () => {
       </>
     );
   }
+  const [sortGraphqlFilter, setSortGraphqlFilter] = useState();
+
+  useEffect(() => {
+    if (filterItems.sort !== '') {
+      setSortGraphqlFilter(filterItems.sort);
+    }
+  }, [filterItems]);
   function ListCampaigns() {
-    const { loading, error, data } = useQuery(REQUEST_GET_ALL_CAMPAIGNS);
+    const { loading, error, data } = useQuery(REQUEST_GET_ALL_CAMPAIGNS, {
+      variables: {
+        sort: sortGraphqlFilter,
+      },
+    });
     if (loading) return <Skeleton variant='text' />;
     if (error) return null;
     let campaigns = data.campaigns;
     let onhold = campaigns.filter((campaign) => campaign.approve == null);
-    let approve = campaigns.filter((campaign) => campaign.approve == true);
+    let approve = campaigns.filter(
+      (campaign) =>
+        campaign.approve == true &&
+        campaign.influencerCompleted != true &&
+        campaign.completed != true
+    );
     let unapprove = campaigns.filter((campaign) => campaign.approve == false);
+    let influencerCompleted = campaigns.filter(
+      (campaign) =>
+        campaign.influencerCompleted == true && campaign.completed != true
+    );
+    let completed = campaigns.filter(
+      (campaign) =>
+        campaign.completed == true && campaign.influencerCompleted == true
+    );
     // console.log('onhold', onhold);
     // console.log('onhold', approve);
     // console.log('onhold', unapprove);
@@ -151,6 +175,22 @@ const EmployeeDashboard = () => {
             roleType={'Employee'}
           />
         </TabPane>
+        <TabPane tabId='vertical4'>
+          <DashboardChildren
+            data={influencerCompleted}
+            categ={filterItems.category}
+            search={filterItems.search}
+            roleType={'Employee'}
+          />
+        </TabPane>
+        <TabPane tabId='vertical5'>
+          <DashboardChildren
+            data={completed}
+            categ={filterItems.category}
+            search={filterItems.search}
+            roleType={'Employee'}
+          />
+        </TabPane>
       </>
     );
   }
@@ -170,13 +210,13 @@ const EmployeeDashboard = () => {
 
     return (
       <>
-        <TabPane tabId='vertical4'>
+        <TabPane tabId='vertical6'>
           <ListChannel data={onhold} />
         </TabPane>
-        <TabPane tabId='vertical5'>
+        <TabPane tabId='vertical7'>
           <ListChannel data={approve} />
         </TabPane>
-        <TabPane tabId='vertical6'>
+        <TabPane tabId='vertical8'>
           <ListChannel data={unapprove} />
         </TabPane>
       </>
@@ -228,7 +268,7 @@ const EmployeeDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 4)}
                     >
-                      Channel requests
+                      Campaigns Request Pay
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -238,7 +278,7 @@ const EmployeeDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 5)}
                     >
-                      Approved Channels
+                      Campaigns Completed
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -248,6 +288,26 @@ const EmployeeDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 6)}
                     >
+                      Channel requests
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className={classnames({
+                        active: navState.vertical === 7,
+                      })}
+                      onClick={(e) => toggleTabs(e, 'vertical', 7)}
+                    >
+                      Approved Channels
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className={classnames({
+                        active: navState.vertical === 8,
+                      })}
+                      onClick={(e) => toggleTabs(e, 'vertical', 8)}
+                    >
                       Unapproved Channels
                     </NavLink>
                   </NavItem>
@@ -255,7 +315,7 @@ const EmployeeDashboard = () => {
               </Col>
               <Col>
                 <TabContent activeTab={'vertical' + navState.vertical}>
-                  {navState.vertical <= 3 ? (
+                  {navState.vertical <= 5 ? (
                     <Row style={{ marginTop: '30px' }}>
                       <Col>
                         <Row>

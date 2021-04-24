@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Employee = ({ campaign, cid }) => {
   const { enqueueSnackbar } = useSnackbar();
-
+  console.log(campaign);
   const classes = useStyles();
 
   const { state } = useAuth();
@@ -110,32 +110,40 @@ const Employee = ({ campaign, cid }) => {
   };
 
   const [requestUpdateCampaignMutation] = useMutation(
-    REQUEST_UPDATE_CAMPAIGN_BY_EMPLOYEE,
-    {
-      variables: {
-        id: cid,
-        approve: employeeApprove,
-        notee: note.note,
-      },
-    }
+    REQUEST_UPDATE_CAMPAIGN_BY_EMPLOYEE
   );
 
   //employee approve/unapprove campaign
   const handleEmployeeApproval = async (approved) => {
     await setEmployeeApprove(approved);
+    await requestUpdateCampaignMutation({
+      variables: {
+        id: cid,
+        approve: employeeApprove,
+        notee: note.note,
+      },
+    });
+    if (approved) {
+      enqueueSnackbar('Đã chấp thuận campaign!', { variant: 'success' });
+    } else enqueueSnackbar('Đã từ chối campaign!', { variant: 'warning' });
+    //Router.push('/dashboard');
+  };
+
+  const handleEmployeeMaskPaid = async () => {
     try {
-      await requestUpdateCampaignMutation();
-      if (approved) {
-        enqueueSnackbar('Đã chấp thuận campaign!', { variant: 'success' });
-      } else enqueueSnackbar('Đã từ chối campaign!', { variant: 'warning' });
-      Router.push('/dashboard');
+      await requestUpdateCampaignMutation({
+        variables: {
+          id: cid,
+          complete: true,
+        },
+      });
+      enqueueSnackbar('Mask as Paid Successfully!', { variant: 'success' });
     } catch (e) {
       console.log(e);
-      enqueueSnackbar('Đã có lỗi xảy ra, vui lòng thử lại!', {
+      enqueueSnackbar('Error during Mask as Paid!', {
         variant: 'error',
       });
     }
-    return;
   };
 
   const renderApproveModal = () => {
@@ -448,18 +456,35 @@ const Employee = ({ campaign, cid }) => {
                     ) : (
                       ''
                     )}
-                    <div className='form-button'>
-                      <Button
-                        className='btn-neutral'
-                        color='primary'
-                        onClick={toggleUnApproveModal}
-                      >
-                        Từ chối
-                      </Button>
-                      <Button color='primary' onClick={toggleApproveModal}>
-                        Xác nhận
-                      </Button>
-                    </div>
+                    {campaign.approve == null ? (
+                      <div className='form-button'>
+                        <Button
+                          className='btn-neutral'
+                          color='primary'
+                          onClick={toggleUnApproveModal}
+                        >
+                          Từ chối
+                        </Button>
+                        <Button color='primary' onClick={toggleApproveModal}>
+                          Xác nhận
+                        </Button>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    {campaign.influencerCompleted == true &&
+                    campaign.completed != true ? (
+                      <div className='form-button'>
+                        <Button
+                          color='primary'
+                          onClick={() => handleEmployeeMaskPaid()}
+                        >
+                          Payment confirmation for Influencer
+                        </Button>
+                      </div>
+                    ) : (
+                      ''
+                    )}
                   </CardBody>
                 </Card>
               </Container>
@@ -481,11 +506,9 @@ const Employee = ({ campaign, cid }) => {
                       <strong>Giới tính:</strong>
                     </CardSubtitle>
                     {campaign.user.gender !== undefined ? (
-                      <CardText>
-                        {campaign.user.gender === 'male' ? 'Nam' : 'Nữ'}
-                      </CardText>
+                      <CardText>{campaign.user.gender}</CardText>
                     ) : (
-                      ''
+                      'N/A'
                     )}
                     <CardSubtitle>
                       <strong>Ngày sinh:</strong>
@@ -530,7 +553,11 @@ const Employee = ({ campaign, cid }) => {
                     <br />
                     <br />
                     <div className='form-button'>
-                      <Button color='primary'>Liên hệ ngay!</Button>
+                      <a
+                        href={`mailto:${campaign.user.email}?subject=Campaign - ${campaign.title}-TrendzNetwork`}
+                      >
+                        <Button color='primary'>Liên hệ ngay!</Button>
+                      </a>
                     </div>
                   </CardBody>
                 </Card>
@@ -553,13 +580,9 @@ const Employee = ({ campaign, cid }) => {
                       <strong>Giới tính:</strong>
                     </CardSubtitle>
                     {campaign.channels[0].user.gender !== undefined ? (
-                      <CardText>
-                        {campaign.channels[0].user.gender === 'male'
-                          ? 'Nam'
-                          : 'Nữ'}
-                      </CardText>
+                      <CardText>{campaign.channels[0].user.gender}</CardText>
                     ) : (
-                      ''
+                      'N/A'
                     )}
                     <CardSubtitle>
                       <strong>Ngày sinh:</strong>
@@ -623,7 +646,11 @@ const Employee = ({ campaign, cid }) => {
                       ''
                     )}
                     <div className='form-button'>
-                      <Button color='primary'>Liên hệ ngay!</Button>
+                      <a
+                        href={`mailto:${campaign.channels[0].user.email}?subject=Campaign - ${campaign.title}-TrendzNetwork`}
+                      >
+                        <Button color='primary'>Liên hệ ngay!</Button>
+                      </a>
                     </div>
                   </CardBody>
                 </Card>
@@ -648,12 +675,13 @@ const Employee = ({ campaign, cid }) => {
                   <TimelineContent>
                     <Paper elevation={3} className={classes.paper}>
                       <p>
-                        <strong>Khởi tạo</strong>
+                        <strong>Created by</strong>
                       </p>
                       <CardText>{campaign.user.name}</CardText>
                     </Paper>
                   </TimelineContent>
                 </TimelineItem>
+
                 {campaign.approve == null ? (
                   <TimelineItem>
                     <TimelineSeparator>
@@ -664,15 +692,14 @@ const Employee = ({ campaign, cid }) => {
                     </TimelineSeparator>
                     <TimelineContent>
                       <Paper elevation={3} className={classes.paper}>
-                        <p>Kiểm duyệt</p>
-                        <CardText>Hệ thống TrendZ đang xử lý yêu cầu</CardText>
+                        <p>Censorship</p>
+                        <CardText>
+                          The TrendzNetwork system is processing the request
+                        </CardText>
                       </Paper>
                     </TimelineContent>
                   </TimelineItem>
-                ) : (
-                  ''
-                )}
-                {campaign.approve == true ? (
+                ) : campaign.approve == true ? (
                   <TimelineItem>
                     <TimelineSeparator>
                       <TimelineDot className={classes.success}>
@@ -682,15 +709,12 @@ const Employee = ({ campaign, cid }) => {
                     </TimelineSeparator>
                     <TimelineContent>
                       <Paper elevation={3} className={classes.paper}>
-                        <p>Kiểm duyệt</p>
-                        <p>Hệ thống TrendZ đã duyệt yêu cầu</p>
+                        <p>Censorship</p>
+                        <p>The TrendzNetwork system approved the request</p>
                       </Paper>
                     </TimelineContent>
                   </TimelineItem>
-                ) : (
-                  ''
-                )}
-                {campaign.approve == false ? (
+                ) : campaign.approve == false ? (
                   <TimelineItem>
                     <TimelineSeparator>
                       <TimelineDot className={classes.error}>
@@ -700,48 +724,15 @@ const Employee = ({ campaign, cid }) => {
                     </TimelineSeparator>
                     <TimelineContent>
                       <Paper elevation={3} className={classes.paper}>
-                        <p>Kiểm duyệt</p>
-                        <p>Hệ thống TrendZ đã từ chối yêu cầu</p>
+                        <p>Censorship</p>
+                        <p> TrendzNetwork system rejected the request </p>
                       </Paper>
                     </TimelineContent>
                   </TimelineItem>
                 ) : (
                   ''
                 )}
-                {campaign.status == false && campaign.approve == null ? (
-                  <TimelineItem>
-                    <TimelineSeparator>
-                      <TimelineDot className={classes.inactive}>
-                        <LockIcon />
-                      </TimelineDot>
-                      <TimelineConnector />
-                    </TimelineSeparator>
-                    <TimelineContent>
-                      <Paper elevation={3} className={classes.paper}>
-                        <p>Thông tin đến Influencer</p>
-                      </Paper>
-                    </TimelineContent>
-                  </TimelineItem>
-                ) : (
-                  ''
-                )}
-                {campaign.status == null && campaign.approve == null ? (
-                  <TimelineItem>
-                    <TimelineSeparator>
-                      <TimelineDot className={classes.inactive}>
-                        <LockIcon />
-                      </TimelineDot>
-                      <TimelineConnector />
-                    </TimelineSeparator>
-                    <TimelineContent>
-                      <Paper elevation={3} className={classes.paper}>
-                        <p>Thông tin đến Influencer</p>
-                      </Paper>
-                    </TimelineContent>
-                  </TimelineItem>
-                ) : (
-                  ''
-                )}
+
                 {campaign.status == null && campaign.approve == true ? (
                   <TimelineItem>
                     <TimelineSeparator>
@@ -752,15 +743,12 @@ const Employee = ({ campaign, cid }) => {
                     </TimelineSeparator>
                     <TimelineContent>
                       <Paper elevation={3} className={classes.paper}>
-                        <p>Thông tin đến Influencer</p>
-                        <p>Influencer đang xem xét yêu cầu</p>
+                        <p>Sent request to Influencer:</p>
+                        <p>Influencer is reviewing the request</p>
                       </Paper>
                     </TimelineContent>
                   </TimelineItem>
-                ) : (
-                  ''
-                )}
-                {campaign.status == false && campaign.approve == true ? (
+                ) : campaign.status == false && campaign.approve == true ? (
                   <TimelineItem>
                     <TimelineSeparator>
                       <TimelineDot className={classes.error}>
@@ -770,15 +758,12 @@ const Employee = ({ campaign, cid }) => {
                     </TimelineSeparator>
                     <TimelineContent>
                       <Paper elevation={3} className={classes.paper}>
-                        <p>Thông tin từ Influencer</p>
-                        <p>Influencer đã từ chối yêu cầu</p>
+                        <p>Influencer:</p>
+                        <p>Influencer declined the request</p>
                       </Paper>
                     </TimelineContent>
                   </TimelineItem>
-                ) : (
-                  ''
-                )}
-                {campaign.status == true ? (
+                ) : campaign.status == true && campaign.approve == true ? (
                   <TimelineItem>
                     <TimelineSeparator>
                       <TimelineDot className={classes.success}>
@@ -788,125 +773,119 @@ const Employee = ({ campaign, cid }) => {
                     </TimelineSeparator>
                     <TimelineContent>
                       <Paper elevation={3} className={classes.paper}>
-                        <p>Thông tin từ Influencer</p>
-                        <p>Influencer đã chấp thuận yêu cầu</p>
+                        <p>Influencer:</p>
+                        <p>Influencer has approved the request</p>
                       </Paper>
                     </TimelineContent>
                   </TimelineItem>
                 ) : (
                   ''
                 )}
-                {campaign.completed == null && campaign.status == null ? (
+
+                {campaign.status == true &&
+                campaign.approve == true &&
+                campaign.influencerCompleted == false ? (
                   <TimelineItem>
                     <TimelineSeparator>
-                      <TimelineDot className={classes.inactive}>
+                      <TimelineDot className={classes.processing}>
+                        <SyncIcon />
+                      </TimelineDot>
+                      <TimelineConnector />
+                    </TimelineSeparator>
+                    <TimelineContent>
+                      <Paper elevation={3} className={classes.paper}>
+                        <p>Influencer:</p>
+                        <p>Influencer initiate the campaign</p>
+                      </Paper>
+                    </TimelineContent>
+                  </TimelineItem>
+                ) : campaign.status == true &&
+                  campaign.approve == true &&
+                  campaign.influencerCompleted == true ? (
+                  <TimelineItem>
+                    <TimelineSeparator>
+                      <TimelineDot className={classes.success}>
+                        <CheckIcon />
+                      </TimelineDot>
+                      <TimelineConnector />
+                    </TimelineSeparator>
+                    <TimelineContent>
+                      <Paper elevation={3} className={classes.paper}>
+                        <p>Influencer:</p>
+                        <p>Influencer has completed the campaign</p>
+                      </Paper>
+                    </TimelineContent>
+                  </TimelineItem>
+                ) : campaign.influencerCompleted == null ? (
+                  <TimelineItem>
+                    <TimelineSeparator>
+                      <TimelineDot className={classes.processing}>
+                        <SyncIcon />
+                      </TimelineDot>
+                      <TimelineConnector />
+                    </TimelineSeparator>
+                    <TimelineContent>
+                      <Paper elevation={3} className={classes.paper}>
+                        <p>Waiting</p>
+                      </Paper>
+                    </TimelineContent>
+                  </TimelineItem>
+                ) : (
+                  ''
+                )}
+
+                {/* completed */}
+                {campaign.status == true &&
+                campaign.approve == true &&
+                campaign.influencerCompleted == true &&
+                campaign.completed == true ? (
+                  <TimelineItem>
+                    <TimelineSeparator>
+                      <TimelineDot className={classes.success}>
+                        <CheckIcon />
+                      </TimelineDot>
+                      <TimelineConnector />
+                    </TimelineSeparator>
+                    <TimelineContent>
+                      <Paper elevation={3} className={classes.paper}>
+                        <p>TrendzNetwork:</p>
+                        <p>Paid for Influencer</p>
+                      </Paper>
+                    </TimelineContent>
+                  </TimelineItem>
+                ) : campaign.status == true &&
+                  campaign.approve == true &&
+                  campaign.influencerCompleted == true &&
+                  campaign.completed == false ? (
+                  <TimelineItem>
+                    <TimelineSeparator>
+                      <TimelineDot className={classes.processing}>
+                        <SyncIcon />
+                      </TimelineDot>
+                      <TimelineConnector />
+                    </TimelineSeparator>
+                    <TimelineContent>
+                      <Paper elevation={3} className={classes.paper}>
+                        <p>Waiting:</p>
+                        <p>TrendzNetwork are paying for influencer</p>
+                      </Paper>
+                    </TimelineContent>
+                  </TimelineItem>
+                ) : campaign.influencerCompleted == false ||
+                  campaign.influencerCompleted == null ? (
+                  <TimelineItem>
+                    <TimelineSeparator>
+                      <TimelineDot className={classes.error}>
                         <LockIcon />
                       </TimelineDot>
                       <TimelineConnector />
                     </TimelineSeparator>
                     <TimelineContent>
                       <Paper elevation={3} className={classes.paper}>
-                        <p>(Dự kiến) Kết thúc</p>
+                        <p>Blocked</p>
                       </Paper>
                     </TimelineContent>
                   </TimelineItem>
-                ) : (
-                  ''
-                )}
-                {campaign.completed == false && campaign.status == true ? (
-                  <>
-                    <TimelineItem>
-                      <TimelineOppositeContent>
-                        <Typography variant='body2' color='textSecondary'>
-                          {new Date(
-                            campaign.campaignTTL.open_datetime
-                          ).toLocaleString('en-GB')}
-                        </Typography>
-                      </TimelineOppositeContent>
-                      <TimelineSeparator>
-                        <TimelineDot className={classes.processing}>
-                          <SyncIcon />
-                        </TimelineDot>
-                        <TimelineConnector />
-                      </TimelineSeparator>
-                      <TimelineContent>
-                        <Paper elevation={3} className={classes.paper}>
-                          <p>Thực thi</p>
-                          <p>Influencer đang thực hiện</p>
-                        </Paper>
-                      </TimelineContent>
-                    </TimelineItem>
-                    <TimelineItem>
-                      <TimelineOppositeContent>
-                        <Typography variant='body2' color='textSecondary'>
-                          {new Date(
-                            campaign.campaignTTL.close_datetime
-                          ).toLocaleString('en-GB')}
-                        </Typography>
-                      </TimelineOppositeContent>
-                      <TimelineSeparator>
-                        <TimelineDot className={classes.inactive}>
-                          <LockIcon />
-                        </TimelineDot>
-                        <TimelineConnector />
-                      </TimelineSeparator>
-                      <TimelineContent>
-                        <Paper elevation={3} className={classes.paper}>
-                          <p>(Dự kiến) Kết thúc</p>
-                        </Paper>
-                      </TimelineContent>
-                    </TimelineItem>
-                  </>
-                ) : (
-                  ''
-                )}
-                {campaign.completed == true && campaign.status == true ? (
-                  <>
-                    <TimelineItem>
-                      <TimelineOppositeContent>
-                        <Typography variant='body2' color='textSecondary'>
-                          {new Date(
-                            campaign.campaignTTL.open_datetime
-                          ).toLocaleString('en-GB')}
-                        </Typography>
-                      </TimelineOppositeContent>
-                      <TimelineSeparator>
-                        <TimelineDot className={classes.success}>
-                          <CheckIcon />
-                        </TimelineDot>
-                        <TimelineConnector />
-                      </TimelineSeparator>
-                      <TimelineContent>
-                        <Paper elevation={3} className={classes.paper}>
-                          <p>Thực thi</p>
-                          <p>Influencer đã hoàn tất yêu cầu</p>
-                        </Paper>
-                      </TimelineContent>
-                    </TimelineItem>
-                    <TimelineItem>
-                      <TimelineOppositeContent>
-                        <Typography variant='body2' color='textSecondary'>
-                          {new Date(
-                            campaign.campaignTTL.close_datetime
-                          ).toLocaleString('en-GB')}
-                        </Typography>
-                      </TimelineOppositeContent>
-                      <TimelineSeparator>
-                        <TimelineDot className={classes.success}>
-                          <CheckIcon />
-                        </TimelineDot>
-                        <TimelineConnector />
-                      </TimelineSeparator>
-                      <TimelineContent>
-                        <Paper elevation={3} className={classes.paper}>
-                          <p>Hoàn thành</p>
-                          <p>
-                            Influencer đã hoàn thành yêu cầu, dự án kết thúc!
-                          </p>
-                        </Paper>
-                      </TimelineContent>
-                    </TimelineItem>
-                  </>
                 ) : (
                   ''
                 )}

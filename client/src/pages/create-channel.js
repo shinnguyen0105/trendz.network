@@ -34,7 +34,9 @@ const Create = () => {
   const { state } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const signal = axios.CancelToken.source();
-
+  useEffect(() => {
+    if (state.user.role.name !== 'Influencer') Router.push('/404');
+  }, [state]);
   const [channelState, setChannel] = useState({
     name: '',
     description: '',
@@ -95,23 +97,23 @@ const Create = () => {
       return { ...previousState, description: content };
     });
   };
-
-  const [requestCreateChannelMutation] = useMutation(CREATE_CHANNEL, {
-    variables: {
-      name: channelState.name,
-      description: channelState.description,
-      address: channelState.address,
-      website: channelState.website,
-      phone: channelState.phone,
-      avatar: channelState.avatar,
-      price: channelState.price,
-      category: channelState.category,
-      user: state.user.id,
-    },
-  });
+  console.log(channelState);
+  const [requestCreateChannelMutation] = useMutation(CREATE_CHANNEL);
   const handleChannelSubmit = async () => {
     try {
-      requestCreateChannelMutation();
+      requestCreateChannelMutation({
+        variables: {
+          name: channelState.name,
+          description: channelState.description,
+          address: channelState.address,
+          website: channelState.website,
+          phone: channelState.phone,
+          avatar: channelState.avatar,
+          price: channelState.price,
+          category: channelState.category,
+          user: state.user.id,
+        },
+      });
       Router.push('/dashboard');
       return enqueueSnackbar(
         'Tạo channel thành công! Channel của bạn đang được xét duyệt!',
@@ -210,10 +212,6 @@ const Create = () => {
       </>
     );
   }
-  useEffect(() => {
-    if (state.user.role.type !== 'influencer') Router.push('/login');
-  }, [state]);
-
   return (
     <div>
       <div className='wrapper'>

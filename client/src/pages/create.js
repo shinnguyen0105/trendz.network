@@ -600,7 +600,7 @@ const Create = () => {
   }, [campaignState]);
 
   useEffect(() => {
-    if (state.user.role.type !== 'customer') Router.push('/login');
+    if (state.user.role.name !== 'Customer') Router.push('/404');
     else {
       let mounted = true;
       //fetch Categories

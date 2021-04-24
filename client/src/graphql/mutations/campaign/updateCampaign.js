@@ -155,9 +155,13 @@ export const REQUEST_UPDATE_CAMPAIGN_BY_EMPLOYEE = gql`
     $id: ID!
     $approve: Boolean
     $notee: String
+    $complete: Boolean
   ) {
     updateCampaign(
-      input: { where: { id: $id }, data: { approve: $approve, note: $notee } }
+      input: {
+        where: { id: $id }
+        data: { approve: $approve, note: $notee, completed: $complete }
+      }
     ) {
       campaign {
         id
@@ -166,6 +170,7 @@ export const REQUEST_UPDATE_CAMPAIGN_BY_EMPLOYEE = gql`
         status
         completed
         approve
+        influencerCompleted
         note
         category {
           id

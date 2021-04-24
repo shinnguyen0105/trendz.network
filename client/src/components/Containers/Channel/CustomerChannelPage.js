@@ -41,11 +41,13 @@ const CustomerChannelPage = ({ channel }) => {
     <Card className='single-card col-md-6 offset-md-3'>
       <CardImg
         src={
-          channel.avatar.formats !== null
-            ? `${API_URL}${channel.avatar.formats.medium.url}`
-            : `${API_URL}${channel.avatar.url}`
+          channel.avatar !== null
+            ? channel.avatar.formats.medium === undefined
+              ? `${API_URL}${channel.avatar.url}`
+              : `${API_URL}${channel.avatar.formats.medium.url}`
+            : `/256x186.svg`
         }
-        alt='Card image cap'
+        alt='Avatar of Channel'
         className='campaign-detail-img'
       />
       <CardTitle>{channel.name}</CardTitle>

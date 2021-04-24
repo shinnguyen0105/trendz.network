@@ -7,7 +7,6 @@ import {
   Card,
   CardBody,
   CardImg,
-  CardDeck,
   CardSubtitle,
   CardTitle,
   Row,
@@ -72,73 +71,71 @@ const DashboardChildren = ({ data, categ, search, roleType }) => {
   console.log(campaign);
   return (
     <Row>
-      <CardDeck>
-        {campaign != undefined ? (
-          campaign.map((campaign) => (
-            <Col md={4} key={campaign.id}>
-              <Card className='campaign-card'>
-                {campaign.picture[0] !== undefined ? (
-                  <CardImg
-                    src={`${API_URL}${campaign.picture[0].formats.thumbnail.url}`}
-                    alt='Card image cap'
-                    className='campaign-img'
-                  />
-                ) : (
-                  <Skeleton variant='rect' width={256} height={186} />
-                )}
-                <CardBody>
-                  <CardTitle className='dashboard-card-title'>
-                    {campaign.title !== undefined ? (
-                      campaign.title
+      {campaign != undefined ? (
+        campaign.map((campaign) => (
+          <Col xs={12} md={4} key={campaign.id}>
+            <Card className='campaign-card'>
+              {campaign.picture[0] !== undefined ? (
+                <CardImg
+                  src={`${API_URL}${campaign.picture[0].formats.thumbnail.url}`}
+                  alt='Card image cap'
+                  className='campaign-img'
+                />
+              ) : (
+                <Skeleton variant='rect' width={256} height={186} />
+              )}
+              <CardBody>
+                <CardTitle className='dashboard-card-title'>
+                  {campaign.title !== undefined ? (
+                    campaign.title
+                  ) : (
+                    <Skeleton variant='text' />
+                  )}
+                </CardTitle>
+                <CardSubtitle>
+                  <strong>Người tạo:</strong>{' '}
+                  {campaign.user !== null ? (
+                    campaign.user.username
+                  ) : (
+                    <Skeleton variant='text' />
+                  )}
+                </CardSubtitle>
+                <CardSubtitle>
+                  <strong>Trạng thái:</strong>{' '}
+                  {renderStatus(
+                    campaign.approve,
+                    campaign.status,
+                    campaign.completed
+                  )}
+                </CardSubtitle>
+                <CardSubtitle>
+                  <strong>Ngày bắt đầu - Ngày kết thúc:</strong>
+                </CardSubtitle>
+                <CardSubtitle>
+                  <small className='text-muted'>
+                    {campaign.campaignTTL !== undefined ? (
+                      new Date(
+                        campaign.campaignTTL.open_datetime
+                      ).toLocaleString('en-GB') +
+                      ' - ' +
+                      new Date(
+                        campaign.campaignTTL.close_datetime
+                      ).toLocaleString('en-GB')
                     ) : (
                       <Skeleton variant='text' />
                     )}
-                  </CardTitle>
-                  <CardSubtitle>
-                    <strong>Người tạo:</strong>{' '}
-                    {campaign.user !== null ? (
-                      campaign.user.username
-                    ) : (
-                      <Skeleton variant='text' />
-                    )}
-                  </CardSubtitle>
-                  <CardSubtitle>
-                    <strong>Trạng thái:</strong>{' '}
-                    {renderStatus(
-                      campaign.approve,
-                      campaign.status,
-                      campaign.completed
-                    )}
-                  </CardSubtitle>
-                  <CardSubtitle>
-                    <strong>Ngày bắt đầu - Ngày kết thúc:</strong>
-                  </CardSubtitle>
-                  <CardSubtitle>
-                    <small className='text-muted'>
-                      {campaign.campaignTTL !== undefined ? (
-                        new Date(
-                          campaign.campaignTTL.open_datetime
-                        ).toLocaleString('en-GB') +
-                        ' - ' +
-                        new Date(
-                          campaign.campaignTTL.close_datetime
-                        ).toLocaleString('en-GB')
-                      ) : (
-                        <Skeleton variant='text' />
-                      )}
-                    </small>
-                  </CardSubtitle>
-                  <Link href='/campaign/[cid]' as={`/campaign/${campaign.id}`}>
-                    <Button>Chi tiết</Button>
-                  </Link>
-                </CardBody>
-              </Card>
-            </Col>
-          ))
-        ) : (
-          <Spinner color='light' />
-        )}
-      </CardDeck>
+                  </small>
+                </CardSubtitle>
+                <Link href='/campaign/[cid]' as={`/campaign/${campaign.id}`}>
+                  <Button>Chi tiết</Button>
+                </Link>
+              </CardBody>
+            </Card>
+          </Col>
+        ))
+      ) : (
+        <Spinner color='light' />
+      )}
     </Row>
   );
 };

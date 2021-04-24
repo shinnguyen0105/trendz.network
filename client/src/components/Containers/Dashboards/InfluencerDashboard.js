@@ -144,11 +144,15 @@ const InfluencerDashboard = () => {
       (campaign) => campaign.approve == true && campaign.status == null
     );
     let approve = campaigns.filter(
-      (campaign) => campaign.approve && campaign.status == true
+      (campaign) =>
+        campaign.approve &&
+        campaign.status == true &&
+        campaign.completed == false
     );
     let unapprove = campaigns.filter(
       (campaign) => campaign.approve == true && campaign.status == false
     );
+    let completed = campaigns.filter((campaign) => campaign.completed == true);
     // console.log('data onhold:', onhold);
     // console.log('data approve:', approve);
     // console.log('data unapprove:', unapprove);
@@ -175,6 +179,13 @@ const InfluencerDashboard = () => {
             search={filterItems.search}
           />
         </TabPane>
+        <TabPane tabId='vertical4'>
+          <DashboardChildren
+            data={completed}
+            categ={filterItems.category}
+            search={filterItems.search}
+          />
+        </TabPane>
       </>
     );
   }
@@ -189,7 +200,7 @@ const InfluencerDashboard = () => {
     // console.log('channel ne:', data);
     let channelData = data.channels;
     return (
-      <TabPane tabId='vertical4'>
+      <TabPane tabId='vertical5'>
         <ListChannel data={channelData} />
       </TabPane>
     );
@@ -246,7 +257,19 @@ const InfluencerDashboard = () => {
                       className={classnames({
                         active: navState.vertical === 4,
                       })}
-                      onClick={(e) => toggleTabs(e, 'vertical', 4)}
+                      onClick={(e) => {
+                        toggleTabs(e, 'vertical', 4);
+                      }}
+                    >
+                      Campaigns Completed
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className={classnames({
+                        active: navState.vertical === 5,
+                      })}
+                      onClick={(e) => toggleTabs(e, 'vertical', 5)}
                     >
                       Channel của tôi
                     </NavLink>
@@ -255,7 +278,7 @@ const InfluencerDashboard = () => {
               </Col>
               <Col>
                 <TabContent activeTab={'vertical' + navState.vertical}>
-                  {navState.vertical !== 4 ? (
+                  {navState.vertical !== 5 ? (
                     <Row style={{ marginTop: '30px' }}>
                       <Col>
                         <Row>

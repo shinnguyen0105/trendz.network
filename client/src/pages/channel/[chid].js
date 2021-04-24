@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
+import Router from 'next/router';
 import { useAuth } from '../../contexts/userContext';
 import { useQuery } from 'react-apollo';
 import { Card, CardBody } from 'reactstrap';
@@ -15,7 +16,9 @@ const { API_URL } = process.env;
 
 const Channel = ({ chid }) => {
   const { state } = useAuth();
-
+  useEffect(() => {
+    if (state.jwt === '') Router.push('/login');
+  }, [state]);
   function ChannelDetail() {
     const { loading, error, data } = useQuery(REQUEST_GET_CHANNEL_DETAILS, {
       variables: {

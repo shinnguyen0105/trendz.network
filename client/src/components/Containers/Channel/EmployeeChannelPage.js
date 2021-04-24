@@ -280,7 +280,7 @@ const EmployeeChannelPage = ({ chid, channel }) => {
       </CardText>
       {channel.employeeConfirm == false ? (
         <>
-          <CardSubtitle>Lý do:</CardSubtitle>
+          <CardSubtitle>Reason of Employee:</CardSubtitle>
           <CardText>{channel.employeeNote}</CardText>
         </>
       ) : (
@@ -288,7 +288,7 @@ const EmployeeChannelPage = ({ chid, channel }) => {
       )}
       {channel.adminConfirm == false ? (
         <>
-          <CardSubtitle>Lý do:</CardSubtitle>
+          <CardSubtitle>Reason of Admin:</CardSubtitle>
           <CardText>{channel.adminNote}</CardText>
         </>
       ) : (
