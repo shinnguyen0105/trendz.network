@@ -51,7 +51,7 @@ const ListInfluencer = ({ data }) => {
                       href='/influencer/[uid]'
                       as={`/influencer/${influencer.id}`}
                     >
-                      <Button>Chi tiết</Button>
+                      <Button>Details</Button>
                     </Link>
                   </CardBody>
                 </Card>

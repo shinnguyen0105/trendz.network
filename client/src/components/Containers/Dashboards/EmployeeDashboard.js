@@ -94,7 +94,7 @@ const EmployeeDashboard = () => {
           className='mydropdown'
         >
           {filterItems.category === ''
-            ? 'Chọn Danh mục...'
+            ? 'Select Category'
             : data.categories.find(
                 (category) => category.id === filterItems.category
               ).name}
@@ -330,7 +330,7 @@ const EmployeeDashboard = () => {
                     <Row style={{ marginTop: '30px' }}>
                       <Col>
                         <Row>
-                          <CardSubtitle>Tìm kiếm</CardSubtitle>
+                          <CardSubtitle>Search</CardSubtitle>
                         </Row>
                         <Row>
                           <Input
@@ -344,7 +344,7 @@ const EmployeeDashboard = () => {
                       </Col>
                       <Col>
                         <Row>
-                          <CardSubtitle>Danh mục</CardSubtitle>
+                          <CardSubtitle>Category</CardSubtitle>
                         </Row>
                         <Row>
                           <UncontrolledDropdown group>
@@ -354,7 +354,7 @@ const EmployeeDashboard = () => {
                       </Col>
                       <Col>
                         <Row>
-                          <CardSubtitle>Sắp xếp theo</CardSubtitle>
+                          <CardSubtitle>Sorted by</CardSubtitle>
                         </Row>
                         <Row>
                           <UncontrolledDropdown group>
@@ -365,7 +365,7 @@ const EmployeeDashboard = () => {
                               className='mydropdown'
                             >
                               {filterItems.sort === ''
-                                ? 'Sắp xếp theo...'
+                                ? 'Sorted by...'
                                 : sortBy.find(
                                     (sort) => sort.value === filterItems.sort
                                   ).type}
@@ -396,7 +396,7 @@ const EmployeeDashboard = () => {
                             color='warning'
                             style={{ marginTop: '19px' }}
                           >
-                            Làm sạch bộ lọc
+                            Clear Filter
                           </Button>
                         </Row>
                       </Col>

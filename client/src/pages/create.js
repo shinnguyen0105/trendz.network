@@ -383,7 +383,7 @@ const Create = () => {
         createCampaign(campaign);
         Router.push('/dashboard');
       });
-      return enqueueSnackbar('Tạo campaign thành công!', {
+      return enqueueSnackbar('Create Campaign success!', {
         variant: 'success',
       });
     } catch (error) {
@@ -435,7 +435,7 @@ const Create = () => {
       return (
         <>
           <FormGroup className='col-md-3'>
-            <Label for='channel'>Chọn Danh mục</Label>
+            <Label for='channel'>Category</Label>
             <br />
             <UncontrolledDropdown group disabled={isMethodDisabled}>
               <DropdownToggle
@@ -444,7 +444,7 @@ const Create = () => {
                 data-toggle='dropdown'
                 className='mydropdown'
               >
-                {tempData.name === '' ? 'Chọn Danh mục...' : tempData.name}
+                {tempData.name === '' ? 'Select Category...' : tempData.name}
               </DropdownToggle>
               <DropdownMenu className='dropdown-menu'>
                 {categories.categories.map((category) => (
@@ -462,12 +462,12 @@ const Create = () => {
             </UncontrolledDropdown>
           </FormGroup>
           <FormGroup className='col-md-3'>
-            <Label for='channel'>Chọn Kênh</Label>
+            <Label for='channel'>Channel</Label>
             <br />
             <UncontrolledDropdown group>
               <DropdownToggle caret color='secondary' data-toggle='dropdown'>
                 {tempData.channelName === ''
-                  ? 'Chọn Kênh...'
+                  ? 'Select Channel...'
                   : tempData.channelName}
               </DropdownToggle>
               {tempData.id !== '' ? (
@@ -494,7 +494,7 @@ const Create = () => {
               disabled={tempData.channelName === ''}
               onClick={handleChannelSelect}
             >
-              Chọn
+              Select
             </Button>
           </FormGroup>
           <br />
@@ -504,7 +504,7 @@ const Create = () => {
       return (
         <>
           <FormGroup className='col-md-3'>
-            <Label for='channel'>Chọn Influencer</Label>
+            <Label for='channel'>Select Influencer</Label>
             <br />
             <UncontrolledDropdown group disabled={isMethodDisabled}>
               <DropdownToggle
@@ -513,31 +513,18 @@ const Create = () => {
                 data-toggle='dropdown'
                 className='mydropdown'
               >
-                {tempData.name === '' ? 'Chọn Influencer...' : tempData.name}
+                {tempData.name === '' ? 'Select Influencer...' : tempData.name}
               </DropdownToggle>
-              {/* <DropdownMenu className='dropdown-menu'>
-                {influencers.influencers.map((user) => (
-                  <DropdownItem
-                    key={user.id}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      handleInfluencerChange(user.id, user.name);
-                    }}
-                  >
-                    {user.name}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu> */}
               <FetchInfluencer />
             </UncontrolledDropdown>
           </FormGroup>
           <FormGroup className='col-md-3'>
-            <Label for='channel'>Chọn Kênh</Label>
+            <Label for='channel'>Channel</Label>
             <br />
             <UncontrolledDropdown group>
               <DropdownToggle caret color='secondary' data-toggle='dropdown'>
                 {tempData.channelName === ''
-                  ? 'Chọn Kênh...'
+                  ? 'Select Channel...'
                   : tempData.channelName}
               </DropdownToggle>
               {tempData.id !== '' ? (
@@ -564,7 +551,7 @@ const Create = () => {
               disabled={tempData.channelName === ''}
               onClick={handleChannelSelect}
             >
-              Chọn
+              Select
             </Button>
           </FormGroup>
           <br />
@@ -665,28 +652,28 @@ const Create = () => {
           <Container>
             <Card>
               <CardHeader>
-                <h3 className='title'>Tạo campaign</h3>
+                <h3 className='title'>Create Campaign</h3>
               </CardHeader>
               <CardBody>
                 <Form className='form'>
                   <FormGroup>
-                    <Label for='title'>Tiêu đề</Label>
+                    <Label for='title'>Title</Label>
                     <Input
                       type='text'
                       id='title'
                       name='title'
                       onChange={handleCampaignChange}
                       value={campaignState.title}
-                      placeholder='Tiêu đề'
+                      placeholder='Title'
                       required
                     />
                   </FormGroup>
                   <FormGroup>
-                    <Label for='content'>Nội dung</Label>
+                    <Label for='content'>Content</Label>
                     <Editor
-                      apiKey='awf8d12nkj02oekbnk7t8xx283a5kexhscdfvpj9sd8h22ox'
+                      apiKey='rra7fcsvr0q6e0fws0mvcj75edqjwjwz9glbrvv24pljw2yp'
                       id='content'
-                      placeholder='Nội dung...'
+                      placeholder='Content...'
                       onEditorChange={handleContentChange}
                       value={campaignState.content}
                       required
@@ -694,7 +681,7 @@ const Create = () => {
                   </FormGroup>
                   <div className='form-row'>
                     <FormGroup className='col-md-4'>
-                      <Label for='startDate'>Chọn Ngày bắt đầu</Label>
+                      <Label for='startDate'>Select start date</Label>
                       <Datetime
                         onChange={handleStartDateChange}
                         value={campaignState.open_datetime}
@@ -703,7 +690,7 @@ const Create = () => {
                       />
                     </FormGroup>
                     <FormGroup className='col-md-4'>
-                      <Label for='endDate'>Chọn Ngày kết thúc</Label>
+                      <Label for='endDate'>Select end date</Label>
                       <Datetime
                         onChange={handleEndDateChange}
                         value={campaignState.close_datetime}
@@ -714,7 +701,7 @@ const Create = () => {
                   </div>
                   <div className='form-row'>
                     <FormGroup className='col-md-3'>
-                      <Label for='channel'>Chọn theo...</Label>
+                      <Label for='channel'>Select by?...</Label>
                       <br />
                       <UncontrolledDropdown group disabled={isMethodDisabled}>
                         <DropdownToggle
@@ -724,7 +711,7 @@ const Create = () => {
                           className='mydropdown'
                         >
                           {typeOfSelection === 'category'
-                            ? 'Danh mục'
+                            ? 'Category'
                             : 'Influencer'}
                         </DropdownToggle>
                         <DropdownMenu className='dropdown-menu'>
@@ -734,7 +721,7 @@ const Create = () => {
                               handleSelectType('category');
                             }}
                           >
-                            Danh mục
+                            Category
                           </DropdownItem>
                           <DropdownItem
                             onClick={(event) => {
@@ -756,24 +743,24 @@ const Create = () => {
                 <br />
                 <div className='FileUpload'>
                   <form onSubmit={handleImageSubmit}>
-                    <Label for='picture'>Chọn ảnh...</Label>
+                    <Label for='picture'>Select picture...</Label>
                     <br />
                     <input type='file' onChange={handleImageChange} />
-                    <Button>Tải lên</Button>
+                    <Button>Upload</Button>
                     {picture.loading ? <CircularProgress /> : null}
                     {picture.submmited ? <CheckIcon /> : <p></p>}
                   </form>
                 </div>
                 <div className='form-button'>
                   <Button className='btn-neutral' color='primary'>
-                    Hủy
+                    Cancel
                   </Button>
                   <Button
                     color='primary'
                     disabled={!isAbleToSubmit}
                     onClick={handleCampaignSubmit}
                   >
-                    Tạo
+                    Create
                   </Button>
                 </div>
               </CardBody>

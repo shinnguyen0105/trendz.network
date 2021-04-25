@@ -21,16 +21,16 @@ const renderChannelStatus = (employeeConfirm, adminConfirm, status) => {
     employeeConfirm == null ||
     (employeeConfirm == true && adminConfirm == null)
   ) {
-    return 'Đang chờ cấp phép';
+    return 'Waiting for licensing';
   }
   if (!employeeConfirm || !adminConfirm) {
-    return 'Không được cấp phép';
+    return 'Not licensed';
   }
   if (adminConfirm && employeeConfirm && status == false) {
-    return 'Đã được cấp phép - Đang dừng hoạt động';
+    return 'Licensed - Inactive';
   }
   if (adminConfirm && employeeConfirm && status == true) {
-    return 'Đã được cấp phép - Đang hoạt động';
+    return 'Licensed - In operation';
   }
 };
 const ListChannel = ({ data }) => {
@@ -59,7 +59,7 @@ const ListChannel = ({ data }) => {
                   )}
                 </CardTitle>
                 <CardSubtitle>
-                  <strong>Thể loại:</strong>{' '}
+                  <strong>Category:</strong>{' '}
                   {channel.category.name !== null ? (
                     channel.category.name
                   ) : (
@@ -67,7 +67,7 @@ const ListChannel = ({ data }) => {
                   )}
                 </CardSubtitle>
                 <CardSubtitle>
-                  <strong>Trạng thái:</strong>{' '}
+                  <strong>Status:</strong>{' '}
                   {renderChannelStatus(
                     channel.employeeConfirm,
                     channel.adminConfirm,
@@ -75,7 +75,7 @@ const ListChannel = ({ data }) => {
                   )}
                 </CardSubtitle>
                 <CardSubtitle>
-                  <strong>Ngày tạo:</strong>{' '}
+                  <strong>Create at:</strong>{' '}
                   <small className='text-muted'>
                     {channel.created_at !== undefined ? (
                       new Date(channel.created_at).toLocaleString('en-GB')
@@ -85,7 +85,7 @@ const ListChannel = ({ data }) => {
                   </small>
                 </CardSubtitle>
                 <Link href='/channel/[chid]' as={`/channel/${channel.id}`}>
-                  <Button>Chi tiết</Button>
+                  <Button>Details</Button>
                 </Link>
               </CardBody>
             </Card>

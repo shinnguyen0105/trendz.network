@@ -252,7 +252,7 @@ const Customer = ({ campaign, cid }) => {
         >
           {tempCampaign.category.name !== null
             ? tempCampaign.category.name
-            : 'Chọn Danh mục...'}
+            : 'Select Category'}
         </DropdownToggle>
         <DropdownMenu>
           {data.categories.map((category) => (
@@ -281,7 +281,7 @@ const Customer = ({ campaign, cid }) => {
       <>
         <DropdownToggle caret color='secondary' data-toggle='dropdown'>
           {tempCampaign.channels[0].name === null
-            ? 'Chọn Kênh...'
+            ? 'Select channel...'
             : tempData.channelName}
         </DropdownToggle>
         {tempCampaign.category.name !== null ? (
@@ -326,43 +326,16 @@ const Customer = ({ campaign, cid }) => {
   const handleEditSubmit = async () => {
     try {
       await requestUpdateCampaignMutation();
-      enqueueSnackbar('Chỉnh sửa thành công!', {
+      enqueueSnackbar('Successful editing!', {
         variant: 'success',
       });
     } catch (e) {
-      enqueueSnackbar('Chỉnh sửa không thành công!', {
+      enqueueSnackbar('Editing failed!', {
         variant: 'error',
       });
       console.log(e);
     }
   };
-  // const handleEditSubmit = async () => {
-  //   // setCampaign((previousState) => {
-  //   //   return {
-  //   //     ...previousState,
-  //   //     campaignTTL: tempCampaign.campaignTTL,
-  //   //     category: tempCampaign.category,
-  //   //     channels: tempCampaign.channels,
-  //   //     content: tempCampaign.content,
-  //   //     title: tempCampaign.title,
-  //   //   };
-  //   // });
-  //   // let dataf = {
-  //   //   campaignTTL: tempCampaign.campaignTTL,
-  //   //   category: tempCampaign.category,
-  //   //   channels: tempCampaign.channels,
-  //   //   content: tempCampaign.content,
-  //   //   title: tempCampaign.title,
-  //   // };
-  //   const upload_resolve = await axios({
-  //     method: 'PUT',
-  //     headers: {
-  //       Authorization: `Bearer ${state.jwt}`,
-  //     },
-  //     url: `${API_URL}/campaigns/${cid}`,
-  //     data: tempCampaign,
-  //   });
-  // };
 
   //creator delete campaign
   const handleDelete = async () => {
@@ -390,20 +363,20 @@ const Customer = ({ campaign, cid }) => {
 
   const renderStatus = (approvalStatus, influencerStatus, status) => {
     if (approvalStatus == null) {
-      return 'Đang chờ cấp phép';
+      return 'Waiting for licensing';
     }
     if (!approvalStatus) {
-      return 'Không được cấp phép';
+      return 'Not licensed';
     }
     if (approvalStatus && influencerStatus == null) {
-      return 'Đã được cấp phép - Đang chờ influencer xác nhận';
+      return 'Licensed - Waiting for Influencer approve';
     }
     if (approvalStatus && !influencerStatus) {
-      return 'Đã được cấp phép - Influencer đã từ chối';
+      return 'Licensed - Influencer rejected';
     }
     if (approvalStatus && influencerStatus && status == false) {
-      return 'Đã được cấp phép - Influencer đã chấp thuận - Đang hoạt động';
-    } else return 'Đã được cấp phép - Influencer đã chấp thuận - Đã kết thúc';
+      return 'Licensed - Influencer approved - Active';
+    } else return 'Licensed - Influencer approved - Ended';
   };
   const toggleTabs = (event, stateName, index) => {
     event.preventDefault();
@@ -416,7 +389,7 @@ const Customer = ({ campaign, cid }) => {
       <Modal isOpen={deleteModal} toggle={toggleDeleteModal}>
         <div className='modal-header'>
           <h4 className='modal-title' id='avatarModal'>
-            <strong>Xóa Campaign</strong>
+            <strong>Delete Campaign</strong>
           </h4>
           <button
             type='button'
@@ -430,12 +403,12 @@ const Customer = ({ campaign, cid }) => {
         </div>
         <ModalBody>
           <FormGroup className='modal-items'>
-            <Label>Bạn có thật sự muốn xóa Campaign này?</Label>
+            <Label>Do you really want to delete this Campaign?</Label>
           </FormGroup>
         </ModalBody>
         <ModalFooter>
           <Button color='secondary' onClick={toggleDeleteModal}>
-            Hủy
+            Cancel
           </Button>
           <Button
             color='primary'
@@ -454,7 +427,7 @@ const Customer = ({ campaign, cid }) => {
               toggleDeleteModal();
             }}
           >
-            Xóa
+            Delete
           </Button>
         </ModalFooter>
       </Modal>
@@ -465,7 +438,7 @@ const Customer = ({ campaign, cid }) => {
       <Modal isOpen={campaignModal} toggle={toggleCampaignModal}>
         <div className='modal-header'>
           <h4 className='modal-title' id='avatarModal'>
-            <strong>Cập nhật Campaign</strong>
+            <strong>Update Campaign</strong>
           </h4>
           <button
             type='button'
@@ -480,22 +453,22 @@ const Customer = ({ campaign, cid }) => {
         <ModalBody>
           <Form className='form'>
             <FormGroup className='modal-items'>
-              <Label for='title'>Tiêu đề</Label>
+              <Label for='title'>Title</Label>
               <Input
                 type='text'
                 id='title'
                 name='title'
                 onChange={handleCampaignChange}
                 value={tempCampaign.title}
-                placeholder='Tiêu đề'
+                placeholder='Title...'
                 required
                 className='modal-items'
               />
             </FormGroup>
             <FormGroup className='modal-items'>
-              <Label for='content'>Nội dung</Label>
+              <Label for='content'>Content</Label>
               <Editor
-                apiKey='awf8d12nkj02oekbnk7t8xx283a5kexhscdfvpj9sd8h22ox'
+                apiKey='rra7fcsvr0q6e0fws0mvcj75edqjwjwz9glbrvv24pljw2yp'
                 id='content'
                 placeholder='Nội dung...'
                 onEditorChange={handleContentChange}
@@ -506,7 +479,7 @@ const Customer = ({ campaign, cid }) => {
             <div className='form-row'>
               <FormGroup className='col-md-5'>
                 <Label for='startDate' className='modal-items'>
-                  Chọn Ngày bắt đầu
+                  Start date:
                 </Label>
                 <Datetime
                   onChange={handleStartDateChange}
@@ -518,7 +491,7 @@ const Customer = ({ campaign, cid }) => {
               </FormGroup>
               <FormGroup className='col-md-5'>
                 <Label for='endDate' className='modal-items'>
-                  Chọn Ngày kết thúc
+                  End date:
                 </Label>
                 <Datetime
                   onChange={handleEndDateChange}
@@ -532,7 +505,7 @@ const Customer = ({ campaign, cid }) => {
             <div className='form-row'>
               <FormGroup className='col-md-4'>
                 <Label for='channel' className='modal-items'>
-                  Chọn Danh mục
+                  Category
                 </Label>
                 <br />
                 <UncontrolledDropdown group>
@@ -541,7 +514,7 @@ const Customer = ({ campaign, cid }) => {
               </FormGroup>
               <FormGroup className='col-md-4'>
                 <Label for='channel' className='modal-items'>
-                  Chọn Kênh
+                  Channel
                 </Label>
                 <br />
                 <UncontrolledDropdown group>
@@ -553,7 +526,7 @@ const Customer = ({ campaign, cid }) => {
         </ModalBody>
         <ModalFooter>
           <Button color='secondary' onClick={toggleCampaignModal}>
-            Hủy
+            Cancel
           </Button>
           <Button
             color='primary'
@@ -622,7 +595,7 @@ const Customer = ({ campaign, cid }) => {
                       }}
                     ></CardText>
                     <CardSubtitle>
-                      <strong>Thể loại:</strong>
+                      <strong>Category:</strong>
                     </CardSubtitle>
                     {campaign.category !== undefined ? (
                       <CardText>
@@ -633,7 +606,7 @@ const Customer = ({ campaign, cid }) => {
                       ''
                     )}
                     <CardSubtitle>
-                      <strong>Kênh:</strong>
+                      <strong>Channel:</strong>
                     </CardSubtitle>
                     {campaign.channels[0] !== undefined ? (
                       <>
@@ -645,18 +618,19 @@ const Customer = ({ campaign, cid }) => {
                           <a href='##'>{campaign.channels[0].website}</a>
                         </CardText>
                         <CardText>
-                          <strong>Địa chỉ:</strong>{' '}
+                          <strong>Address:</strong>{' '}
                           {campaign.channels[0].address}
                         </CardText>
                         <CardText>
-                          <strong>Liên hệ:</strong> {campaign.channels[0].phone}
+                          <strong>Phone number:</strong>{' '}
+                          {campaign.channels[0].phone}
                         </CardText>
                       </>
                     ) : (
                       ''
                     )}
                     <CardSubtitle>
-                      <strong>Trạng thái:</strong>
+                      <strong>Status:</strong>
                     </CardSubtitle>
                     <CardText>
                       {renderStatus(
@@ -666,13 +640,13 @@ const Customer = ({ campaign, cid }) => {
                       )}
                     </CardText>
                     <CardSubtitle>
-                      <strong>Người tạo:</strong>
+                      <strong>Create by:</strong>
                     </CardSubtitle>
                     <CardText>
                       {campaign.user !== undefined ? campaign.user.name : ''}
                     </CardText>
                     <CardSubtitle>
-                      <strong>Thời gian:</strong>
+                      <strong>Start date - End date:</strong>
                     </CardSubtitle>
                     {campaign.campaignTTL !== undefined ? (
                       <CardText>
@@ -695,16 +669,20 @@ const Customer = ({ campaign, cid }) => {
                         onClick={toggleCampaignModal}
                         disabled={campaign.completed === null ? false : true}
                       >
-                        Chỉnh sửa
+                        Edit
                       </Button>
                       <Button
                         color='primary'
                         onClick={toggleDeleteModal}
                         disabled={campaign.completed === null ? false : true}
                       >
-                        Xóa
+                        Delete
                       </Button>
-                      <Button color='success'>Liên hệ TrendZ</Button>
+                      <a
+                        href={`mailto:trendz.networksys@gmail.com?subject=Campaign - ${campaign.title} - TrendzNetwork`}
+                      >
+                        <Button color='success'>Contact TrendZ</Button>
+                      </a>
                     </div>
                   </CardBody>
                 </Card>
@@ -1040,7 +1018,7 @@ const Customer = ({ campaign, cid }) => {
                 setMesage('');
               }}
             >
-              <Button color='primary'>Liên hệ ngay!</Button>
+              <Button color='primary'>Chat Message</Button>
             </div>
           </TabPane>
         </TabContent>

@@ -36,16 +36,16 @@ const Influencer = () => {
       employeeConfirm == null ||
       (employeeConfirm == true && adminConfirm == null)
     ) {
-      return 'Đang chờ cấp phép';
+      return 'Waiting for licensing';
     }
     if (!employeeConfirm || !adminConfirm) {
-      return 'Không được cấp phép';
+      return 'Not licensed';
     }
     if (adminConfirm && employeeConfirm && status == false) {
-      return 'Đã được cấp phép - Đang dừng hoạt động';
+      return 'Licensed - Inactive';
     }
     if (adminConfirm && employeeConfirm && status == true) {
-      return 'Đã được cấp phép - Đang hoạt động';
+      return 'Licensed - In operation';
     }
   };
 
@@ -87,12 +87,10 @@ const Influencer = () => {
             />
             <CardBody>
               <CardTitle>{influencerInfor.name}</CardTitle>
-              <CardText>Số điện thoại: {influencerInfor.phoneNumber}</CardText>
-              <CardText>Email liên hệ: {influencerInfor.email}</CardText>
+              <CardText>Phone number: {influencerInfor.phoneNumber}</CardText>
+              <CardText>Email: {influencerInfor.email}</CardText>
               <br />
-              <CardTitle>
-                Các kênh thuộc sở hữu của {influencerInfor.name}:
-              </CardTitle>
+              <CardTitle>Channels owned by {influencerInfor.name}:</CardTitle>
             </CardBody>
             <CardBody>
               <Row>
@@ -104,7 +102,7 @@ const Influencer = () => {
                             {channel.avatar.formats.thumbnail !== null ? (
                               <CardImg
                                 src={`${API_URL}${channel.avatar.formats.thumbnail.url}`}
-                                alt='Card image cap'
+                                alt='Avatar of user'
                                 className='campaign-img'
                               />
                             ) : (
@@ -123,7 +121,7 @@ const Influencer = () => {
                                 )}
                               </CardSubtitle>
                               <CardText>
-                                <strong>Trạng thái:</strong>{' '}
+                                <strong>Status:</strong>{' '}
                                 {renderChannelStatus(
                                   channel.employeeConfirm,
                                   channel.adminConfirm,
@@ -131,13 +129,13 @@ const Influencer = () => {
                                 )}
                               </CardText>
                               <CardText>
-                                <strong>Mức giá:</strong> {channel.price} VNĐ
+                                <strong>Price:</strong> {channel.price} VNĐ
                               </CardText>
                               <Link
                                 href='/channel/[chid]'
                                 as={`/channel/${channel.id}`}
                               >
-                                <Button>Chi tiết</Button>
+                                <Button>Details</Button>
                               </Link>
                             </CardBody>
                           </Card>

@@ -12,11 +12,11 @@ const ErrorPage = () => {
         <Card>
           <Container>
             <Card className='single-card'>
-              <CardTitle>KHÔNG TỒN TẠI</CardTitle>
+              <CardTitle>404 Error</CardTitle>
               <br />
-              <CardText>Đường dẫn của bạn hiện đang không khả dụng.</CardText>
+              <CardText>Your path is currently unavailable.</CardText>
               <Link href='/dashboard'>
-                <Button>Quay về trang chủ</Button>
+                <Button>Return to home page</Button>
               </Link>
             </Card>
           </Container>

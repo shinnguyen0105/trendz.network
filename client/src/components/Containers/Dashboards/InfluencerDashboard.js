@@ -104,7 +104,7 @@ const InfluencerDashboard = () => {
           className='mydropdown'
         >
           {filterItems.category === ''
-            ? 'Chọn Danh mục...'
+            ? 'Select Category'
             : data.categories.find(
                 (category) => category.id === filterItems.category
               ).name}
@@ -271,7 +271,7 @@ const InfluencerDashboard = () => {
                       })}
                       onClick={(e) => toggleTabs(e, 'vertical', 5)}
                     >
-                      Channel của tôi
+                      My Channel
                     </NavLink>
                   </NavItem>
                 </Nav>
@@ -282,7 +282,7 @@ const InfluencerDashboard = () => {
                     <Row style={{ marginTop: '30px' }}>
                       <Col>
                         <Row>
-                          <CardSubtitle>Tìm kiếm</CardSubtitle>
+                          <CardSubtitle>Search</CardSubtitle>
                         </Row>
                         <Row>
                           <Input
@@ -296,7 +296,7 @@ const InfluencerDashboard = () => {
                       </Col>
                       <Col>
                         <Row>
-                          <CardSubtitle>Danh mục</CardSubtitle>
+                          <CardSubtitle>Category</CardSubtitle>
                         </Row>
                         <Row>
                           <UncontrolledDropdown group>
@@ -307,7 +307,7 @@ const InfluencerDashboard = () => {
                       </Col>
                       <Col>
                         <Row>
-                          <CardSubtitle>Sắp xếp theo</CardSubtitle>
+                          <CardSubtitle>Sorted by</CardSubtitle>
                         </Row>
                         <Row>
                           <UncontrolledDropdown group>
@@ -318,7 +318,7 @@ const InfluencerDashboard = () => {
                               className='mydropdown'
                             >
                               {filterItems.sort === ''
-                                ? 'Sắp xếp theo...'
+                                ? 'Sorted by...'
                                 : sortBy.find(
                                     (sort) => sort.value === filterItems.sort
                                   ).type}
@@ -349,7 +349,7 @@ const InfluencerDashboard = () => {
                             color='warning'
                             style={{ marginTop: '19px' }}
                           >
-                            Làm sạch bộ lọc
+                            Clear Filter
                           </Button>
                         </Row>
                       </Col>

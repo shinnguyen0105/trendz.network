@@ -24,16 +24,16 @@ const CustomerChannelPage = ({ channel }) => {
       employeeConfirm == null ||
       (employeeConfirm == true && adminConfirm == null)
     ) {
-      return 'Đang chờ cấp phép';
+      return 'Waiting for licensing';
     }
     if (!employeeConfirm || !adminConfirm) {
-      return 'Không được cấp phép';
+      return 'Not licensed';
     }
     if (adminConfirm && employeeConfirm && status == false) {
-      return 'Đã được cấp phép - Đang dừng hoạt động';
+      return 'Licensed - Inactive';
     }
     if (adminConfirm && employeeConfirm && status == true) {
-      return 'Đã được cấp phép - Đang hoạt động';
+      return 'Licensed - In operation';
     }
   };
 
@@ -53,7 +53,7 @@ const CustomerChannelPage = ({ channel }) => {
       <CardTitle>{channel.name}</CardTitle>
       <CardSubtitle>{channel.description}</CardSubtitle>
       <CardSubtitle>
-        <strong>Thể loại:</strong>
+        <strong>Category:</strong>
       </CardSubtitle>
 
       {channel.category !== undefined ? (
@@ -69,15 +69,15 @@ const CustomerChannelPage = ({ channel }) => {
       </CardSubtitle>
       <CardText>{channel.website}</CardText>
       <CardSubtitle>
-        <strong>Số điện thoại:</strong>
+        <strong>Phone number:</strong>
       </CardSubtitle>
       <CardText>{channel.phone}</CardText>
       <CardSubtitle>
-        <strong>Mức giá:</strong>
+        <strong>Price:</strong>
       </CardSubtitle>
       <CardText>{channel.price}</CardText>
       <CardSubtitle>
-        <strong>Trạng thái:</strong>
+        <strong>Status:</strong>
       </CardSubtitle>
       <CardText>
         {renderStatus(
@@ -88,7 +88,7 @@ const CustomerChannelPage = ({ channel }) => {
       </CardText>
       {channel.employeeConfirm == false ? (
         <>
-          <CardSubtitle>Lý do:</CardSubtitle>
+          <CardSubtitle>Reasons:</CardSubtitle>
           <CardText>{channel.employeeNote}</CardText>
         </>
       ) : (
@@ -96,7 +96,7 @@ const CustomerChannelPage = ({ channel }) => {
       )}
       {channel.adminConfirm == false ? (
         <>
-          <CardSubtitle>Lý do:</CardSubtitle>
+          <CardSubtitle>Reasons:</CardSubtitle>
           <CardText>{channel.adminNote}</CardText>
         </>
       ) : (

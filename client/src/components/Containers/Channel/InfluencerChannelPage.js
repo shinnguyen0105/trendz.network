@@ -49,16 +49,16 @@ const InfluencerChannelPage = ({ chid, channel }) => {
       employeeConfirm == null ||
       (employeeConfirm == true && adminConfirm == null)
     ) {
-      return 'Đang chờ cấp phép';
+      return 'Waiting for licensing';
     }
     if (!employeeConfirm || !adminConfirm) {
-      return 'Không được cấp phép';
+      return 'Not licensed';
     }
     if (adminConfirm && employeeConfirm && status == false) {
-      return 'Đã được cấp phép - Đang dừng hoạt động';
+      return 'Licensed - Inactive';
     }
     if (adminConfirm && employeeConfirm && status == true) {
-      return 'Đã được cấp phép - Đang hoạt động';
+      return 'Licensed - In operation';
     }
   };
 
@@ -68,9 +68,9 @@ const InfluencerChannelPage = ({ chid, channel }) => {
         <div className='modal-header'>
           <h4 className='modal-title' id='avatarModal'>
             {channel.status === true ? (
-              <strong>Dừng hoạt động Channel</strong>
+              <strong>Deactivate the Channel</strong>
             ) : (
-              <strong>Kích hoạt Channel</strong>
+              <strong>Activate the Channel</strong>
             )}
           </h4>
           <button
@@ -86,15 +86,15 @@ const InfluencerChannelPage = ({ chid, channel }) => {
         <ModalBody>
           <FormGroup className='modal-items'>
             {channel.status === true ? (
-              <Label>Bạn có thật sự muốn dừng hoạt động Channel này?</Label>
+              <Label>Do you really want to deactivate this channel?</Label>
             ) : (
-              <Label>Bạn có thật sự muốn kích hoạt Channel này?</Label>
+              <Label>Do you really want to activate this channel?</Label>
             )}
           </FormGroup>
         </ModalBody>
         <ModalFooter>
           <Button color='secondary' onClick={toggleStatusModal}>
-            Không
+            Cancel
           </Button>
           {channel.status === true ? (
             <Button
@@ -102,21 +102,18 @@ const InfluencerChannelPage = ({ chid, channel }) => {
               onClick={() => {
                 try {
                   handleChangeStatusChannel();
-                  enqueueSnackbar('Channel đã ngưng hoạt động!', {
+                  enqueueSnackbar('Channel has stopped working!', {
                     variant: 'success',
                   });
                 } catch (error) {
-                  enqueueSnackbar(
-                    'Thay đổi trạng thái của Channel không thành công!',
-                    {
-                      variant: 'error',
-                    }
-                  );
+                  enqueueSnackbar('Channel status change failed!', {
+                    variant: 'error',
+                  });
                 }
                 toggleStatusModal();
               }}
             >
-              Có
+              Confirm
             </Button>
           ) : (
             <Button
@@ -124,16 +121,13 @@ const InfluencerChannelPage = ({ chid, channel }) => {
               onClick={() => {
                 try {
                   handleChangeStatusChannel();
-                  enqueueSnackbar('Channel đã được kích hoạt!', {
+                  enqueueSnackbar('Channel is activated!', {
                     variant: 'success',
                   });
                 } catch (error) {
-                  enqueueSnackbar(
-                    'Thay đổi trạng thái của Channel không thành công!',
-                    {
-                      variant: 'error',
-                    }
-                  );
+                  enqueueSnackbar('Channel status change failed!', {
+                    variant: 'error',
+                  });
                 }
                 toggleStatusModal();
               }}
@@ -162,7 +156,7 @@ const InfluencerChannelPage = ({ chid, channel }) => {
       <CardTitle>{channel.name}</CardTitle>
       <CardSubtitle>{channel.description}</CardSubtitle>
       <CardSubtitle>
-        <strong>Thể loại:</strong>
+        <strong>Category:</strong>
       </CardSubtitle>
       {channel.category !== undefined ? (
         <CardText>
@@ -178,15 +172,15 @@ const InfluencerChannelPage = ({ chid, channel }) => {
       </CardSubtitle>
       <CardText>{channel.website}</CardText>
       <CardSubtitle>
-        <strong>Số điện thoại:</strong>
+        <strong>Phone number:</strong>
       </CardSubtitle>
       <CardText>{channel.phone}</CardText>
       <CardSubtitle>
-        <strong>Mức giá:</strong>
+        <strong>Price:</strong>
       </CardSubtitle>
       <CardText>{channel.price}</CardText>
       <CardSubtitle>
-        <strong>Trạng thái:</strong>
+        <strong>Status:</strong>
       </CardSubtitle>
       <CardText>
         {renderStatus(
@@ -197,7 +191,7 @@ const InfluencerChannelPage = ({ chid, channel }) => {
       </CardText>
       {channel.employeeConfirm == false ? (
         <>
-          <CardSubtitle>Lý do:</CardSubtitle>
+          <CardSubtitle>Reasons:</CardSubtitle>
           <CardText>{channel.employeeNote}</CardText>
         </>
       ) : (
@@ -205,7 +199,7 @@ const InfluencerChannelPage = ({ chid, channel }) => {
       )}
       {channel.adminConfirm == false ? (
         <>
-          <CardSubtitle>Lý do:</CardSubtitle>
+          <CardSubtitle>Reasons:</CardSubtitle>
           <CardText>{channel.adminNote}</CardText>
         </>
       ) : (
@@ -220,7 +214,7 @@ const InfluencerChannelPage = ({ chid, channel }) => {
               setTempChannel(false);
             }}
           >
-            Dừng hoạt động
+            Deactivate
           </Button>
         ) : (
           ''
@@ -233,7 +227,7 @@ const InfluencerChannelPage = ({ chid, channel }) => {
               setTempChannel(true);
             }}
           >
-            Kích hoạt
+            Active
           </Button>
         ) : (
           ''

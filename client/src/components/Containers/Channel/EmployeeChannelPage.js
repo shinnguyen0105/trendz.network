@@ -63,12 +63,12 @@ const EmployeeChannelPage = ({ chid, channel }) => {
     try {
       await requestUpdateChannelByEmployeeMutation();
       if (approved) {
-        enqueueSnackbar('Đã chấp thuận channel!', { variant: 'success' });
-      } else enqueueSnackbar('Đã từ chối channel!', { variant: 'success' });
+        enqueueSnackbar('Approved channel!', { variant: 'success' });
+      } else enqueueSnackbar('Rejected the channel!', { variant: 'success' });
       Router.push('/dashboard');
     } catch (e) {
       console.log(e);
-      enqueueSnackbar('Đã có lỗi xảy ra, vui lòng thử lại!', {
+      enqueueSnackbar('An error has occurred, please try again!', {
         variant: 'error',
       });
     }
@@ -98,12 +98,12 @@ const EmployeeChannelPage = ({ chid, channel }) => {
         <ModalBody>
           <FormGroup className='modal-items'>
             <Label>
-              Bạn có thật sự muốn duyệt Channel này? Hãy để lại nhận xét:
+              Do you really want to approve this Channel? Leave a comment:
             </Label>
             <Input
               type='textarea'
               id='content'
-              placeholder='Nhận xét...'
+              placeholder='comment...'
               name='content'
               onChange={handleNoteChange}
               value={note.note != null ? note.note : ''}
@@ -120,7 +120,7 @@ const EmployeeChannelPage = ({ chid, channel }) => {
               toggleApproveModal();
             }}
           >
-            Hủy
+            Cancel
           </Button>
           <Button
             color='primary'
@@ -129,14 +129,14 @@ const EmployeeChannelPage = ({ chid, channel }) => {
               try {
                 handleEmployeeAcceptChannel(true);
               } catch (error) {
-                enqueueSnackbar('Đã có lỗi xảy ra, vui lòng thử lại!', {
+                enqueueSnackbar('An error has occurred, please try again!', {
                   variant: 'error',
                 });
               }
               toggleApproveModal();
             }}
           >
-            Xác nhận
+            Confirm
           </Button>
         </ModalFooter>
       </Modal>
@@ -148,7 +148,7 @@ const EmployeeChannelPage = ({ chid, channel }) => {
       <Modal isOpen={unApproveModal} toggle={toggleUnApproveModal}>
         <div className='modal-header'>
           <h4 className='modal-title' id='avatarModal'>
-            <strong>Từ chối Channel</strong>
+            <strong>Decline Channel</strong>
           </h4>
           <button
             type='button'
@@ -166,12 +166,12 @@ const EmployeeChannelPage = ({ chid, channel }) => {
         <ModalBody>
           <FormGroup className='modal-items'>
             <Label>
-              Bạn có thật sự muốn từ chối Channel này? Hãy để lại nhận xét:
+              Do you really want this Decline Channel? Leave a comment:
             </Label>
             <Input
               type='textarea'
               id='content'
-              placeholder='Nhận xét...'
+              placeholder='comment...'
               name='content'
               onChange={handleNoteChange}
               value={note.note != null ? note.note : ''}
@@ -188,7 +188,7 @@ const EmployeeChannelPage = ({ chid, channel }) => {
               toggleApproveModal();
             }}
           >
-            Hủy
+            Cancel
           </Button>
           <Button
             color='primary'
@@ -197,14 +197,14 @@ const EmployeeChannelPage = ({ chid, channel }) => {
               try {
                 handleEmployeeAcceptChannel(false);
               } catch (error) {
-                enqueueSnackbar('Đã có lỗi xảy ra, vui lòng thử lại!', {
+                enqueueSnackbar('An error has occurred, please try again!', {
                   variant: 'error',
                 });
               }
               toggleUnApproveModal();
             }}
           >
-            Xác nhận
+            Confirm
           </Button>
         </ModalFooter>
       </Modal>
@@ -216,16 +216,16 @@ const EmployeeChannelPage = ({ chid, channel }) => {
       employeeConfirm == null ||
       (employeeConfirm == true && adminConfirm == null)
     ) {
-      return 'Đang chờ cấp phép';
+      return 'Waiting for licensing';
     }
     if (!employeeConfirm || !adminConfirm) {
-      return 'Không được cấp phép';
+      return 'Not licensed';
     }
     if (adminConfirm && employeeConfirm && status == false) {
-      return 'Đã được cấp phép - Đang dừng hoạt động';
+      return 'Licensed - Inactive';
     }
     if (adminConfirm && employeeConfirm && status == true) {
-      return 'Đã được cấp phép - Đang hoạt động';
+      return 'Licensed - In operation';
     }
   };
 
@@ -245,7 +245,7 @@ const EmployeeChannelPage = ({ chid, channel }) => {
       <CardTitle>{channel.name}</CardTitle>
       <CardSubtitle>{channel.description}</CardSubtitle>
       <CardSubtitle>
-        <strong>Thể loại:</strong>
+        <strong>Category:</strong>
       </CardSubtitle>
       {channel.category !== undefined ? (
         <CardText>
@@ -261,15 +261,15 @@ const EmployeeChannelPage = ({ chid, channel }) => {
       </CardSubtitle>
       <CardText>{channel.website}</CardText>
       <CardSubtitle>
-        <strong>Số điện thoại:</strong>
+        <strong>Phone number:</strong>
       </CardSubtitle>
       <CardText>{channel.phone}</CardText>
       <CardSubtitle>
-        <strong>Mức giá:</strong>
+        <strong>Price:</strong>
       </CardSubtitle>
       <CardText>{channel.price}</CardText>
       <CardSubtitle>
-        <strong>Trạng thái:</strong>
+        <strong>Status:</strong>
       </CardSubtitle>
       <CardText>
         {renderStatus(
@@ -301,10 +301,10 @@ const EmployeeChannelPage = ({ chid, channel }) => {
             color='primary'
             onClick={toggleUnApproveModal}
           >
-            Từ chối
+            Reject
           </Button>
           <Button color='primary' onClick={toggleApproveModal}>
-            Xác nhận
+            Approve
           </Button>
         </div>
       ) : (

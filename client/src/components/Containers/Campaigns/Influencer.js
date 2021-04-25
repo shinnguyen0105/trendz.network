@@ -1,7 +1,5 @@
-import { useAuth } from '../../../contexts/userContext';
 import React, { useEffect, useState } from 'react';
-import Router from 'next/router';
-import axios from 'axios';
+
 import { useMutation } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -17,7 +15,6 @@ import {
   CardTitle,
   CardText,
   Row,
-  Spinner,
   Col,
   Nav,
   NavLink,
@@ -28,10 +25,7 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
-  Label,
   FormGroup,
-  Toast,
-  ToastBody,
   Input,
 } from 'reactstrap';
 import { useSnackbar } from 'notistack';
@@ -51,7 +45,6 @@ import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import SyncIcon from '@material-ui/icons/Sync';
 import LockIcon from '@material-ui/icons/Lock';
-import { forEach } from 'lodash';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -133,12 +126,12 @@ const Influencer = ({ campaign, cid }) => {
         },
       });
       if (approved) {
-        enqueueSnackbar('Đã chấp thuận campaign!', { variant: 'success' });
-      } else enqueueSnackbar('Đã từ chối campaign!', { variant: 'success' });
+        enqueueSnackbar('Approved campaign!', { variant: 'success' });
+      } else enqueueSnackbar('Rejected the campaign!', { variant: 'success' });
       //Router.push('/dashboard');
     } catch (e) {
       console.log(e);
-      enqueueSnackbar('Đã có lỗi xảy ra, vui lòng thử lại!', {
+      enqueueSnackbar('An error has occurred, please try again!', {
         variant: 'error',
       });
     }
@@ -183,17 +176,17 @@ const Influencer = ({ campaign, cid }) => {
   };
   const renderStatus = (approvalStatus, influencerStatus, status) => {
     if (approvalStatus == true && influencerStatus == null) {
-      return 'Đang chờ influencer chấp thuận';
+      return 'Waiting for Influencer approval';
     }
     if (approvalStatus == true && influencerStatus == true) {
-      return 'Đã được chấp thuận - Đang thực hiện';
+      return 'Approved - Ongoing';
     }
     if (approvalStatus == true && influencerStatus == false) {
-      return 'Đã được cấp phép - Influencer đã từ chối';
+      return 'Licensed - Influencer declined';
     }
     if (approvalStatus && influencerStatus && status == false) {
-      return 'Chưa được cấp phép';
-    } else return 'Đã được cấp phép - Influencer đã chấp thuận - Đã kết thúc';
+      return 'Unlicensed';
+    } else return 'Licensed - Influencer approved - Ended';
   };
   const toggleTabs = (event, stateName, index) => {
     event.preventDefault();
@@ -346,7 +339,7 @@ const Influencer = ({ campaign, cid }) => {
                         }}
                       ></CardText>
                       <CardSubtitle>
-                        <strong>Thể loại:</strong>
+                        <strong>Category:</strong>
                       </CardSubtitle>
                       {campaign.category !== undefined ? (
                         <CardText>
@@ -357,7 +350,7 @@ const Influencer = ({ campaign, cid }) => {
                         ''
                       )}
                       <CardSubtitle>
-                        <strong>Kênh:</strong>
+                        <strong>Channel:</strong>
                       </CardSubtitle>
                       {campaign.channels[0] !== undefined ? (
                         <>
@@ -369,11 +362,11 @@ const Influencer = ({ campaign, cid }) => {
                             <a href='##'>{campaign.channels[0].website}</a>
                           </CardText>
                           <CardText>
-                            <strong>Địa chỉ:</strong>{' '}
+                            <strong>Address:</strong>{' '}
                             {campaign.channels[0].address}
                           </CardText>
                           <CardText>
-                            <strong>Liên hệ:</strong>{' '}
+                            <strong>Phone number:</strong>{' '}
                             {campaign.channels[0].phone}
                           </CardText>
                         </>
@@ -381,7 +374,7 @@ const Influencer = ({ campaign, cid }) => {
                         ''
                       )}
                       <CardSubtitle>
-                        <strong>Trạng thái:</strong>
+                        <strong>Status:</strong>
                       </CardSubtitle>
                       <CardText>
                         {renderStatus(
@@ -391,7 +384,7 @@ const Influencer = ({ campaign, cid }) => {
                         )}
                       </CardText>
                       <CardSubtitle>
-                        <strong>Người tạo:</strong>
+                        <strong>Create by:</strong>
                       </CardSubtitle>
                       <CardText>
                         {campaign.user !== undefined
@@ -399,7 +392,7 @@ const Influencer = ({ campaign, cid }) => {
                           : ''}
                       </CardText>
                       <CardSubtitle>
-                        <strong>Thời gian:</strong>
+                        <strong>Start date - End date:</strong>
                       </CardSubtitle>
                       {campaign.campaignTTL !== undefined ? (
                         <CardText>
@@ -423,14 +416,14 @@ const Influencer = ({ campaign, cid }) => {
                             disabled={requestUpdateCampaignLoading}
                             onClick={() => handleInfluencerApproval(false)}
                           >
-                            Từ chối
+                            Reject
                           </Button>
                           <Button
                             color='primary'
                             loading={requestUpdateCampaignLoading}
                             onClick={() => handleInfluencerApproval(true)}
                           >
-                            Xác nhận
+                            Approve
                           </Button>
                         </div>
                       ) : (
@@ -474,7 +467,7 @@ const Influencer = ({ campaign, cid }) => {
                   <CardBody>
                     <CardTitle>{campaign.user.name}</CardTitle>
                     <CardSubtitle>
-                      <strong>Giới tính:</strong>
+                      <strong>Gender:</strong>
                     </CardSubtitle>
                     {campaign.user.gender !== undefined ? (
                       <CardText>
@@ -484,7 +477,7 @@ const Influencer = ({ campaign, cid }) => {
                       'N/A'
                     )}
                     <CardSubtitle>
-                      <strong>Ngày sinh:</strong>
+                      <strong>Date of Birth:</strong>
                     </CardSubtitle>
                     {campaign.user.birthDay !== undefined ? (
                       <CardText>
@@ -504,7 +497,7 @@ const Influencer = ({ campaign, cid }) => {
                       ''
                     )}
                     <CardSubtitle>
-                      <strong>Địa chỉ:</strong>
+                      <strong>Address:</strong>
                     </CardSubtitle>
                     {campaign.user.address !== undefined ? (
                       <CardText>{campaign.user.address}</CardText>
@@ -512,7 +505,7 @@ const Influencer = ({ campaign, cid }) => {
                       ''
                     )}
                     <CardSubtitle>
-                      <strong>Số điện thoại:</strong>
+                      <strong>Phone number:</strong>
                     </CardSubtitle>
                     {campaign.user.phoneNumber !== undefined ? (
                       <CardText>{campaign.user.phoneNumber}</CardText>
@@ -758,7 +751,7 @@ const Influencer = ({ campaign, cid }) => {
                 )}
                 <div className='form-button text-right'>
                   <Button color='primary' onClick={toggleChatModal}>
-                    Liên hệ ngay!
+                    Chat Message
                   </Button>
                 </div>
               </Timeline>

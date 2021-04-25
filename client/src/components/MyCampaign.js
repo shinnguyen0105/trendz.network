@@ -17,9 +17,9 @@ const { API_URL } = process.env;
 const renderStatus = (status) => {
   if (status !== null) {
     if (status) {
-      return 'Đang hoạt động';
-    } else return 'Không hoạt động';
-  } else return 'Đang chờ kích hoạt';
+      return 'Being active';
+    } else return 'Inactive';
+  } else return 'Waiting for activation';
 };
 const MyCampaign = ({ data, categ, search }) => {
   var myCampaign;
@@ -63,13 +63,13 @@ const MyCampaign = ({ data, categ, search }) => {
                     {campaign.title}
                   </CardTitle>
                   <CardSubtitle>
-                    <strong>Người tạo:</strong> {campaign.user.name}
+                    <strong>Create by:</strong> {campaign.user.name}
                   </CardSubtitle>
                   <CardSubtitle>
-                    <strong>Trạng thái:</strong> {renderStatus(campaign.status)}
+                    <strong>Status:</strong> {renderStatus(campaign.status)}
                   </CardSubtitle>
                   <CardSubtitle>
-                    <strong>Ngày bắt đầu - Ngày kết thúc:</strong>
+                    <strong>Start date - End date:</strong>
                   </CardSubtitle>
                   <CardSubtitle>
                     <small className='text-muted'>
@@ -88,7 +88,7 @@ const MyCampaign = ({ data, categ, search }) => {
                   </CardSubtitle>
 
                   <Link href='/campaign/[cid]' as={`/campaign/${campaign.id}`}>
-                    <Button>Chi tiết</Button>
+                    <Button>Details</Button>
                   </Link>
                 </CardBody>
               </Card>

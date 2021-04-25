@@ -124,8 +124,8 @@ const Employee = ({ campaign, cid }) => {
       },
     });
     if (approved) {
-      enqueueSnackbar('Đã chấp thuận campaign!', { variant: 'success' });
-    } else enqueueSnackbar('Đã từ chối campaign!', { variant: 'warning' });
+      enqueueSnackbar('Approved campaign!', { variant: 'success' });
+    } else enqueueSnackbar('Rejected the campaign!', { variant: 'warning' });
     //Router.push('/dashboard');
   };
 
@@ -151,7 +151,7 @@ const Employee = ({ campaign, cid }) => {
       <Modal isOpen={approveModal} toggle={toggleApproveModal}>
         <div className='modal-header'>
           <h4 className='modal-title' id='avatarModal'>
-            <strong>Duyệt Campaign</strong>
+            <strong>Approve campaign</strong>
           </h4>
           <button
             type='button'
@@ -169,12 +169,12 @@ const Employee = ({ campaign, cid }) => {
         <ModalBody>
           <FormGroup className='modal-items'>
             <Label>
-              Bạn có thật sự muốn duyệt Campaign này? Hãy để lại nhận xét:
+              Do you really want to approve this Campaign? Leave a comment:
             </Label>
             <Input
               type='textarea'
               id='content'
-              placeholder='Nhận xét...'
+              placeholder='comment...'
               name='content'
               onChange={handleNoteChange}
               value={note.note != null ? note.note : ''}
@@ -191,7 +191,7 @@ const Employee = ({ campaign, cid }) => {
               toggleApproveModal();
             }}
           >
-            Hủy
+            Cancel
           </Button>
           <Button
             color='primary'
@@ -200,14 +200,14 @@ const Employee = ({ campaign, cid }) => {
               try {
                 handleEmployeeApproval(true);
               } catch (error) {
-                enqueueSnackbar('Đã có lỗi xảy ra, vui lòng thử lại!', {
+                enqueueSnackbar('An error has occurred, please try again!', {
                   variant: 'error',
                 });
               }
               toggleApproveModal();
             }}
           >
-            Xác nhận
+            Confirm
           </Button>
         </ModalFooter>
       </Modal>
@@ -219,7 +219,7 @@ const Employee = ({ campaign, cid }) => {
       <Modal isOpen={unApproveModal} toggle={toggleUnApproveModal}>
         <div className='modal-header'>
           <h4 className='modal-title' id='avatarModal'>
-            <strong>Từ chối Campaign</strong>
+            <strong>Reject Campaign</strong>
           </h4>
           <button
             type='button'
@@ -237,12 +237,12 @@ const Employee = ({ campaign, cid }) => {
         <ModalBody>
           <FormGroup className='modal-items'>
             <Label>
-              Bạn có thật sự muốn từ chối Campaign này? Hãy để lại nhận xét:
+              Do you really want to reject this Campaign? Leave a comment:
             </Label>
             <Input
               type='textarea'
               id='content'
-              placeholder='Nhận xét...'
+              placeholder='comment...'
               name='content'
               onChange={handleNoteChange}
               value={note.note != null ? note.note : ''}
@@ -259,7 +259,7 @@ const Employee = ({ campaign, cid }) => {
               toggleApproveModal();
             }}
           >
-            Hủy
+            Cancel
           </Button>
           <Button
             color='primary'
@@ -268,14 +268,14 @@ const Employee = ({ campaign, cid }) => {
               try {
                 handleEmployeeApproval(false);
               } catch (error) {
-                enqueueSnackbar('Đã có lỗi xảy ra, vui lòng thử lại!', {
+                enqueueSnackbar('An error has occurred, please try again!', {
                   variant: 'error',
                 });
               }
               toggleUnApproveModal();
             }}
           >
-            Xác nhận
+            Confirm
           </Button>
         </ModalFooter>
       </Modal>
@@ -316,20 +316,20 @@ const Employee = ({ campaign, cid }) => {
 
   const renderStatus = (approvalStatus, influencerStatus, status) => {
     if (approvalStatus == null) {
-      return 'Đang chờ cấp phép';
+      return 'Waiting for licensing';
     }
     if (!approvalStatus) {
-      return 'Không được cấp phép';
+      return 'Not licensed';
     }
     if (approvalStatus && influencerStatus == null) {
-      return 'Đã được cấp phép - Đang chờ influencer xác nhận';
+      return 'Licensed - Waiting for Influencer approve';
     }
     if (approvalStatus && !influencerStatus) {
-      return 'Đã được cấp phép - Influencer đã từ chối';
+      return 'Licensed - Influencer rejected';
     }
     if (approvalStatus && influencerStatus && status == false) {
-      return 'Đã được cấp phép - Influencer đã chấp thuận - Đang hoạt động';
-    } else return 'Đã được cấp phép - Influencer đã chấp thuận - Đã kết thúc';
+      return 'Licensed - Influencer approved - Active';
+    } else return 'Licensed - Influencer approved - Ended';
   };
 
   return (
@@ -388,7 +388,7 @@ const Employee = ({ campaign, cid }) => {
                       }}
                     ></CardText>
                     <CardSubtitle>
-                      <strong>Thể loại:</strong>
+                      <strong>Category:</strong>
                     </CardSubtitle>
                     {campaign.category !== undefined ? (
                       <CardText>
@@ -399,7 +399,7 @@ const Employee = ({ campaign, cid }) => {
                       ''
                     )}
                     <CardSubtitle>
-                      <strong>Kênh:</strong>
+                      <strong>Channel:</strong>
                     </CardSubtitle>
                     {campaign.channels[0] !== undefined ? (
                       <>
@@ -411,18 +411,19 @@ const Employee = ({ campaign, cid }) => {
                           <a href='##'>{campaign.channels[0].website}</a>
                         </CardText>
                         <CardText>
-                          <strong>Địa chỉ:</strong>{' '}
+                          <strong>Address:</strong>{' '}
                           {campaign.channels[0].address}
                         </CardText>
                         <CardText>
-                          <strong>Liên hệ:</strong> {campaign.channels[0].phone}
+                          <strong>Phone number:</strong>{' '}
+                          {campaign.channels[0].phone}
                         </CardText>
                       </>
                     ) : (
                       ''
                     )}
                     <CardSubtitle>
-                      <strong>Trạng thái:</strong>
+                      <strong>Status:</strong>
                     </CardSubtitle>
                     <CardText>
                       {renderStatus(
@@ -432,7 +433,7 @@ const Employee = ({ campaign, cid }) => {
                       )}
                     </CardText>
                     <CardSubtitle>
-                      <strong>Người tạo:</strong>
+                      <strong>Create by:</strong>
                     </CardSubtitle>
                     <CardText>
                       {campaign.user !== undefined
@@ -440,7 +441,7 @@ const Employee = ({ campaign, cid }) => {
                         : ''}
                     </CardText>
                     <CardSubtitle>
-                      <strong>Thời gian:</strong>
+                      <strong>Start date - End date:</strong>
                     </CardSubtitle>
                     {campaign.campaignTTL !== undefined ? (
                       <CardText>
@@ -463,10 +464,10 @@ const Employee = ({ campaign, cid }) => {
                           color='primary'
                           onClick={toggleUnApproveModal}
                         >
-                          Từ chối
+                          Reject
                         </Button>
                         <Button color='primary' onClick={toggleApproveModal}>
-                          Xác nhận
+                          Approve
                         </Button>
                       </div>
                     ) : (
@@ -493,7 +494,7 @@ const Employee = ({ campaign, cid }) => {
           <TabPane tabId='vertical2'>
             <Row>
               <Col md={6}>
-                <h3>Thông tin người tạo</h3>
+                <h3>Customer info</h3>
                 <Card className='single-card'>
                   <CardImg
                     src={renderUserImage()}
@@ -503,7 +504,7 @@ const Employee = ({ campaign, cid }) => {
                   <CardBody>
                     <CardTitle>{campaign.user.name}</CardTitle>
                     <CardSubtitle>
-                      <strong>Giới tính:</strong>
+                      <strong>Gender:</strong>
                     </CardSubtitle>
                     {campaign.user.gender !== undefined ? (
                       <CardText>{campaign.user.gender}</CardText>
@@ -511,7 +512,7 @@ const Employee = ({ campaign, cid }) => {
                       'N/A'
                     )}
                     <CardSubtitle>
-                      <strong>Ngày sinh:</strong>
+                      <strong>Date of Birth:</strong>
                     </CardSubtitle>
                     {campaign.user.birthDay !== undefined ? (
                       <CardText>
@@ -531,7 +532,7 @@ const Employee = ({ campaign, cid }) => {
                       ''
                     )}
                     <CardSubtitle>
-                      <strong>Địa chỉ:</strong>
+                      <strong>Address:</strong>
                     </CardSubtitle>
                     {campaign.user.address !== undefined ? (
                       <CardText>{campaign.user.address}</CardText>
@@ -539,7 +540,7 @@ const Employee = ({ campaign, cid }) => {
                       ''
                     )}
                     <CardSubtitle>
-                      <strong>Số điện thoại:</strong>
+                      <strong>Phone number:</strong>
                     </CardSubtitle>
                     {campaign.user.phoneNumber !== undefined ? (
                       <CardText>{campaign.user.phoneNumber}</CardText>
@@ -556,14 +557,14 @@ const Employee = ({ campaign, cid }) => {
                       <a
                         href={`mailto:${campaign.user.email}?subject=Campaign - ${campaign.title}-TrendzNetwork`}
                       >
-                        <Button color='primary'>Liên hệ ngay!</Button>
+                        <Button color='primary'>Contact now!</Button>
                       </a>
                     </div>
                   </CardBody>
                 </Card>
               </Col>
               <Col md={6}>
-                <h3>Thông tin Influencer</h3>
+                <h3>Influencer info</h3>
                 <Card className='single-card'>
                   {campaign.channels[0].user.avatar !== undefined ? (
                     <CardImg
@@ -577,7 +578,7 @@ const Employee = ({ campaign, cid }) => {
                   <CardBody>
                     <CardTitle>{campaign.channels[0].user.name}</CardTitle>
                     <CardSubtitle>
-                      <strong>Giới tính:</strong>
+                      <strong>Gender:</strong>
                     </CardSubtitle>
                     {campaign.channels[0].user.gender !== undefined ? (
                       <CardText>{campaign.channels[0].user.gender}</CardText>
@@ -585,7 +586,7 @@ const Employee = ({ campaign, cid }) => {
                       'N/A'
                     )}
                     <CardSubtitle>
-                      <strong>Ngày sinh:</strong>
+                      <strong>Date of Birth:</strong>
                     </CardSubtitle>
                     {campaign.channels[0].user.birthDay !== undefined ? (
                       <CardText>
@@ -605,7 +606,7 @@ const Employee = ({ campaign, cid }) => {
                       ''
                     )}
                     <CardSubtitle>
-                      <strong>Địa chỉ:</strong>
+                      <strong>Address:</strong>
                     </CardSubtitle>
                     {campaign.channels[0].user.address !== undefined ? (
                       <CardText>{campaign.channels[0].user.address}</CardText>
@@ -613,7 +614,7 @@ const Employee = ({ campaign, cid }) => {
                       ''
                     )}
                     <CardSubtitle>
-                      <strong>Số điện thoại:</strong>
+                      <strong>Phone number:</strong>
                     </CardSubtitle>
                     {campaign.channels[0].user.phoneNumber !== undefined ? (
                       <CardText>
@@ -623,7 +624,7 @@ const Employee = ({ campaign, cid }) => {
                       ''
                     )}
                     <CardSubtitle>
-                      <strong>Kênh:</strong>
+                      <strong>Channel:</strong>
                     </CardSubtitle>
                     {campaign.channels[0] !== undefined ? (
                       <>
@@ -635,11 +636,12 @@ const Employee = ({ campaign, cid }) => {
                           <a href='##'>{campaign.channels[0].website}</a>
                         </CardText>
                         <CardText>
-                          <strong>Địa chỉ:</strong>{' '}
+                          <strong>Address:</strong>{' '}
                           {campaign.channels[0].address}
                         </CardText>
                         <CardText>
-                          <strong>Liên hệ:</strong> {campaign.channels[0].phone}
+                          <strong>Phone number:</strong>{' '}
+                          {campaign.channels[0].phone}
                         </CardText>
                       </>
                     ) : (
@@ -649,7 +651,7 @@ const Employee = ({ campaign, cid }) => {
                       <a
                         href={`mailto:${campaign.channels[0].user.email}?subject=Campaign - ${campaign.title}-TrendzNetwork`}
                       >
-                        <Button color='primary'>Liên hệ ngay!</Button>
+                        <Button color='primary'>Contact now!</Button>
                       </a>
                     </div>
                   </CardBody>

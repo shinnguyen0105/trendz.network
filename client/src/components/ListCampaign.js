@@ -20,33 +20,33 @@ const DashboardChildren = ({ data, categ, search, roleType }) => {
   function renderStatus(approvalStatus, influencerStatus, status) {
     if ((roleType = 'Employee')) {
       if (approvalStatus == null) {
-        return 'Đang chờ cấp phép';
+        return 'Waiting for licensing';
       }
       if (!approvalStatus) {
-        return 'Không được cấp phép';
+        return 'Not licensed';
       }
       if (approvalStatus && influencerStatus == null) {
-        return 'Đã được cấp phép - Đang chờ influencer xác nhận';
+        return 'Đã được cấp phép - Đang chờ Influencer approve';
       }
       if (approvalStatus && !influencerStatus) {
-        return 'Đã được cấp phép - Influencer đã từ chối';
+        return 'Licensed - Influencer declined';
       }
       if (approvalStatus && influencerStatus && status == false) {
-        return 'Đã được cấp phép - Influencer đã chấp thuận - Đang hoạt động';
-      } else return 'Đã được cấp phép - Influencer đã chấp thuận - Đã kết thúc';
+        return 'Licensed - Influencer approved - Being Active';
+      } else return 'Licensed - Influencer approved - Ended';
     } else {
       if (approvalStatus == true && influencerStatus == null) {
-        return 'Đang chờ influencer chấp thuận';
+        return 'Waiting for Influencer approval';
       }
       if (approvalStatus == true && influencerStatus == true) {
-        return 'Đã được chấp thuận - Đang thực hiện';
+        return 'Approved - Ongoing';
       }
       if (approvalStatus == true && influencerStatus == false) {
-        return 'Đã được cấp phép - Influencer đã từ chối';
+        return 'Licensed - Influencer declined';
       }
       if (approvalStatus && influencerStatus && status == false) {
-        return 'Đã được cấp phép - Influencer đã chấp thuận - Đang hoạt động';
-      } else return 'Đã được cấp phép - Influencer đã chấp thuận - Đã kết thúc';
+        return 'Licensed - Influencer approved - Being Active';
+      } else return 'Licensed - Influencer approved - Ended';
     }
   }
 
@@ -93,7 +93,7 @@ const DashboardChildren = ({ data, categ, search, roleType }) => {
                   )}
                 </CardTitle>
                 <CardSubtitle>
-                  <strong>Người tạo:</strong>{' '}
+                  <strong>Create by:</strong>{' '}
                   {campaign.user !== null ? (
                     campaign.user.username
                   ) : (
@@ -101,7 +101,7 @@ const DashboardChildren = ({ data, categ, search, roleType }) => {
                   )}
                 </CardSubtitle>
                 <CardSubtitle>
-                  <strong>Trạng thái:</strong>{' '}
+                  <strong>Status:</strong>{' '}
                   {renderStatus(
                     campaign.approve,
                     campaign.status,
@@ -109,7 +109,7 @@ const DashboardChildren = ({ data, categ, search, roleType }) => {
                   )}
                 </CardSubtitle>
                 <CardSubtitle>
-                  <strong>Ngày bắt đầu - Ngày kết thúc:</strong>
+                  <strong>Start date - End date:</strong>
                 </CardSubtitle>
                 <CardSubtitle>
                   <small className='text-muted'>
@@ -127,7 +127,7 @@ const DashboardChildren = ({ data, categ, search, roleType }) => {
                   </small>
                 </CardSubtitle>
                 <Link href='/campaign/[cid]' as={`/campaign/${campaign.id}`}>
-                  <Button>Chi tiết</Button>
+                  <Button>Details</Button>
                 </Link>
               </CardBody>
             </Card>

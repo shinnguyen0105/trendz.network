@@ -175,7 +175,7 @@ const CustomerDashboard = () => {
           className='mydropdown'
         >
           {filterItems.category === ''
-            ? 'Chọn Danh mục...'
+            ? 'Select Category'
             : data.categories.find(
                 (category) => category.id === filterItems.category
               ).name}
@@ -230,7 +230,7 @@ const CustomerDashboard = () => {
                 <TabContent activeTab={'vertical' + navState.vertical}>
                   <Link href='/create'>
                     <Button color='primary' className='btn-create'>
-                      Tạo Campaign
+                      Create Campaign
                     </Button>
                   </Link>
                   <TabPane tabId='vertical1'>
@@ -240,7 +240,7 @@ const CustomerDashboard = () => {
                     <Row>
                       <Col>
                         <Row>
-                          <CardSubtitle>Tìm kiếm</CardSubtitle>
+                          <CardSubtitle>Search</CardSubtitle>
                         </Row>
                         <Row>
                           <Input
@@ -254,7 +254,7 @@ const CustomerDashboard = () => {
                       </Col>
                       <Col>
                         <Row>
-                          <CardSubtitle>Danh mục</CardSubtitle>
+                          <CardSubtitle>Category</CardSubtitle>
                         </Row>
                         <Row>
                           <UncontrolledDropdown group>
@@ -264,7 +264,7 @@ const CustomerDashboard = () => {
                       </Col>
                       <Col>
                         <Row>
-                          <CardSubtitle>Trạng thái</CardSubtitle>
+                          <CardSubtitle>Status</CardSubtitle>
                         </Row>
                         <Row>
                           <UncontrolledDropdown group>
@@ -275,7 +275,7 @@ const CustomerDashboard = () => {
                               className='mydropdown'
                             >
                               {filterItems.status === ''
-                                ? 'Chọn Trạng thái...'
+                                ? 'Select status...'
                                 : campaignStatuses.find(
                                     (status) => status.id === filterItems.status
                                   ).status}
@@ -301,7 +301,7 @@ const CustomerDashboard = () => {
                       </Col>
                       <Col>
                         <Row>
-                          <CardSubtitle>Sắp xếp theo</CardSubtitle>
+                          <CardSubtitle>Sorted by</CardSubtitle>
                         </Row>
                         <Row>
                           <UncontrolledDropdown group>
@@ -312,7 +312,7 @@ const CustomerDashboard = () => {
                               className='mydropdown'
                             >
                               {filterItems.sort === ''
-                                ? 'Sắp xếp theo...'
+                                ? 'Sorted by...'
                                 : sortBy.find(
                                     (sort) => sort.value === filterItems.sort
                                   ).type}
@@ -343,7 +343,7 @@ const CustomerDashboard = () => {
                             color='warning'
                             style={{ marginTop: '19px' }}
                           >
-                            Làm sạch bộ lọc
+                            Clear Filter
                           </Button>
                         </Row>
                       </Col>

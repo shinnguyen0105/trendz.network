@@ -170,30 +170,30 @@ const Profile = () => {
   const renderSetGender = () => {
     switch (userUpdate.gender) {
       case '':
-        return 'Giới tính...';
+        return 'Gender...';
       case 'male':
-        return 'Nam';
+        return 'Male';
       case 'female':
-        return 'Nữ';
+        return 'Female';
       case 'other':
-        return 'Khác';
+        return 'Others';
       default:
-        return 'Giới tính...';
+        return 'Gender...';
     }
   };
 
   const renderGender = () => {
     switch (user.gender) {
       case '':
-        return '(Vui lòng cập nhật thông tin)';
+        return '(Please update your info)';
       case 'male':
-        return 'Nam';
+        return 'Male';
       case 'female':
-        return 'Nữ';
+        return 'Female';
       case 'other':
-        return 'Khác';
+        return 'Others';
       default:
-        return '(Vui lòng cập nhật thông tin)';
+        return '(Please update your info)';
     }
   };
 
@@ -210,7 +210,7 @@ const Profile = () => {
   useEffect(() => {
     if (userAvatar.avatar.id !== null) {
       updateUserAvatar();
-      enqueueSnackbar('Cập nhật ảnh đại diện thành công!', {
+      enqueueSnackbar('Update profile successfully!', {
         variant: 'success',
       });
     }
@@ -307,12 +307,12 @@ const Profile = () => {
                   />
                   <h3 className='title'>{state.user.username}</h3>
                   <Button color='primary' onClick={toggleAvatarModal}>
-                    Cập nhật ảnh đại diện
+                    Update Profile
                   </Button>
                   <Modal isOpen={avatarModal} toggle={toggleAvatarModal}>
                     <div className='modal-header'>
                       <h4 className='modal-title' id='avatarModal'>
-                        <strong>Cập nhật ảnh đại diện</strong>
+                        <strong>Update Profile</strong>
                       </h4>
                       <button
                         type='button'
@@ -352,7 +352,7 @@ const Profile = () => {
                     </ModalBody>
                     <ModalFooter>
                       <Button color='secondary' onClick={toggleAvatarModal}>
-                        Hủy
+                        Cancel
                       </Button>
                       <Button
                         color='primary'
@@ -361,7 +361,7 @@ const Profile = () => {
                           toggleAvatarModal();
                         }}
                       >
-                        Lưu
+                        Save
                       </Button>
                     </ModalFooter>
                   </Modal>
@@ -375,7 +375,7 @@ const Profile = () => {
                         })}
                         onClick={(event) => toggleTabs(event, 'tabs', 1)}
                       >
-                        Hồ sơ
+                        Profile
                       </NavLink>
                     </NavItem>
                     <NavItem>
@@ -385,7 +385,7 @@ const Profile = () => {
                         })}
                         onClick={(event) => toggleTabs(event, 'tabs', 2)}
                       >
-                        Tài khoản
+                        Account
                       </NavLink>
                     </NavItem>
                   </Nav>
@@ -399,17 +399,17 @@ const Profile = () => {
                         <Col sm='6'>
                           <h4>
                             {user.name === ''
-                              ? '(Vui lòng cập nhật thông tin)'
+                              ? '(Please update your info)'
                               : user.name}
                           </h4>
                         </Col>
                       </Row>
                       <Row>
-                        <Label sm='5'>Ngày sinh</Label>
+                        <Label sm='5'>Date of Birth</Label>
                         <Col sm='6'>
                           <h4>
                             {user.birthDay === ''
-                              ? '(Vui lòng cập nhật thông tin)'
+                              ? '(Please update your info)'
                               : new Date(user.birthDay).toLocaleDateString(
                                   'en-GB'
                                 )}
@@ -417,7 +417,7 @@ const Profile = () => {
                         </Col>
                       </Row>
                       <Row>
-                        <Label sm='5'>Số điện thoại</Label>
+                        <Label sm='5'>Phone number</Label>
                         <Col sm='6'>
                           <h4>
                             {user.phoneNumber === ''
@@ -427,13 +427,13 @@ const Profile = () => {
                         </Col>
                       </Row>
                       <Row>
-                        <Label sm='5'>Giới tính</Label>
+                        <Label sm='5'>Gender</Label>
                         <Col sm='6'>
                           <h4>{renderGender()}</h4>
                         </Col>
                       </Row>
                       <Row>
-                        <Label sm='5'>Địa chỉ</Label>
+                        <Label sm='5'>Address</Label>
                         <Col sm='6'>
                           <h4>
                             {user.address === ''
@@ -461,7 +461,7 @@ const Profile = () => {
                         </Col>
                       </Row>
                       <Row>
-                        <Label sm='5'>Mật khẩu</Label>
+                        <Label sm='5'>Password</Label>
                         <Col sm='6'>
                           <Button
                             className={classnames({
@@ -469,14 +469,14 @@ const Profile = () => {
                             })}
                             onClick={(event) => toggleTabs(event, 'tabs', 4)}
                           >
-                            Thay đổi mật khẩu
+                            Change Password
                           </Button>
                         </Col>
                       </Row>
                     </TabPane>
                     <TabPane tabId='tab3'>
                       <Row>
-                        <Label sm='5'>Tên</Label>
+                        <Label sm='5'>Name</Label>
                         <Col sm='4'>
                           <FormGroup>
                             <Input
@@ -489,7 +489,7 @@ const Profile = () => {
                         </Col>
                       </Row>
                       <Row>
-                        <Label sm='5'>Ngày sinh</Label>
+                        <Label sm='5'>Date of Birth</Label>
                         <Col sm='4'>
                           <FormGroup>
                             <Datetime
@@ -515,7 +515,7 @@ const Profile = () => {
                         </Col>
                       </Row>
                       <Row>
-                        <Label sm='5'>Số điện thoại</Label>
+                        <Label sm='5'>Phone number</Label>
                         <Col sm='4'>
                           <FormGroup>
                             <Input
@@ -528,7 +528,7 @@ const Profile = () => {
                         </Col>
                       </Row>
                       <Row>
-                        <Label sm='5'>Giới tính</Label>
+                        <Label sm='5'>Gender</Label>
                         <Col sm='4'>
                           <FormGroup>
                             <UncontrolledDropdown group>
@@ -545,21 +545,21 @@ const Profile = () => {
                                   value='male'
                                   onClick={handleUserChange}
                                 >
-                                  Nam
+                                  Male
                                 </DropdownItem>
                                 <DropdownItem
                                   name='gender'
                                   value='female'
                                   onClick={handleUserChange}
                                 >
-                                  Nữ
+                                  Female
                                 </DropdownItem>
                                 <DropdownItem
                                   name='gender'
                                   value='other'
                                   onClick={handleUserChange}
                                 >
-                                  Khác
+                                  Others
                                 </DropdownItem>
                               </DropdownMenu>
                             </UncontrolledDropdown>
@@ -567,7 +567,7 @@ const Profile = () => {
                         </Col>
                       </Row>
                       <Row>
-                        <Label sm='5'>Địa chỉ</Label>
+                        <Label sm='5'>Address</Label>
                         <Col sm='4'>
                           <FormGroup>
                             <Input
@@ -587,7 +587,7 @@ const Profile = () => {
                             toggleTabs(event, 'tabs', 1);
                           }}
                         >
-                          Hủy
+                          Cancel
                         </Button>
                         <Button
                           color='primary'
@@ -596,13 +596,13 @@ const Profile = () => {
                             toggleTabs(event, 'tabs', 1);
                           }}
                         >
-                          Lưu
+                          Save
                         </Button>
                       </Row>
                     </TabPane>
                     <TabPane tabId='tab4'>
                       <Row>
-                        <Label sm='5'>Mật khẩu mới</Label>
+                        <Label sm='5'>New password</Label>
                         <Col sm='4'>
                           <FormGroup>
                             <Input type='password' />
@@ -610,7 +610,7 @@ const Profile = () => {
                         </Col>
                       </Row>
                       <Row>
-                        <Label sm='5'>Nhập lại mật khẩu mới</Label>
+                        <Label sm='5'>Confirm password</Label>
                         <Col sm='4'>
                           <FormGroup>
                             <Input type='password' />
@@ -622,10 +622,10 @@ const Profile = () => {
                         <Button
                           onClick={(event) => toggleTabs(event, 'tabs', 2)}
                         >
-                          Hủy
+                          Cancel
                         </Button>
                         <Button color='primary' type='submit'>
-                          Lưu
+                          Save
                         </Button>
                       </Row>
                     </TabPane>

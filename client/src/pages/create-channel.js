@@ -33,7 +33,7 @@ const { API_URL } = process.env;
 const Create = () => {
   const { state } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
-  const signal = axios.CancelToken.source();
+
   useEffect(() => {
     if (state.user.role.name !== 'Influencer') Router.push('/404');
   }, [state]);
@@ -52,10 +52,6 @@ const Create = () => {
     avatar: null,
   });
   const [isAbleToSubmit, setIsAbleToSubmit] = useState(false);
-
-  const [categories, setCategories] = useState({
-    categories: [],
-  });
 
   const [tempData, setTempData] = useState({
     categoryId: '',
@@ -116,7 +112,7 @@ const Create = () => {
       });
       Router.push('/dashboard');
       return enqueueSnackbar(
-        'Tạo channel thành công! Channel của bạn đang được xét duyệt!',
+        'Create Channel success! Your channel is under review!',
         {
           variant: 'success',
         }
@@ -193,7 +189,7 @@ const Create = () => {
           className='mydropdown'
         >
           {channelState.category === null
-            ? 'Chọn Danh mục...'
+            ? 'Select Category...'
             : tempData.categoryName}
         </DropdownToggle>
         <DropdownMenu>
@@ -219,35 +215,35 @@ const Create = () => {
           <Container>
             <Card>
               <CardHeader>
-                <h3 className='title'>Tạo channel</h3>
+                <h3 className='title'>Create Channel</h3>
               </CardHeader>
               <CardBody>
                 <Form className='form'>
                   <FormGroup>
-                    <Label for='name'>Tên Channel</Label>
+                    <Label for='name'>Name Channel</Label>
                     <Input
                       type='text'
                       id='name'
                       name='name'
                       onChange={handleChannelChange}
                       value={channelState.name}
-                      placeholder='Tên Channel'
+                      placeholder='Name Channel'
                       required
                     />
                   </FormGroup>
                   <FormGroup>
-                    <Label for='content'>Mô tả chung</Label>
+                    <Label for='content'>Description</Label>
                     <Editor
-                      apiKey='awf8d12nkj02oekbnk7t8xx283a5kexhscdfvpj9sd8h22ox'
+                      apiKey='rra7fcsvr0q6e0fws0mvcj75edqjwjwz9glbrvv24pljw2yp'
                       id='content'
-                      placeholder='Nội dung...'
+                      placeholder='Description...'
                       onEditorChange={handleDescriptionChange}
                       value={channelState.description}
                       required
                     />
                   </FormGroup>
                   <FormGroup>
-                    <Label for='channel'>Chọn Danh mục</Label>
+                    <Label for='channel'>Category</Label>
                     <br />
                     <UncontrolledDropdown group>
                       <FetchCategories />
@@ -261,31 +257,31 @@ const Create = () => {
                       name='website'
                       onChange={handleChannelChange}
                       value={channelState.website}
-                      placeholder='Đường dẫn website'
+                      placeholder='URL'
                       required
                     />
                   </FormGroup>
                   <FormGroup>
-                    <Label for='website'>Số điện thoại</Label>
+                    <Label for='website'>Phone number of Manager</Label>
                     <Input
                       type='number'
                       id='phone'
                       name='phone'
                       onChange={handleChannelChange}
                       value={channelState.phone}
-                      placeholder='Số điện thoại'
+                      placeholder='Phone number '
                       required
                     />
                   </FormGroup>
                   <FormGroup>
-                    <Label for='website'>Mức giá</Label>
+                    <Label for='website'>Price</Label>
                     <Input
                       type='number'
                       id='price'
                       name='price'
                       onChange={handleChannelChange}
                       value={channelState.price}
-                      placeholder='Mức giá'
+                      placeholder='Price'
                       required
                     />
                   </FormGroup>
@@ -293,24 +289,24 @@ const Create = () => {
                 <br />
                 <div className='FileUpload'>
                   <form onSubmit={handleAvatarSubmit}>
-                    <Label for='picture'>Chọn ảnh...</Label>
+                    <Label for='picture'>Select picture...</Label>
                     <br />
                     <input type='file' onChange={handleAvatarChange} />
-                    <Button>Tải lên</Button>
+                    <Button>Upload</Button>
                     {avatar.loading ? <CircularProgress /> : null}
                     {avatar.submmited ? <CheckIcon /> : <p></p>}
                   </form>
                 </div>
                 <div className='form-button'>
                   <Button className='btn-neutral' color='primary'>
-                    Hủy
+                    Cancel
                   </Button>
                   <Button
                     color='primary'
                     disabled={!isAbleToSubmit}
                     onClick={handleChannelSubmit}
                   >
-                    Tạo
+                    Create
                   </Button>
                 </div>
               </CardBody>
