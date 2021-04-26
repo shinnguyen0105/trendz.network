@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery } from 'react-apollo';
+import { useQuery, useMutation } from 'react-apollo';
 
 import { useAuth } from '../contexts/userContext';
 import Router from 'next/router';
@@ -28,6 +28,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 import { REQUEST_GET_ALL_INFLUENCERS } from '../graphql/query/influencer/getInfluencers';
+import { CREATE_CAMPAIGN } from '../graphql/mutations/campaign/createCampaign';
 
 const { API_URL } = process.env;
 
@@ -311,16 +312,14 @@ const Create = () => {
     });
   };
 
+  const [
+    requestCreateCampaignMutation,
+    { loading: requestCreateCampaignLoading },
+  ] = useMutation(CREATE_CAMPAIGN);
+
   const createCampaign = async (campaign) => {
     try {
-      await axios({
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${state.jwt}`,
-        },
-        url: `${API_URL}/campaigns`,
-        data: campaign,
-      });
+      await requestCreateCampaignMutation({ variables: campaign });
     } catch (e) {
       console.log(e);
     }

@@ -44,8 +44,6 @@ const reducer = (state, { type, payload }) => {
 };
 /* END */
 
-//let token=''
-
 export const UserContextProvider = (props) => {
   let localState = null;
 
