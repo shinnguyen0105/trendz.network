@@ -20,10 +20,6 @@ const App = ({ Component, pageProps, apolloClient, router }) => {
         <title>Trendz Network</title>
 
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
-        <meta
-          http-equiv='Content-Security-Policy'
-          content='upgrade-insecure-requests'
-        ></meta>
         <link
           rel='stylesheet'
           href='https://fonts.googleapis.com/css?family=Staatliches'
