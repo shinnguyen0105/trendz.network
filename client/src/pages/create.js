@@ -319,19 +319,12 @@ const Create = () => {
     update(cache, { data: { createCampaign } }) {
       cache.modify({
         fields: {
-          campaigns(existingCampaignRefs = [], { readField }) {
-            const newCampaignRef = cache.writeFragment({
-              data: createCampaign,
+          campaigns(existingTodos = []) {
+            const newTodoRef = cache.writeFragment({
+              data: createCampaign.campaign,
               fragment: CREATE_CAMPAIGN_FRAGMENT,
             });
-            if (
-              existingCampaignRefs.some(
-                (ref) => readField('id', ref) === createCampaign.id
-              )
-            ) {
-              return existingCampaignRefs;
-            }
-            return [...existingCampaignRefs, newCampaignRef];
+            return [...existingTodos, newTodoRef];
           },
         },
       });
@@ -391,12 +384,8 @@ const Create = () => {
           user: state.user.id,
           category: channel.category,
           channels: [channel.id],
-          campaignTTL: [
-            {
-              open_datetime: campaignState.open_datetime,
-              close_datetime: campaignState.close_datetime,
-            },
-          ],
+          open_datetime: campaignState.open_datetime,
+          close_datetime: campaignState.close_datetime,
           approve: null,
           completed: null,
         };
@@ -410,7 +399,7 @@ const Create = () => {
       return enqueueSnackbar(errorLog(error.message), { variant: 'error' });
     }
   };
-
+  console.log(campaignState);
   const RenderChips = () => {
     if (selectedChannels.length > 0) {
       return (

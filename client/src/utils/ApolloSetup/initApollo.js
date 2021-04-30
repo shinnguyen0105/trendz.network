@@ -13,7 +13,7 @@ const create = (initialState, headers) => {
 
   const httpLink = new HttpLink({
     uri:
-      process.env.API_URL + '/graphql' || 'http://103.82.25.142:1337/graphql',
+      process.env.API_URL + '/graphql' || 'https://trendz.gcd-gw.com/graphql',
     onError: ({ networkError, graphQLErrors }) => {
       console.log('graphQLErrors', graphQLErrors);
       console.log('networkError', networkError);
