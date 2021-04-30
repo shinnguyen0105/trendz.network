@@ -17,6 +17,7 @@ export const REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID = gql`
         name
       }
       user {
+        id
         name
       }
       channels {
@@ -25,10 +26,12 @@ export const REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID = gql`
         }
       }
       picture {
+        id
         formats
         url
       }
       campaignTTL {
+        id
         open_datetime
         close_datetime
       }

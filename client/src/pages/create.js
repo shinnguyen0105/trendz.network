@@ -29,7 +29,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 import { REQUEST_GET_ALL_INFLUENCERS } from '../graphql/query/influencer/getInfluencers';
 import { CREATE_CAMPAIGN } from '../graphql/mutations/campaign/createCampaign';
-
+import { CREATE_CAMPAIGN_FRAGMENT } from '../graphql/fragments/newcampaign';
 const { API_URL } = process.env;
 
 const Create = () => {
@@ -44,8 +44,8 @@ const Create = () => {
     status: null,
     user: state.user.id,
     category: null,
-    open_datetime: new Date().toISOString(),
-    close_datetime: new Date().toISOString(),
+    open_datetime: new Date(),
+    close_datetime: new Date(),
     approve: null,
     completed: null,
   });
@@ -315,7 +315,28 @@ const Create = () => {
   const [
     requestCreateCampaignMutation,
     { loading: requestCreateCampaignLoading },
-  ] = useMutation(CREATE_CAMPAIGN);
+  ] = useMutation(CREATE_CAMPAIGN, {
+    update(cache, { data: { createCampaign } }) {
+      cache.modify({
+        fields: {
+          campaigns(existingCampaignRefs = [], { readField }) {
+            const newCampaignRef = cache.writeFragment({
+              data: createCampaign,
+              fragment: CREATE_CAMPAIGN_FRAGMENT,
+            });
+            if (
+              existingCampaignRefs.some(
+                (ref) => readField('id', ref) === createCampaign.id
+              )
+            ) {
+              return existingCampaignRefs;
+            }
+            return [...existingCampaignRefs, newCampaignRef];
+          },
+        },
+      });
+    },
+  });
 
   const createCampaign = async (campaign) => {
     try {
@@ -356,7 +377,7 @@ const Create = () => {
           end_date: new Date(campaignState.close_datetime).toLocaleDateString(
             'en-GB'
           ),
-          influencer_name: influencerName,
+          influencer_name: influencerName[0],
           to_email: influencer,
         };
         sendMailForInfluencer(infor);

@@ -198,9 +198,9 @@ const Customer = ({ campaign, cid }) => {
   };
 
   const handleChannelsChange = (id, name) => {
-    setTempCampaign((previousState) => {
-      return { ...previousState, channels: [id] };
-    });
+    // setTempCampaign((previousState) => {
+    //   return { ...previousState, channels: [id] };
+    // });
     setTempData((previousState) => {
       return {
         ...previousState,
@@ -237,6 +237,7 @@ const Customer = ({ campaign, cid }) => {
   };
 
   console.log('temp campaign: ', tempCampaign);
+
   function FetchCategories() {
     const { loading, error, data } = useQuery(REQUEST_GET_ALL_CATEGORIES);
     if (loading) return <Skeleton />;
@@ -312,20 +313,27 @@ const Customer = ({ campaign, cid }) => {
     requestUpdateCampaignMutation,
     { loading: requestUpdateCampaignLoading },
   ] = useMutation(REQUEST_UPDATE_CAMPAIGN, {
-    variables: {
-      id: cid,
-      title: tempCampaign.title,
-      content: tempCampaign.content,
-      category: parseInt(tempCampaign.category.id),
-      channels: tempCampaign.channels,
-      open_datetime: tempCampaign.campaignTTL.open_datetime,
-      close_datetime: tempCampaign.campaignTTL.close_datetime,
+    update(cache, { data: { updateCampaign } }) {
+      let channelsNew = updateCampaign.campaign.channels;
+      //console.log('cc neenee: ', channelsNew);
+      setTempCampaign((previousState) => {
+        return { ...previousState, channelsNew };
+      });
     },
   });
-
   const handleEditSubmit = async () => {
     try {
-      await requestUpdateCampaignMutation();
+      await requestUpdateCampaignMutation({
+        variables: {
+          id: cid,
+          title: tempCampaign.title,
+          content: tempCampaign.content,
+          category: parseInt(tempCampaign.category.id),
+          channels: parseInt(tempData.channelId),
+          open_datetime: tempCampaign.campaignTTL.open_datetime,
+          close_datetime: tempCampaign.campaignTTL.close_datetime,
+        },
+      });
       enqueueSnackbar('Successful editing!', {
         variant: 'success',
       });
