@@ -164,14 +164,14 @@ const Influencer = ({ campaign, cid }) => {
         return API_URL + campaign.picture[0].formats.medium.url;
       } else if (campaign.picture[0].formats.thumbnail !== undefined) {
         return API_URL + campaign.picture[0].formats.thumbnail.url;
-      } else return '/256x186.svg';
+      } else return API_URL + campaign.picture[0].url;
     } else return '/256x186.svg';
   };
   const renderUserImage = () => {
     if (campaign.user.avatar !== undefined) {
-      if (campaign.user.avatar.formats !== undefined) {
+      if (campaign.user.avatar.formats.thumbnail !== undefined) {
         return API_URL + campaign.user.avatar.formats.thumbnail.url;
-      } else return '/256x186.svg';
+      } else return API_URL + campaign.user.avatar.url;
     } else return '/256x186.svg';
   };
   const renderStatus = (approvalStatus, influencerStatus, status) => {
@@ -603,7 +603,7 @@ const Influencer = ({ campaign, cid }) => {
                     </TimelineSeparator>
                     <TimelineContent>
                       <Paper elevation={3} className={classes.paper}>
-                        <s>Sent request to Influencer:</s>
+                        <p>Sent request to Influencer:</p>
                         <p>Influencer is reviewing the request</p>
                       </Paper>
                     </TimelineContent>

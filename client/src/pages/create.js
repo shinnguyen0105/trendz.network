@@ -319,12 +319,12 @@ const Create = () => {
     update(cache, { data: { createCampaign } }) {
       cache.modify({
         fields: {
-          campaigns(existingTodos = []) {
-            const newTodoRef = cache.writeFragment({
+          campaigns(existingCampaigns = []) {
+            const newCampaignRef = cache.writeFragment({
               data: createCampaign.campaign,
               fragment: CREATE_CAMPAIGN_FRAGMENT,
             });
-            return [...existingTodos, newTodoRef];
+            return [...existingCampaigns, newCampaignRef];
           },
         },
       });

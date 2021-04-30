@@ -26,6 +26,7 @@ import CheckIcon from '@material-ui/icons/Check';
 
 import { CREATE_CHANNEL } from '../graphql/mutations/channel/createChannel';
 import { REQUEST_GET_ALL_CATEGORIES } from '../graphql/query/category/getCategory';
+import { CREATE_CHANNEL_FRAGMENT } from '../graphql/fragments/newchannel';
 import { useMutation, useQuery } from 'react-apollo';
 
 const { API_URL } = process.env;
@@ -93,8 +94,22 @@ const Create = () => {
       return { ...previousState, description: content };
     });
   };
-  console.log(channelState);
-  const [requestCreateChannelMutation] = useMutation(CREATE_CHANNEL);
+  const [requestCreateChannelMutation] = useMutation(CREATE_CHANNEL, {
+    update(cache, { data: { createChannel } }) {
+      cache.modify({
+        fields: {
+          campaigns(existingChannels = []) {
+            const newChannelRef = cache.writeFragment({
+              data: createChannel.channel,
+              fragment: CREATE_CHANNEL_FRAGMENT,
+            });
+            return [...existingChannels, newChannelRef];
+          },
+        },
+      });
+    },
+  });
+
   const handleChannelSubmit = async () => {
     try {
       requestCreateChannelMutation({
