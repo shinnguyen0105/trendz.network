@@ -307,12 +307,12 @@ const Profile = () => {
                   />
                   <h3 className='title'>{state.user.username}</h3>
                   <Button color='primary' onClick={toggleAvatarModal}>
-                    Update Profile
+                    Update Avatar
                   </Button>
                   <Modal isOpen={avatarModal} toggle={toggleAvatarModal}>
                     <div className='modal-header'>
                       <h4 className='modal-title' id='avatarModal'>
-                        <strong>Update Profile</strong>
+                        <strong>Update Avatar</strong>
                       </h4>
                       <button
                         type='button'

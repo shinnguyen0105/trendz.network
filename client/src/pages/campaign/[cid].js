@@ -77,6 +77,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
+  if (!params) return null;
   const cid = params.cid;
   return {
     props: { cid },
