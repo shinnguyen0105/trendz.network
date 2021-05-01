@@ -308,7 +308,6 @@ const Customer = ({ campaign, cid }) => {
     );
   }
 
-  const [requestDeletePostMutation] = useMutation(REQUEST_DELETE_CAMPAIGN);
   const [
     requestUpdateCampaignMutation,
     { loading: requestUpdateCampaignLoading },
@@ -346,6 +345,22 @@ const Customer = ({ campaign, cid }) => {
   };
 
   //creator delete campaign
+  const [requestDeletePostMutation] = useMutation(REQUEST_DELETE_CAMPAIGN, {
+    update(cache, { data: { deleteCampaign } }) {
+      cache.modify({
+        fields: {
+          campaigns(existingCampaigns, { readField }) {
+            const newCampaigns = existingCampaigns.filter(
+              (postRef) =>
+                readField('id', postRef) !== deleteCampaign.campaign.id
+            );
+            return newCampaigns;
+          },
+        },
+      });
+    },
+  });
+
   const handleDelete = async () => {
     try {
       await requestDeletePostMutation({
