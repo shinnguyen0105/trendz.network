@@ -73,7 +73,7 @@ export async function getStaticPaths() {
   const paths = campaignIds.map((campaignId) => ({
     params: { cid: campaignId.id.toString() },
   }));
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 }
 
 export async function getStaticProps({ params }) {
