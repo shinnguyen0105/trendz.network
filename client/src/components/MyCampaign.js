@@ -66,6 +66,13 @@ const MyCampaign = ({ data, categ, search }) => {
                     <strong>Create by:</strong> {campaign.user.name}
                   </CardSubtitle>
                   <CardSubtitle>
+                    <strong>Price:</strong>{' '}
+                    {campaign.price.toLocaleString('vi-VN', {
+                      style: 'currency',
+                      currency: 'VND',
+                    })}
+                  </CardSubtitle>
+                  <CardSubtitle>
                     <strong>Status:</strong> {renderStatus(campaign.status)}
                   </CardSubtitle>
                   <CardSubtitle>
@@ -87,9 +94,14 @@ const MyCampaign = ({ data, categ, search }) => {
                     </small>
                   </CardSubtitle>
 
-                  <Link href='/campaign/[cid]' as={`/campaign/${campaign.id}`}>
-                    <Button>Details</Button>
-                  </Link>
+                  <CardSubtitle className='text-center'>
+                    <Link
+                      href='/campaign/[cid]'
+                      as={`/campaign/${campaign.id}`}
+                    >
+                      <Button>Details</Button>
+                    </Link>
+                  </CardSubtitle>
                 </CardBody>
               </Card>
             </Col>

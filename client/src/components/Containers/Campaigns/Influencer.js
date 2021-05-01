@@ -374,6 +374,17 @@ const Influencer = ({ campaign, cid }) => {
                         ''
                       )}
                       <CardSubtitle>
+                        <strong>Price:</strong>
+                      </CardSubtitle>
+                      <CardText>
+                        {campaign.price !== null
+                          ? campaign.price.toLocaleString('vi-VN', {
+                              style: 'currency',
+                              currency: 'VND',
+                            })
+                          : ''}
+                      </CardText>
+                      <CardSubtitle>
                         <strong>Status:</strong>
                       </CardSubtitle>
                       <CardText>
@@ -387,20 +398,18 @@ const Influencer = ({ campaign, cid }) => {
                         <strong>Create by:</strong>
                       </CardSubtitle>
                       <CardText>
-                        {campaign.user !== undefined
-                          ? campaign.user.username
-                          : ''}
+                        {campaign.user !== undefined ? campaign.user.name : ''}
                       </CardText>
                       <CardSubtitle>
                         <strong>Start date - End date:</strong>
                       </CardSubtitle>
                       {campaign.campaignTTL !== undefined ? (
                         <CardText>
-                          {'Từ ' +
+                          {'From ' +
                             new Date(
                               campaign.campaignTTL.open_datetime
                             ).toLocaleDateString('en-GB') +
-                            ' - Đến ' +
+                            ' - To ' +
                             new Date(
                               campaign.campaignTTL.close_datetime
                             ).toLocaleDateString('en-GB')}

@@ -2,20 +2,22 @@ import gql from 'graphql-tag';
 
 export const CREATE_CAMPAIGN = gql`
   mutation createCampaign(
-    $title: String
-    $content: String
-    $picture: [ID]
-    $user: ID
-    $category: ID
-    $channels: [ID]
-    $open_datetime: DateTime
-    $close_datetime: DateTime
+    $title: String!
+    $content: String!
+    $price: Long!
+    $picture: [ID!]
+    $user: ID!
+    $category: ID!
+    $channels: [ID!]
+    $open_datetime: DateTime!
+    $close_datetime: DateTime!
   ) {
     createCampaign(
       input: {
         data: {
           title: $title
           content: $content
+          price: $price
           picture: $picture
           user: $user
           status: null
@@ -35,7 +37,9 @@ export const CREATE_CAMPAIGN = gql`
         title
         status
         completed
+        influencerCompleted
         approve
+        price
         category {
           id
           name

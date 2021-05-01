@@ -6,6 +6,7 @@ export const REQUEST_UPDATE_CAMPAIGN = gql`
     $title: String
     $content: String
     $category: ID
+    $price: Long
     $channels: [ID]
     $open_datetime: DateTime
     $close_datetime: DateTime
@@ -18,6 +19,7 @@ export const REQUEST_UPDATE_CAMPAIGN = gql`
           content: $content
           category: $category
           channels: $channels
+          price: $price
           campaignTTL: {
             open_datetime: $open_datetime
             close_datetime: $close_datetime
@@ -29,9 +31,11 @@ export const REQUEST_UPDATE_CAMPAIGN = gql`
         id
         title
         content
+        price
         status
         completed
         approve
+        price
         note
         category {
           id

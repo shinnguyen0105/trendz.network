@@ -16,7 +16,7 @@ import {
 
 const { API_URL } = process.env;
 
-const DashboardChildren = ({ data, categ, search, roleType }) => {
+const ListCampaignsChild = ({ data, categ, search, roleType }) => {
   function renderStatus(approvalStatus, influencerStatus, status) {
     if ((roleType = 'Employee')) {
       if (approvalStatus == null) {
@@ -95,10 +95,17 @@ const DashboardChildren = ({ data, categ, search, roleType }) => {
                 <CardSubtitle>
                   <strong>Create by:</strong>{' '}
                   {campaign.user !== null ? (
-                    campaign.user.username
+                    campaign.user.name
                   ) : (
                     <Skeleton variant='text' />
                   )}
+                </CardSubtitle>
+                <CardSubtitle>
+                  <strong>Price:</strong>{' '}
+                  {campaign.price.toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                  })}
                 </CardSubtitle>
                 <CardSubtitle>
                   <strong>Status:</strong>{' '}
@@ -126,9 +133,11 @@ const DashboardChildren = ({ data, categ, search, roleType }) => {
                     )}
                   </small>
                 </CardSubtitle>
-                <Link href='/campaign/[cid]' as={`/campaign/${campaign.id}`}>
-                  <Button>Details</Button>
-                </Link>
+                <CardSubtitle className='text-center'>
+                  <Link href='/campaign/[cid]' as={`/campaign/${campaign.id}`}>
+                    <Button>Details</Button>
+                  </Link>
+                </CardSubtitle>
               </CardBody>
             </Card>
           </Col>
@@ -140,4 +149,4 @@ const DashboardChildren = ({ data, categ, search, roleType }) => {
   );
 };
 
-export default DashboardChildren;
+export default ListCampaignsChild;

@@ -10,7 +10,7 @@ import { REQUEST_GET_ALL_CATEGORIES_CHANNELS } from '../../../graphql/query/cate
 import { REQUEST_UPDATE_CAMPAIGN } from '../../../graphql/mutations/campaign/updateCampaign';
 import { REQUEST_DELETE_CAMPAIGN } from '../../../graphql/mutations/campaign/deleteCampaign';
 import { REQUEST_SEND_CHAT_BY_CUSTOMER } from '../../../graphql/mutations/message/sendChat';
-
+import { UPDATE_CAMPAIGN_FRAGMENT } from '../../../graphql/fragments/editcampaign';
 import Datetime from 'react-datetime';
 import {
   Button,
@@ -95,8 +95,11 @@ const Customer = ({ campaign, cid }) => {
   const [tempData, setTempData] = useState({
     categoryId: '',
     categoryName: '',
-    channelId: '',
+    channelId: tempCampaign.channels[0].id,
     channelName: tempCampaign.channels[0].name,
+    open_date: tempCampaign.campaignTTL.open_datetime,
+    close_date: tempCampaign.campaignTTL.close_datetime,
+    price: tempCampaign.price,
   });
 
   const [isAbleToSend, setIsAbleToSend] = useState(true);
@@ -198,9 +201,6 @@ const Customer = ({ campaign, cid }) => {
   };
 
   const handleChannelsChange = (id, name) => {
-    // setTempCampaign((previousState) => {
-    //   return { ...previousState, channels: [id] };
-    // });
     setTempData((previousState) => {
       return {
         ...previousState,
@@ -307,16 +307,67 @@ const Customer = ({ campaign, cid }) => {
       </>
     );
   }
+  //useEffect to fetch price of channel to cacular price for campaign
+  useEffect(() => {
+    if (
+      tempData.channelId !== tempCampaign.channels[0].id ||
+      tempData.open_date !== tempCampaign.campaignTTL.open_datetime ||
+      tempData.close_date !== tempCampaign.campaignTTL.close_datetime
+    ) {
+      const fetchPriceChannel = async () => {
+        const url = API_URL + '/channels?_where[id]=' + tempData.channelId;
+        try {
+          const get_resolve = await axios.get(url, {
+            headers: {
+              Authorization: `Bearer ${state.jwt}`,
+            },
+          });
+          var start_new = new Date(tempCampaign.campaignTTL.open_datetime);
+          var end_new = new Date(tempCampaign.campaignTTL.close_datetime);
+          var difference_new = Math.abs(end_new - start_new);
+          var totalDays_new = difference_new / (1000 * 3600 * 24);
+          var priceCampaign = totalDays_new * get_resolve.data[0].price;
+          setTempData((prev) => {
+            return {
+              ...prev,
+              price: priceCampaign,
+            };
+          });
+        } catch (error) {
+          console.log('Error: ', error.message);
+        }
+      };
+      fetchPriceChannel();
+      console.log(tempData.price);
+    }
+  }, [
+    tempData.channelId,
+    tempCampaign.campaignTTL.open_datetime,
+    tempCampaign.campaignTTL.close_datetime,
+  ]);
 
   const [
     requestUpdateCampaignMutation,
     { loading: requestUpdateCampaignLoading },
   ] = useMutation(REQUEST_UPDATE_CAMPAIGN, {
+    // update(cache, { data: { updateCampaign } }) {
+    //   let channelsNew = updateCampaign.campaign.channels;
+    //   setTempCampaign((previousState) => {
+    //     return { ...previousState, channelsNew };
+    //   });
+    // },
     update(cache, { data: { updateCampaign } }) {
-      let channelsNew = updateCampaign.campaign.channels;
-      //console.log('cc neenee: ', channelsNew);
-      setTempCampaign((previousState) => {
-        return { ...previousState, channelsNew };
+      cache.modify({
+        id: cache.identify(cid),
+        fields: {
+          campaign() {
+            const newCampaignRef = cache.writeFragment({
+              data: updateCampaign.campaign,
+              fragment: UPDATE_CAMPAIGN_FRAGMENT,
+            });
+            return newCampaignRef;
+          },
+        },
       });
     },
   });
@@ -329,6 +380,7 @@ const Customer = ({ campaign, cid }) => {
           content: tempCampaign.content,
           category: parseInt(tempCampaign.category.id),
           channels: parseInt(tempData.channelId),
+          price: tempData.price,
           open_datetime: tempCampaign.campaignTTL.open_datetime,
           close_datetime: tempCampaign.campaignTTL.close_datetime,
         },
@@ -652,6 +704,17 @@ const Customer = ({ campaign, cid }) => {
                     ) : (
                       ''
                     )}
+                    <CardSubtitle>
+                      <strong>Price:</strong>
+                    </CardSubtitle>
+                    <CardText>
+                      {campaign.price !== null
+                        ? campaign.price.toLocaleString('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND',
+                          })
+                        : ''}
+                    </CardText>
                     <CardSubtitle>
                       <strong>Status:</strong>
                     </CardSubtitle>

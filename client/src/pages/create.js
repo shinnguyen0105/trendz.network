@@ -208,7 +208,6 @@ const Create = () => {
         channelName: '',
       };
     });
-    console.log(allChannels);
     const FetchInfluencerEmail = async () => {
       const url = API_URL + '/channels/' + tempData.channelId;
       try {
@@ -263,11 +262,6 @@ const Create = () => {
             return email != temp;
           })
         );
-        // console.log(
-        //   emailInfluencer.filter(function (email) {
-        //     return email != temp;
-        //   })
-        // );
       } catch (error) {
         if (axios.isCancel(error) && error.message !== undefined) {
           console.log('Error: ', error.message);
@@ -311,7 +305,29 @@ const Create = () => {
       };
     });
   };
-
+  const RenderPrice = () => {
+    var price = 0;
+    var start = new Date(campaignState.open_datetime);
+    var end = new Date(campaignState.close_datetime);
+    var difference = Math.abs(end - start);
+    var totalDays = difference / (1000 * 3600 * 24);
+    for (let i = 0; i < selectedChannels.length; i++) {
+      price += selectedChannels[i].price * totalDays;
+    }
+    return (
+      <p>
+        Total Price:{' '}
+        {price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+      </p>
+    );
+  };
+  const CacularPriceForEachChannel = (priceChannel, startdate, enddate) => {
+    var start = new Date(startdate);
+    var end = new Date(enddate);
+    var difference = Math.abs(end - start);
+    var totalDays = difference / (1000 * 3600 * 24);
+    return priceChannel * totalDays;
+  };
   const [
     requestCreateCampaignMutation,
     { loading: requestCreateCampaignLoading },
@@ -381,6 +397,11 @@ const Create = () => {
           content: campaignState.content,
           picture: [campaignState.picture[0]],
           status: null,
+          price: CacularPriceForEachChannel(
+            channel.price,
+            campaignState.open_datetime,
+            campaignState.close_datetime
+          ),
           user: state.user.id,
           category: channel.category,
           channels: [channel.id],
@@ -400,6 +421,8 @@ const Create = () => {
     }
   };
   console.log(campaignState);
+  console.log(allChannels);
+  console.log(selectedChannels);
   const RenderChips = () => {
     if (selectedChannels.length > 0) {
       return (
@@ -761,6 +784,7 @@ const Create = () => {
                   </form>
                 </div>
                 <div className='form-button'>
+                  <RenderPrice />
                   <Button className='btn-neutral' color='primary'>
                     Cancel
                   </Button>

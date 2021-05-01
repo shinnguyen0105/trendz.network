@@ -22,7 +22,7 @@ import {
 } from 'reactstrap';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-import DashboardChildren from '../../ListCampaign';
+import ListCampaignsChild from '../../ListCampaign';
 import ListChannel from '../../ListChannel';
 
 import { sortBy } from '../../../utils/filters/sortBy';
@@ -153,7 +153,7 @@ const EmployeeDashboard = () => {
     return (
       <>
         <TabPane tabId='vertical2'>
-          <DashboardChildren
+          <ListCampaignsChild
             data={onhold}
             categ={filterItems.category}
             search={filterItems.search}
@@ -161,7 +161,7 @@ const EmployeeDashboard = () => {
           />
         </TabPane>
         <TabPane tabId='vertical3'>
-          <DashboardChildren
+          <ListCampaignsChild
             data={approve}
             categ={filterItems.category}
             search={filterItems.search}
@@ -169,7 +169,7 @@ const EmployeeDashboard = () => {
           />
         </TabPane>
         <TabPane tabId='vertical4'>
-          <DashboardChildren
+          <ListCampaignsChild
             data={unapprove}
             categ={filterItems.category}
             search={filterItems.search}
@@ -177,7 +177,7 @@ const EmployeeDashboard = () => {
           />
         </TabPane>
         <TabPane tabId='vertical5'>
-          <DashboardChildren
+          <ListCampaignsChild
             data={influencerCompleted}
             categ={filterItems.category}
             search={filterItems.search}
@@ -185,7 +185,7 @@ const EmployeeDashboard = () => {
           />
         </TabPane>
         <TabPane tabId='vertical6'>
-          <DashboardChildren
+          <ListCampaignsChild
             data={completed}
             categ={filterItems.category}
             search={filterItems.search}

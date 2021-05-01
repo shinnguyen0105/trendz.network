@@ -28,7 +28,7 @@ import { REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID } from '../../../graphql/query/c
 import { REQUEST_GET_ALL_CATEGORIES } from '../../../graphql/query/category/getCategory';
 import { REQUEST_GET_MY_CHANNELS } from '../../../graphql/query/channel/getChannels';
 
-import DashboardChildren from '../../ListCampaign';
+import ListCampaignsChild from '../../ListCampaign';
 import ListChannel from '../../ListChannel';
 
 const InfluencerDashboard = () => {
@@ -159,28 +159,28 @@ const InfluencerDashboard = () => {
     return (
       <>
         <TabPane tabId='vertical1'>
-          <DashboardChildren
+          <ListCampaignsChild
             data={onhold}
             categ={filterItems.category}
             search={filterItems.search}
           />
         </TabPane>
         <TabPane tabId='vertical2'>
-          <DashboardChildren
+          <ListCampaignsChild
             data={approve}
             categ={filterItems.category}
             search={filterItems.search}
           />
         </TabPane>
         <TabPane tabId='vertical3'>
-          <DashboardChildren
+          <ListCampaignsChild
             data={unapprove}
             categ={filterItems.category}
             search={filterItems.search}
           />
         </TabPane>
         <TabPane tabId='vertical4'>
-          <DashboardChildren
+          <ListCampaignsChild
             data={completed}
             categ={filterItems.category}
             search={filterItems.search}

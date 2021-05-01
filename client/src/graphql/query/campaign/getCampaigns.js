@@ -12,6 +12,7 @@ export const REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID = gql`
       status
       completed
       approve
+      price
       category {
         id
         name
@@ -46,6 +47,7 @@ export const REQUEST_GET_MY_CAMPAIGNS = gql`
       title
       status
       completed
+      price
       approve
       category {
         id
@@ -87,6 +89,7 @@ export const REQUEST_GET_ALL_CAMPAIGNS = gql`
       }
       status
       completed
+      price
       approve
       influencerCompleted
       picture {
@@ -123,6 +126,7 @@ export const REQUEST_GET_DETAIL_CAMPAIGNS_BY_ID = gql`
       content
       status
       completed
+      price
       approve
       note
       influencerCompleted
