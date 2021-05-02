@@ -350,12 +350,6 @@ const Customer = ({ campaign, cid }) => {
     requestUpdateCampaignMutation,
     { loading: requestUpdateCampaignLoading },
   ] = useMutation(REQUEST_UPDATE_CAMPAIGN, {
-    // update(cache, { data: { updateCampaign } }) {
-    //   let channelsNew = updateCampaign.campaign.channels;
-    //   setTempCampaign((previousState) => {
-    //     return { ...previousState, channelsNew };
-    //   });
-    // },
     update(cache, { data: { updateCampaign } }) {
       cache.modify({
         id: cache.identify(cid),

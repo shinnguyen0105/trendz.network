@@ -72,7 +72,6 @@ const Influencer = ({ campaign, cid }) => {
   const [navState, setNav] = useState({
     vertical: 1,
   });
-  const [statusChange, setStatusChange] = useState();
   const { enqueueSnackbar } = useSnackbar();
 
   const [chatModal, setChatModal] = useState(false);
@@ -115,20 +114,18 @@ const Influencer = ({ campaign, cid }) => {
     { loading: requestUpdateCampaignLoading },
   ] = useMutation(REQUEST_UPDATE_CAMPAIGN_INFLUENCER);
 
-  const handleInfluencerApproval = async (approved) => {
+  const handleInfluencerApproval = async (status) => {
     try {
-      await setStatusChange(approved);
       await requestUpdateCampaignMutation({
         variables: {
           id: cid,
-          status: statusChange,
+          status: status,
           InfluencerCompleted: false,
         },
       });
-      if (approved) {
+      if (status) {
         enqueueSnackbar('Approved campaign!', { variant: 'success' });
       } else enqueueSnackbar('Rejected the campaign!', { variant: 'success' });
-      //Router.push('/dashboard');
     } catch (e) {
       console.log(e);
       enqueueSnackbar('An error has occurred, please try again!', {

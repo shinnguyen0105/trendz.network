@@ -79,7 +79,6 @@ const Employee = ({ campaign, cid }) => {
     vertical: 1,
   });
 
-  const [employeeApprove, setEmployeeApprove] = useState();
   const [note, setNote] = useState({
     note: null,
   });
@@ -110,20 +109,35 @@ const Employee = ({ campaign, cid }) => {
   };
 
   const [requestUpdateCampaignMutation] = useMutation(
-    REQUEST_UPDATE_CAMPAIGN_BY_EMPLOYEE
+    REQUEST_UPDATE_CAMPAIGN_BY_EMPLOYEE,
+    {
+      update(cache, { data: { updateCampaign } }) {
+        cache.modify({
+          id: cache.identify(cid),
+          fields: {
+            campaign() {
+              const newCampaignRef = cache.writeFragment({
+                data: updateCampaign.campaign,
+                fragment: UPDATE_CAMPAIGN_FRAGMENT,
+              });
+              return newCampaignRef;
+            },
+          },
+        });
+      },
+    }
   );
 
   //employee approve/unapprove campaign
-  const handleEmployeeApproval = async (approved) => {
-    await setEmployeeApprove(approved);
+  const handleEmployeeApproval = async (status) => {
     await requestUpdateCampaignMutation({
       variables: {
         id: cid,
-        approve: employeeApprove,
+        approve: status,
         notee: note.note,
       },
     });
-    if (approved) {
+    if (status) {
       enqueueSnackbar('Approved campaign!', { variant: 'success' });
     } else enqueueSnackbar('Rejected the campaign!', { variant: 'warning' });
     //Router.push('/dashboard');
