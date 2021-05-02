@@ -1,22 +1,22 @@
 export const campaignStatuses = [
   {
     id: 1,
-    status: 'Đang chờ kiểm duyệt',
+    status: 'Waiting for Employee approve',
   },
   {
     id: 2,
-    status: 'Đang chờ Influencer xác nhận',
+    status: 'Waiting for Influencer approve',
   },
   {
     id: 3,
-    status: 'Influencer đã từ chối',
+    status: 'Influencer rejected',
   },
   {
     id: 4,
-    status: 'Đang được thực hiện',
+    status: 'Initiating',
   },
   {
     id: 5,
-    status: 'Đã hoàn thành',
+    status: 'Completed',
   },
 ];

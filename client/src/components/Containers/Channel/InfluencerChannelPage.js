@@ -21,7 +21,6 @@ const { API_URL } = process.env;
 
 const InfluencerChannelPage = ({ chid, channel }) => {
   const { enqueueSnackbar } = useSnackbar();
-  const [tempChannel, setTempChannel] = useState();
   const [statusModal, setStatusModal] = useState(false);
   const toggleStatusModal = () => {
     setStatusModal(!statusModal);
@@ -30,15 +29,30 @@ const InfluencerChannelPage = ({ chid, channel }) => {
   const [requestUpdateChannelStatusMutation] = useMutation(
     UPDATE_CHANNEL_BY_INFLUENCER,
     {
-      variables: {
-        id: chid,
-        status: tempChannel,
+      update(cache, { data: { updateChannel } }) {
+        cache.modify({
+          id: cache.identify(chid),
+          fields: {
+            channel() {
+              const newChannelRef = cache.writeFragment({
+                data: updateChannel.channel,
+                fragment: UPDATE_CHANNEL_FRAGMENT,
+              });
+              return newChannelRef;
+            },
+          },
+        });
       },
     }
   );
-  const handleChangeStatusChannel = async () => {
+  const handleChangeStatusChannel = async (status) => {
     try {
-      await requestUpdateChannelStatusMutation();
+      await requestUpdateChannelStatusMutation({
+        variables: {
+          id: chid,
+          status: status,
+        },
+      });
     } catch (e) {
       console.log(e);
     }
@@ -101,7 +115,7 @@ const InfluencerChannelPage = ({ chid, channel }) => {
               color='primary'
               onClick={() => {
                 try {
-                  handleChangeStatusChannel();
+                  handleChangeStatusChannel(false);
                   enqueueSnackbar('Channel has stopped working!', {
                     variant: 'success',
                   });
@@ -120,7 +134,7 @@ const InfluencerChannelPage = ({ chid, channel }) => {
               color='primary'
               onClick={() => {
                 try {
-                  handleChangeStatusChannel();
+                  handleChangeStatusChannel(true);
                   enqueueSnackbar('Channel is activated!', {
                     variant: 'success',
                   });
@@ -160,9 +174,7 @@ const InfluencerChannelPage = ({ chid, channel }) => {
       </CardSubtitle>
       {channel.category !== undefined ? (
         <CardText>
-          {channel.category.name}
-          <br />
-          {channel.category.description}
+          {channel.category.name} - {channel.category.description}
         </CardText>
       ) : (
         ''
@@ -178,7 +190,12 @@ const InfluencerChannelPage = ({ chid, channel }) => {
       <CardSubtitle>
         <strong>Price:</strong>
       </CardSubtitle>
-      <CardText>{channel.price}</CardText>
+      <CardText>
+        {channel.price.toLocaleString('vi-VN', {
+          style: 'currency',
+          currency: 'VND',
+        })}
+      </CardText>
       <CardSubtitle>
         <strong>Status:</strong>
       </CardSubtitle>
@@ -211,7 +228,6 @@ const InfluencerChannelPage = ({ chid, channel }) => {
             color='danger'
             onClick={() => {
               toggleStatusModal();
-              setTempChannel(false);
             }}
           >
             Deactivate
@@ -224,7 +240,6 @@ const InfluencerChannelPage = ({ chid, channel }) => {
             color='primary'
             onClick={() => {
               toggleStatusModal();
-              setTempChannel(true);
             }}
           >
             Active

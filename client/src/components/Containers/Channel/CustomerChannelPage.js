@@ -75,7 +75,12 @@ const CustomerChannelPage = ({ channel }) => {
       <CardSubtitle>
         <strong>Price:</strong>
       </CardSubtitle>
-      <CardText>{channel.price}</CardText>
+      <CardText>
+        {channel.price.toLocaleString('vi-VN', {
+          style: 'currency',
+          currency: 'VND',
+        })}
+      </CardText>
       <CardSubtitle>
         <strong>Status:</strong>
       </CardSubtitle>

@@ -26,7 +26,7 @@ const ListCampaignsChild = ({ data, categ, search, roleType }) => {
         return 'Not licensed';
       }
       if (approvalStatus && influencerStatus == null) {
-        return 'Đã được cấp phép - Đang chờ Influencer approve';
+        return 'Licensed - Waiting for Influencer approve';
       }
       if (approvalStatus && !influencerStatus) {
         return 'Licensed - Influencer declined';

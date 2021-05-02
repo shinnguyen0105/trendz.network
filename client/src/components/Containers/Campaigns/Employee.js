@@ -450,9 +450,7 @@ const Employee = ({ campaign, cid }) => {
                       <strong>Create by:</strong>
                     </CardSubtitle>
                     <CardText>
-                      {campaign.user !== undefined
-                        ? campaign.user.username
-                        : ''}
+                      {campaign.user !== undefined ? campaign.user.name : ''}
                     </CardText>
                     <CardSubtitle>
                       <strong>Start date - End date:</strong>

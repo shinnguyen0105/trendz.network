@@ -18,13 +18,12 @@ import Router from 'next/router';
 
 import { useMutation } from 'react-apollo';
 import { UPDATE_CHANNEL_BY_EMPLOYEE } from '../../../graphql/mutations/channel/updateChannel';
+import { UPDATE_CHANNEL_FRAGMENT } from '../../../graphql/fragments/editchannel';
 
 const { API_URL } = process.env;
 
 const EmployeeChannelPage = ({ chid, channel }) => {
   const { enqueueSnackbar } = useSnackbar();
-
-  const [employeeStatus, setEmployeeStatus] = useState();
 
   const [approveModal, setApproveModal] = useState(false);
   const toggleApproveModal = () => {
@@ -50,22 +49,35 @@ const EmployeeChannelPage = ({ chid, channel }) => {
   const [requestUpdateChannelByEmployeeMutation] = useMutation(
     UPDATE_CHANNEL_BY_EMPLOYEE,
     {
-      variables: {
-        id: chid,
-        status: employeeStatus,
-        employeeNote: note.note,
+      update(cache, { data: { updateChannel } }) {
+        cache.modify({
+          id: cache.identify(chid),
+          fields: {
+            channel() {
+              const newChannelRef = cache.writeFragment({
+                data: updateChannel.channel,
+                fragment: UPDATE_CHANNEL_FRAGMENT,
+              });
+              return newChannelRef;
+            },
+          },
+        });
       },
     }
   );
 
-  const handleEmployeeAcceptChannel = async (approved) => {
-    await setEmployeeStatus(approved);
+  const handleEmployeeAcceptChannel = async (status) => {
     try {
-      await requestUpdateChannelByEmployeeMutation();
-      if (approved) {
+      await requestUpdateChannelByEmployeeMutation({
+        variables: {
+          id: chid,
+          status: status,
+          employeeNote: note.note,
+        },
+      });
+      if (status) {
         enqueueSnackbar('Approved channel!', { variant: 'success' });
       } else enqueueSnackbar('Rejected the channel!', { variant: 'success' });
-      Router.push('/dashboard');
     } catch (e) {
       console.log(e);
       enqueueSnackbar('An error has occurred, please try again!', {
@@ -267,7 +279,12 @@ const EmployeeChannelPage = ({ chid, channel }) => {
       <CardSubtitle>
         <strong>Price:</strong>
       </CardSubtitle>
-      <CardText>{channel.price}</CardText>
+      <CardText>
+        {channel.price.toLocaleString('vi-VN', {
+          style: 'currency',
+          currency: 'VND',
+        })}
+      </CardText>
       <CardSubtitle>
         <strong>Status:</strong>
       </CardSubtitle>

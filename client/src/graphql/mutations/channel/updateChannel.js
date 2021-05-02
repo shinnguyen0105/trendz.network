@@ -2,9 +2,7 @@ import gql from 'graphql-tag';
 
 export const UPDATE_CHANNEL_BY_INFLUENCER = gql`
   mutation updateChannelByInfluencer($id: ID!, $status: Boolean) {
-    updateChannel(
-      input: { where: { id: $id }, data: { employeeConfirm: $status } }
-    ) {
+    updateChannel(input: { where: { id: $id }, data: { status: $status } }) {
       channel {
         id
         name

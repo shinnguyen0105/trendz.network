@@ -19,13 +19,12 @@ import Router from 'next/router';
 
 import { useMutation } from 'react-apollo';
 import { UPDATE_CHANNEL_BY_ADMIN } from '../../../graphql/mutations/channel/updateChannel';
+import { UPDATE_CHANNEL_FRAGMENT } from '../../../graphql/fragments/editchannel';
+
 const { API_URL } = process.env;
 
 const AdminCampaignPage = ({ chid, channel }) => {
   const { enqueueSnackbar } = useSnackbar();
-
-  const [adminConfirmTemp, setAdminConfirmTemp] = useState();
-  const [statusTemp, setStatusTemp] = useState();
 
   const [approveModal, setApproveModal] = useState(false);
   const [unApproveModal, setUnApproveModal] = useState(false);
@@ -51,24 +50,36 @@ const AdminCampaignPage = ({ chid, channel }) => {
   const [requestUpdateChannelByAdminMutation] = useMutation(
     UPDATE_CHANNEL_BY_ADMIN,
     {
-      variables: {
-        id: chid,
-        adminConfirm: adminConfirmTemp,
-        status: statusTemp,
-        adminNote: note.note,
+      update(cache, { data: { updateChannel } }) {
+        cache.modify({
+          id: cache.identify(chid),
+          fields: {
+            channel() {
+              const newChannelRef = cache.writeFragment({
+                data: updateChannel.channel,
+                fragment: UPDATE_CHANNEL_FRAGMENT,
+              });
+              return newChannelRef;
+            },
+          },
+        });
       },
     }
   );
 
-  const handleAdminAcceptChannel = async (approved) => {
-    await setAdminConfirmTemp(approved);
-    await setStatusTemp(approved);
+  const handleAdminAcceptChannel = async (status) => {
     try {
-      await requestUpdateChannelByAdminMutation();
-      if (approved) {
+      await requestUpdateChannelByAdminMutation({
+        variables: {
+          id: chid,
+          adminConfirm: status,
+          status: status,
+          adminNote: note.note,
+        },
+      });
+      if (status) {
         enqueueSnackbar('Approved channel!', { variant: 'success' });
       } else enqueueSnackbar('Rejected the channel!', { variant: 'success' });
-      Router.push('/dashboard');
     } catch (e) {
       console.log(e);
       enqueueSnackbar('An error has occurred, please try again!', {
@@ -270,7 +281,12 @@ const AdminCampaignPage = ({ chid, channel }) => {
       <CardSubtitle>
         <strong>Price:</strong>
       </CardSubtitle>
-      <CardText>{channel.price}</CardText>
+      <CardText>
+        {channel.price.toLocaleString('vi-VN', {
+          style: 'currency',
+          currency: 'VND',
+        })}
+      </CardText>
       <CardSubtitle>
         <strong>Status:</strong>
       </CardSubtitle>

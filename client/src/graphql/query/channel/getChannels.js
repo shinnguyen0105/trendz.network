@@ -68,6 +68,7 @@ export const REQUEST_GET_CHANNEL_DETAILS = gql`
       price
       adminNote
       employeeNote
+      phone
       category {
         id
         name

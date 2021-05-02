@@ -43,73 +43,68 @@ const MyCampaign = ({ data, categ, search }) => {
   console.log(data);
   return (
     <>
-      <CardDeck>
-        {data.length !== 0 ? (
-          myCampaign.map((campaign) => (
-            <Col md={4} key={campaign.id}>
-              <Card className='campaign-card'>
-                <CardImg
-                  src={
-                    campaign.picture[0] !== undefined
-                      ? `
+      {data.length !== 0 ? (
+        myCampaign.map((campaign) => (
+          <Col md={4} xs={12} key={campaign.id}>
+            <Card className='campaign-card'>
+              <CardImg
+                src={
+                  campaign.picture[0] !== undefined
+                    ? `
                                         ${API_URL}${campaign.picture[0].formats.thumbnail.url}`
-                      : '/256x186.svg'
-                  }
-                  alt='Card image cap'
-                  className='campaign-img'
-                />
-                <CardBody>
-                  <CardTitle className='dashboard-card-title'>
-                    {campaign.title}
-                  </CardTitle>
-                  <CardSubtitle>
-                    <strong>Create by:</strong> {campaign.user.name}
-                  </CardSubtitle>
-                  <CardSubtitle>
-                    <strong>Price:</strong>{' '}
-                    {campaign.price.toLocaleString('vi-VN', {
-                      style: 'currency',
-                      currency: 'VND',
-                    })}
-                  </CardSubtitle>
-                  <CardSubtitle>
-                    <strong>Status:</strong> {renderStatus(campaign.status)}
-                  </CardSubtitle>
-                  <CardSubtitle>
-                    <strong>Start date - End date:</strong>
-                  </CardSubtitle>
-                  <CardSubtitle>
-                    <small className='text-muted'>
-                      {campaign.campaignTTL !== undefined ? (
-                        new Date(
-                          campaign.campaignTTL.open_datetime
-                        ).toLocaleString('en-GB') +
-                        ' - ' +
-                        new Date(
-                          campaign.campaignTTL.close_datetime
-                        ).toLocaleString('en-GB')
-                      ) : (
-                        <Skeleton variant='text' />
-                      )}
-                    </small>
-                  </CardSubtitle>
+                    : '/256x186.svg'
+                }
+                alt='Card image cap'
+                className='campaign-img'
+              />
+              <CardBody>
+                <CardTitle className='dashboard-card-title'>
+                  {campaign.title}
+                </CardTitle>
+                <CardSubtitle>
+                  <strong>Create by:</strong> {campaign.user.name}
+                </CardSubtitle>
+                <CardSubtitle>
+                  <strong>Price:</strong>{' '}
+                  {campaign.price.toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                  })}
+                </CardSubtitle>
+                <CardSubtitle>
+                  <strong>Status:</strong> {renderStatus(campaign.status)}
+                </CardSubtitle>
+                <CardSubtitle>
+                  <strong>Start date - End date:</strong>
+                </CardSubtitle>
+                <CardSubtitle>
+                  <small className='text-muted'>
+                    {campaign.campaignTTL !== undefined ? (
+                      new Date(
+                        campaign.campaignTTL.open_datetime
+                      ).toLocaleString('en-GB') +
+                      ' - ' +
+                      new Date(
+                        campaign.campaignTTL.close_datetime
+                      ).toLocaleString('en-GB')
+                    ) : (
+                      <Skeleton variant='text' />
+                    )}
+                  </small>
+                </CardSubtitle>
 
-                  <CardSubtitle className='text-center'>
-                    <Link
-                      href='/campaign/[cid]'
-                      as={`/campaign/${campaign.id}`}
-                    >
-                      <Button>Details</Button>
-                    </Link>
-                  </CardSubtitle>
-                </CardBody>
-              </Card>
-            </Col>
-          ))
-        ) : (
-          <Spinner color='light' />
-        )}
-      </CardDeck>
+                <CardSubtitle className='text-center'>
+                  <Link href='/campaign/[cid]' as={`/campaign/${campaign.id}`}>
+                    <Button>Details</Button>
+                  </Link>
+                </CardSubtitle>
+              </CardBody>
+            </Card>
+          </Col>
+        ))
+      ) : (
+        <Spinner color='light' />
+      )}
     </>
   );
 };
