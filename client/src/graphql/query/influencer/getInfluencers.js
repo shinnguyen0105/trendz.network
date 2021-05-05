@@ -47,6 +47,8 @@ export const REQUEST_GET_INFLUENCER_DETAILS = gql`
       website
       status
       price
+      employeeConfirm
+      adminConfirm
       avatar {
         id
         formats
