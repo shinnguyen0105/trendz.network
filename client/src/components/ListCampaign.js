@@ -16,37 +16,38 @@ import {
 
 const { API_URL } = process.env;
 
-const ListCampaignsChild = ({ data, categ, search, roleType }) => {
-  function renderStatus(approvalStatus, influencerStatus, status) {
-    if ((roleType = 'Employee')) {
-      if (approvalStatus == null) {
-        return 'Waiting for licensing';
-      }
-      if (!approvalStatus) {
-        return 'Not licensed';
-      }
-      if (approvalStatus && influencerStatus == null) {
-        return 'Licensed - Waiting for Influencer approve';
-      }
-      if (approvalStatus && !influencerStatus) {
-        return 'Licensed - Influencer declined';
-      }
-      if (approvalStatus && influencerStatus && status == false) {
-        return 'Licensed - Influencer approved - Being Active';
-      } else return 'Licensed - Influencer approved - Ended';
-    } else {
-      if (approvalStatus == true && influencerStatus == null) {
-        return 'Waiting for Influencer approval';
-      }
-      if (approvalStatus == true && influencerStatus == true) {
-        return 'Approved - Ongoing';
-      }
-      if (approvalStatus == true && influencerStatus == false) {
-        return 'Licensed - Influencer declined';
-      }
-      if (approvalStatus && influencerStatus && status == false) {
-        return 'Licensed - Influencer approved - Being Active';
-      } else return 'Licensed - Influencer approved - Ended';
+const ListCampaignsChild = ({ data, categ, search }) => {
+  function renderStatus(
+    approvalStatus,
+    influencerStatus,
+    InfluencerCompleted,
+    completed
+  ) {
+    if (approvalStatus == null) {
+      return 'Waiting for licensing';
+    }
+    if (!approvalStatus) {
+      return 'Not licensed';
+    }
+    if (approvalStatus && influencerStatus == null) {
+      return 'Licensed - Waiting for Influencer approve';
+    }
+    if (approvalStatus && !influencerStatus) {
+      return 'Licensed - Influencer rejected';
+    }
+    if (approvalStatus && influencerStatus && InfluencerCompleted == false) {
+      return 'Licensed - Influencer approved - Initiating';
+    }
+    if (
+      approvalStatus &&
+      influencerStatus &&
+      InfluencerCompleted == true &&
+      completed != true
+    ) {
+      return 'Licensed - Influencer approved - Done - Request Pay';
+    }
+    if (completed && InfluencerCompleted) {
+      return 'Ended!';
     }
   }
 
@@ -112,6 +113,7 @@ const ListCampaignsChild = ({ data, categ, search, roleType }) => {
                   {renderStatus(
                     campaign.approve,
                     campaign.status,
+                    campaign.influencerCompleted,
                     campaign.completed
                   )}
                 </CardSubtitle>

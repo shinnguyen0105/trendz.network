@@ -133,17 +133,22 @@ const CustomerDashboard = () => {
         case 3:
           myCampaigns = data.campaigns.filter(
             (c) =>
-              c.approve == true && c.status == false && c.completed == false
+              c.approve == true &&
+              c.status == false &&
+              c.influencerCompleted == false
           );
           break;
         case 4:
           myCampaigns = data.campaigns.filter(
-            (c) => c.approve == true && c.status == true && c.completed == false
+            (c) =>
+              c.approve == true &&
+              c.status == true &&
+              c.influencerCompleted == false
           );
           break;
         case 5:
           myCampaigns = data.campaigns.filter(
-            (c) => c.approve == true && c.status == true && c.completed == true
+            (c) => c.influencerCompleted == true && c.completed == true
           );
           break;
       }

@@ -11,6 +11,7 @@ export const REQUEST_GET_CAMPAIGNS_BY_INFLUENCER_ID = gql`
       title
       status
       completed
+      influencerCompleted
       approve
       price
       category {
@@ -49,6 +50,7 @@ export const REQUEST_GET_MY_CAMPAIGNS = gql`
       completed
       price
       approve
+      influencerCompleted
       category {
         id
         name

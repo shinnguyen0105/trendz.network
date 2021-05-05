@@ -14,12 +14,22 @@ import {
 import Skeleton from '@material-ui/lab/Skeleton';
 
 const { API_URL } = process.env;
-const renderStatus = (status) => {
-  if (status !== null) {
-    if (status) {
-      return 'Being active';
-    } else return 'Inactive';
-  } else return 'Waiting for activation';
+const renderStatus = (approve, status, influencerCompleted, completed) => {
+  if (approve == null) {
+    return 'Waiting employee approve';
+  }
+  if (approve == false) {
+    return 'Employee rejected!';
+  }
+  if (approve == true && status == null) {
+    return 'Waiting influencer approve';
+  }
+  if (approve == true && status == true && influencerCompleted == false) {
+    return 'Initiating campaign';
+  }
+  if (influencerCompleted || completed) {
+    return 'Completed!';
+  }
 };
 const MyCampaign = ({ data, categ, search }) => {
   var myCampaign;
@@ -72,7 +82,13 @@ const MyCampaign = ({ data, categ, search }) => {
                   })}
                 </CardSubtitle>
                 <CardSubtitle>
-                  <strong>Status:</strong> {renderStatus(campaign.status)}
+                  <strong>Status:</strong>{' '}
+                  {renderStatus(
+                    campaign.approve,
+                    campaign.status,
+                    campaign.influencerCompleted,
+                    campaign.completed
+                  )}
                 </CardSubtitle>
                 <CardSubtitle>
                   <strong>Start date - End date:</strong>

@@ -157,7 +157,6 @@ const EmployeeDashboard = () => {
             data={onhold}
             categ={filterItems.category}
             search={filterItems.search}
-            roleType={'Employee'}
           />
         </TabPane>
         <TabPane tabId='vertical3'>
@@ -165,7 +164,6 @@ const EmployeeDashboard = () => {
             data={approve}
             categ={filterItems.category}
             search={filterItems.search}
-            roleType={'Employee'}
           />
         </TabPane>
         <TabPane tabId='vertical4'>
@@ -173,7 +171,6 @@ const EmployeeDashboard = () => {
             data={unapprove}
             categ={filterItems.category}
             search={filterItems.search}
-            roleType={'Employee'}
           />
         </TabPane>
         <TabPane tabId='vertical5'>
@@ -181,7 +178,6 @@ const EmployeeDashboard = () => {
             data={influencerCompleted}
             categ={filterItems.category}
             search={filterItems.search}
-            roleType={'Employee'}
           />
         </TabPane>
         <TabPane tabId='vertical6'>
@@ -189,7 +185,6 @@ const EmployeeDashboard = () => {
             data={completed}
             categ={filterItems.category}
             search={filterItems.search}
-            roleType={'Employee'}
           />
         </TabPane>
       </>

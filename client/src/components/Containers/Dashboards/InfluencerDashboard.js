@@ -145,9 +145,9 @@ const InfluencerDashboard = () => {
     );
     let approve = campaigns.filter(
       (campaign) =>
-        campaign.approve &&
+        campaign.approve == true &&
         campaign.status == true &&
-        campaign.completed == false
+        campaign.influencerCompleted == false
     );
     let unapprove = campaigns.filter(
       (campaign) => campaign.approve == true && campaign.status == false
