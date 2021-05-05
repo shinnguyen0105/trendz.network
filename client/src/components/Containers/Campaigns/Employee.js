@@ -298,11 +298,7 @@ const Employee = ({ campaign, cid }) => {
 
   const renderImage = () => {
     if (campaign.picture[0] !== undefined) {
-      if (campaign.picture[0].formats.medium !== undefined) {
-        return API_URL + campaign.picture[0].formats.medium.url;
-      } else if (campaign.picture[0].formats.thumbnail !== undefined) {
-        return API_URL + campaign.picture[0].formats.thumbnail.url;
-      } else return '/256x186.svg';
+      return API_URL + campaign.picture[0].url;
     } else return '/256x186.svg';
   };
 
@@ -391,7 +387,7 @@ const Employee = ({ campaign, cid }) => {
                 <Card className='single-card'>
                   <CardImg
                     src={renderImage()}
-                    alt='Card image cap'
+                    alt={campaign.title + 'campaign at trendz network'}
                     className='campaign-detail-img'
                   />
                   <CardBody>
