@@ -129,7 +129,12 @@ const Influencer = () => {
                                 )}
                               </CardText>
                               <CardText>
-                                <strong>Price:</strong> {channel.price} VNĐ
+                                <strong>Price:</strong>{' '}
+                                {channel.price.toLocaleString('vi-VN', {
+                                  style: 'currency',
+                                  currency: 'VND',
+                                })}{' '}
+                                VNĐ
                               </CardText>
                               <Link
                                 href='/channel/[chid]'
